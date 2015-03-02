@@ -1,14 +1,14 @@
 <link href="/spirare/css/markdown.css" rel="stylesheet"></link>
 
-[github](https://github.com/walden-/spirare)
+[github](https://github.com/waldenn/spirare)
 
-[grid index page](http://walden-.github.io/spirare/grid.html)
+[grid index page](http://waldenn.github.io/spirare/grid.html)
 
 - **Demos:**
 
 	- [surface grapher](/spirare/examples/surface-grapher/)
 
-		- note: the math operands available are described [here](https://github.com/walden-/spirare/blob/master/libs/parser.js#L359)
+		- note: the math operands available are described [here](https://github.com/waldenn/spirare/blob/master/libs/parser.js#L359)
 		- note: use the mouse to move around
 		- note: typing "f" activates fullscreen
 		- idea: explore the parameters and other preset-functions
@@ -38,4 +38,4 @@
 	- [essential-threejs book code](https://github.com/josdirksen/essential-threejs)
 	- [threejs cookbook code](http://www.smartjava.org/content/all-80-recipes-threejs-cookbook-online)
 	- [stemkoski demos](http://stemkoski.github.io/Three.js/) (note: older three.js used)
-	- [Three.js editor: Breakout](http://threejs.org/editor/#app=https://gist.githubusercontent.com/walden-/98d41536d2e2e431a387/raw/7a7995623856a9d2624c1d4e1ebf942285e8c582/arkanoid.app.json) (beta tool, but interesting for the future)
+	- [Three.js editor: Breakout](http://threejs.org/editor/#app=https://gist.githubusercontent.com/waldenn/98d41536d2e2e431a387/raw/7a7995623856a9d2624c1d4e1ebf942285e8c582/arkanoid.app.json) (beta tool, but interesting for the future)
