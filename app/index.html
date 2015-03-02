@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+  <!--  source: http://www.dwuser.com/education/content/creating-responsive-tiled-layout-with-pure-css/ -->
+  <!--  Enable responsive view on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>spirare playground</title>
+
+  <link href="css/grid.css" rel="stylesheet"></link>
+
+  <!-- Enable media queries for old IE -->
+  <!--[if lt IE 9]>
+	<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+  <![endif]-->
+
+</head>
+
+<body class="no-touch">
+
+	<p><strong>links:</strong></p>
+		<ul>
+			<li><a href="https://github.com/walden-/spirare">github</a></li>
+			<li><a href="https://www.khanacademy.org/profile/ccl123/programs">khan academy</a></li>
+			<li><a href="http://devfreebooks.org/javascript/">online JS books</a></li>
+			<li><a href="https://github.com/josdirksen/essential-threejs">essential-threejs book code</a></li>
+			<li><a href="http://www.smartjava.org/content/all-80-recipes-threejs-cookbook-online">threejs cookbook code</a></li>
+			<li><a href="http://stemkoski.github.io/Three.js/">stemkoski demos</a> (note: older three.js used)</li>
+			<li><a href="http://threejs.org/editor/#app=https://gist.githubusercontent.com/walden-/98d41536d2e2e431a387/raw/7a7995623856a9d2624c1d4e1ebf942285e8c582/arkanoid.app.json">Three.js editor: Breakout</a> (beta tool, but interesting for the future)</li>
+		</ul>
+	</ul>
+
+
+  <div class="wrap">
+    
+    <!-- Define all of the tiles: -->
+
+    <div class="box">
+      <div class="boxInner">
+		  <a href="examples/basic-cube1/index.html"><img src="images/tiles/cube1.png" /></a>
+		<div class="titleBox">basic cube 1</a></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="boxInner">
+		  <a href="examples/basic-cube2/index.html"><img src="images/tiles/cube2.png" /></a>
+		<div class="titleBox">basic cube 2</a></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="boxInner">
+		  <a href="examples/first-person/index.html"><img src="images/tiles/first-person.png" /></a>
+		<div class="titleBox">first person</div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="boxInner">
+		  <a href="examples/xyz-grapher/index.html"><img src="images/tiles/xyz.jpg" /></a>
+		<div class="titleBox">xyz grapher</div>
+      </div>
+    </div>
+
+
+    <div class="box">
+      <div class="boxInner">
+		  <a href="examples/surface-grapher/index.html"><img src="images/tiles/surface.jpg" /></a>
+		<div class="titleBox">surface grapher</a></div>
+      </div>
+    </div>
+
+    <!--div class="box">
+      <div class="boxInner">
+		  <a href="examples/stemkoski/Three.js/index.html"><img src="images/tiles/list.png" /></a>
+		<div class="titleBox">stemkoski demos</div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="boxInner">
+		  <a href="examples/essential-threejs/"><img src="images/tiles/list.png" /></a>
+		<div class="titleBox">essential-threejs demos</div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="boxInner">
+		  <a href="examples/threejs-cookbook"><img src="images/tiles/list.png" /></a>
+		<div class="titleBox">threejs-cookbook demos</div>
+      </div>
+    </div-->
+
+  </div>
+  <!-- /#wrap -->
+
+  
+  <!-- Add some JavaScript to enable toggling the descriptions when an image is tapped on a touchscreen device -->
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(function(){
+      // See if this is a touch device
+      if ('ontouchstart' in window)
+      {
+        // Set the correct body class
+        $('body').removeClass('no-touch').addClass('touch');
+        
+        // Add the touch toggle to show text
+        $('div.boxInner img').click(function(){
+          $(this).closest('.boxInner').toggleClass('touchFocus');
+        });
+      }
+    });
+  </script>
+  
+</body>
+</html>
+
