@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>surface grapher</title>
+    <!-- link rel="stylesheet" href="style.css" type="text/css" -->
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/base.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery-ui.css" type="text/css">
+    <link rel="stylesheet" href="css/info.css" type="text/css">
+</head>
+
+<body>
+    <script src="libs/Three.js" type="text/javascript"> </script>
+    <script src="libs/Detector.js" type="text/javascript"> </script>
+    <script src="libs/Stats.js" type="text/javascript"> </script>
+    <script src="libs/TrackballControls.js" type="text/javascript"> </script>
+    <script src="libs/THREEx.KeyboardState.js" type="text/javascript"> </script>
+    <script src="libs/THREEx.FullScreen.js" type="text/javascript"> </script>
+    <script src="libs/THREEx.WindowResize.js" type="text/javascript"> </script>
+    <script src="libs/DAT.GUI.min.js" type="text/javascript"> </script>
+
+    <!-- http://silentmatt.com/javascript-expression-evaluator/ -->
+    <script src="libs/parser.js" type="text/javascript"> </script>
+
+    <!-- jquery code to display an information button and box when clicked. -->
+    <script src="libs/jquery-1.9.1.js" type="text/javascript"> </script>
+    <script src="libs/jquery-ui.js" type="text/javascript"> </script>
+    <script src="libs/info.js" type="text/javascript"> </script>
+
+    <div id="infoButton"></div>
+    <div id="infoBox" title="Demo Information">Github <a href="https://github.com/walden-/spirare">spirare</a>
+		<ul>
+     		<li>note: the math operands available are described <a href="https://github.com/walden-/spirare/blob/master/libs/parser.js#L359">here</a></li>
+            <li>note: use the mouse to move around</li>
+            <li>note: typing "f" activates fullscreen</li>
+            <li>idea: explore the parameters and other preset-functions</li>
+            <li>idea: write your own formula</li>
+		</ul>
+	</div>
+    <div id="ThreeJS" style="position: absolute; left:0px; top:0px"> </div>
+
+    <script src="grapher.js" type="text/javascript"> </script>
+</body>
+
+</html>
