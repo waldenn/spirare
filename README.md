@@ -2,10 +2,11 @@
 
 [online demos](http://waldenn.github.io/spirare/app/)
 
+
+<!--
 Beginner:   https://www.khanacademy.org/profile/ccl123/programs
 Advanced: JS, Git, Github, ThreeJS, ...
 
-<!--
 **3D Demos**:
 	- threejs.org/editor/#app=https://gist.githubusercontent.com/walden-/98d41536d2e2e431a387/raw/fdf54340ffab97363fcd3420af6385eb5e86d869/arkanoid.app.json
 	- http://chewbonga.com/simple-world-threejs/
