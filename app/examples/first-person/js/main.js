@@ -46,6 +46,9 @@
         // floor
         scene.add(createFloor());
 
+		// skybox
+		scene.add(createSkybox());
+		
         renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0xb2e1f2);
@@ -61,7 +64,7 @@
 
     function createFloor() {
 
-        geometry = new THREE.PlaneGeometry(2000, 2000, 5, 5);
+        geometry = new THREE.PlaneBufferGeometry(2000, 2000, 5, 5);
         geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
         var texture = THREE.ImageUtils.loadTexture('textures/desert.jpg');
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -72,6 +75,24 @@
         });
         return new THREE.Mesh(geometry, material);
     }
+	
+	function createSkybox()
+	{
+		var imagePrefix = "textures/skybox/dawnmountain-";
+		var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+		var imageSuffix = ".png";
+		var skyGeometry = new THREE.BoxGeometry( 1000, 1000, 1000 );	
+		
+		var materialArray = [];
+		for (var i = 0; i < 6; i++)
+			//console.log(imagePrefix + directions[i] + imageSuffix);
+			materialArray.push( new THREE.MeshBasicMaterial({
+				map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+				side: THREE.BackSide
+			}));
+		var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+		return new THREE.Mesh( skyGeometry, skyMaterial );
+	}
 
     function checkForPointerLock() {
 
