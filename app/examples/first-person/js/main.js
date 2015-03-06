@@ -45,7 +45,11 @@
 
         // floor
         scene.add(createFloor());
-
+		
+		// skybox
+		scene.add(createSkybox());
+		
+		
         renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0xb2e1f2);
@@ -72,6 +76,25 @@
         });
         return new THREE.Mesh(geometry, material);
     }
+	
+	function createSkybox()
+	{
+		var skyboxImagePath = "textures/skybox/dawnmountain-";
+		var directions = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+		var skyGeometry = THREE.CubeGeometry(5000, 5000, 5000);
+		var materials = [];	
+		
+		for (var i = 0; i < 6; i++)
+		{
+			materials.push(new THREE.MeshBasicMaterial({
+				map: THREE.ImageUtils.loadTexture(skyboxImagePath + directions[i] + ".png"),
+				side: THREE.BackSide
+			}));
+		}
+		
+		var skyMaterial = new THREE.MeshFaceMaterial(materials);
+		return new THREE.Mesh(skyGeometry, skyMaterial);
+	}
 
     function checkForPointerLock() {
 
