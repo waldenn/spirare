@@ -35,7 +35,7 @@
         clock = new THREE.Clock();
 
         scene = new THREE.Scene();
-        scene.fog = new THREE.Fog(0xb2e1f2, 0, 750);
+        scene.fog = new THREE.Fog(0xb2e1f2, 10,  1600);
 
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
         camera.position.y = 10;
@@ -64,7 +64,7 @@
 
     function createFloor() {
 
-        geometry = new THREE.PlaneBufferGeometry(2000, 2000, 5, 5);
+        geometry = new THREE.PlaneBufferGeometry(4000, 4000, 5, 5);
         geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
         var texture = THREE.ImageUtils.loadTexture('textures/desert.jpg');
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
