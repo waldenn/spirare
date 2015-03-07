@@ -27,6 +27,7 @@
 
         initControls();
         initPointerLock();
+		THREEx.FullScreen.bindKey({ charCode : 'f'.charCodeAt(0) });
 
         //ambienceSfx.play();
         footStepSfx.preload = 'auto';
@@ -48,7 +49,20 @@
 
 		// skybox
 		scene.add(createSkybox());
-		
+
+		/*
+		var TextGeometry = new THREE.TextGeometry( 'type "f" for fullscreen and click to play!', {
+						size: 10, height: 10, curveSegments: 3,
+						font: "helvetiker", // weight: "regular", style: "normal",
+						bevelThickness: 1, bevelSize: 2, bevelEnabled: false
+		});
+		var Material = new THREE.MeshNormalMaterial( { color: 0x00ff00 } );
+		var Text = new THREE.Mesh( TextGeometry, Material );
+		//Text.lookAt( camera.position );
+		//Text.lookAt( camera.position );
+		scene.add( Text );
+		*/
+
         renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0xb2e1f2);
