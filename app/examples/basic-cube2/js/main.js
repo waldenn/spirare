@@ -20,15 +20,28 @@ function init() {
 
 	// create a cube and add to scene
 	var cubeGeometry = new THREE.BoxGeometry(6, 6, 6);
-	var cubeMaterial = new THREE.MeshLambertMaterial();
+	var cubeMaterial = new THREE.MeshPhongMaterial();
 	cubeMaterial.color = new THREE.Color('red');
 	var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    cube.position.x = 0;
+    cube.position.y = 0;
+    cube.position.z = 0;
 	cube.name = 'cube';
 	scene.add(cube);
 
-	var light = new THREE.DirectionalLight();
-	light.position.set(20, 30, 20);
-	scene.add(light);
+    var spotLight = new THREE.SpotLight( 0xffffff );
+    spotLight.position.set(0, 0, 0);
+    spotLight.name = 'spot';
+    spotLight.castShadow = true;
+
+    spotLight.shadowMapWidth = 1024;
+    spotLight.shadowMapHeight = 1024;
+
+    spotLight.shadowCameraNear = 500;
+    spotLight.shadowCameraFar = 4000;
+    spotLight.shadowCameraFov = 30;
+
+    scene.add( spotLight );
 
 
 	// position and point the camera to the center of the scene
@@ -44,7 +57,9 @@ function init() {
 		this.rotationSpeedX = 0.001;
 		this.rotationSpeedY = 0.001;
 		this.rotationSpeedZ = 0.001;
-
+        this.lightX = 15;
+        this.lightY = 16;
+        this.lightZ = 13;
 	};
 	addControls(control);
 
@@ -57,16 +72,23 @@ function addControls(controlObject) {
 	gui.add(controlObject, 'rotationSpeedX', -0.2, 0.2);
 	gui.add(controlObject, 'rotationSpeedY', -0.2, 0.2);
 	gui.add(controlObject, 'rotationSpeedZ', -0.2, 0.2);
+    gui.add(controlObject, 'lightX', -50, 50);
+    gui.add(controlObject, 'lightY', -50, 50);
+    gui.add(controlObject, 'lightZ', -50, 50);
 
 }
+
+
 
 function render() {
 	renderer.render(scene, camera);
 	scene.getObjectByName('cube').rotation.x += control.rotationSpeedX;
 	scene.getObjectByName('cube').rotation.y += control.rotationSpeedY;
 	scene.getObjectByName('cube').rotation.z += control.rotationSpeedZ;
-
-
+    scene.getObjectByName('spot').position.x = control.lightX;
+    scene.getObjectByName('spot').position.y = control.lightY;
+    scene.getObjectByName('spot').position.z = control.lightZ;
+    camera.lookAt( scene.position )
 	requestAnimationFrame(render);
 }
 
