@@ -17,8 +17,8 @@ var directionList = [];
 init();
 animate();
 
-function init() 
-{
+function init() {
+
 	// SCENE
 	scene = new THREE.Scene();
 
@@ -100,25 +100,31 @@ function init()
 	wall2.position.set(-150, 50, 0);
 	wall2.rotation.y = 3.14159 / 2;
 	scene.add(wall2);
-	
-	
+
 }
 
-function clearText()
-{   document.getElementById('message').innerHTML = '....';   }
+function clearText() {
 
-function appendText(txt)
-{   document.getElementById('message').innerHTML += txt;   }
+	document.getElementById('message').innerHTML = '....';
 
-function animate() 
-{
+}
+
+function appendText(txt) {
+
+	document.getElementById('message').innerHTML += txt;
+
+}
+
+function animate() {
+
     requestAnimationFrame( animate );
 	render();		
 	update();
+
 }
 
-function update()
-{
+function update() {
+
 	var delta = clock.getDelta(); // seconds.
 	var moveDistance = 200 * delta; // 200 pixels per second
 	var rotateAngle = Math.PI / 2 * delta;   // pi/2 radians (90 degrees) per second
@@ -149,23 +155,28 @@ function update()
 
 	// FIXME: http://threejs.org/docs/#Reference/Core/Raycaster
 	
-	for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++)
-	{		
+	for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++) {		
+
 		var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
 		var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
 		var directionVector = globalVertex.sub( MovingCube.position );
 		
 		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
 		var collisionResults = ray.intersectObjects( collidableMeshList );
-		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
+
+		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
+
 			appendText(" Hit ");
+
+		}
 	}	
 
 	controls.update();
 	stats.update();
 }
 
-function render() 
-{
+function render() {
+
 	renderer.render( scene, camera );
+
 }
