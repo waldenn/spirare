@@ -56,18 +56,20 @@ var line;
 init();
 animate();
 
-// FUNCTIONS 		
 function init() 
 {
 	// SCENE
 	scene = new THREE.Scene();
+
 	// CAMERA
 	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
 	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+
 	camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
 	scene.add(camera);
 	camera.position.set(0,150,400);
 	camera.lookAt(scene.position);	
+
 	// RENDERER
 	if ( Detector.webgl )
 		renderer = new THREE.WebGLRenderer( {antialias:true} );
@@ -76,17 +78,21 @@ function init()
 	renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	container = document.getElementById( 'ThreeJS' );
 	container.appendChild( renderer.domElement );
+
 	// EVENTS
 	THREEx.WindowResize(renderer, camera);
 	THREEx.FullScreen.bindKey({ charCode : 'f'.charCodeAt(0) });
+
 	// CONTROLS
 	controls = new THREE.TrackballControls( camera, renderer.domElement );
+
 	// STATS
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
 	stats.domElement.style.bottom = '0px';
 	stats.domElement.style.zIndex = 100;
 	container.appendChild( stats.domElement );
+
 	// LIGHT
 	var light = new THREE.PointLight(0xffffff);
 	light.position.set(0,250,0);
@@ -94,24 +100,8 @@ function init()
 	// SKYBOX/FOG
 	// scene.fog = new THREE.FogExp2( 0x888888, 0.00025 );
 	
-	////////////
-	// CUSTOM //
-	////////////
-	
-
 	// wireframe for xy-plane
-	//var wireframeMaterial = new THREE.MeshBasicMaterial( { color: 0x000088, wireframe: true, side:THREE.DoubleSide } ); 
 	var wireframeMaterial = new THREE.MeshBasicMaterial( { wireframe: true, transparent: true } ); 
-
-	//var floorGeometry = new THREE.PlaneBufferGeometry(1000,1000,100,100);
-	//var floor = new THREE.Mesh(floorGeometry, wireframeMaterial);
-	//floor.position.z = -0.01;
-	// rotate to lie in x-y plane
-	// floor.rotation.x = Math.PI / 2;
-	//scene.add(floor);
-
-	//var grid = new THREE.GridHelper( 500, 25 );
-	//scene.add( grid );
 
 	//grid xy
 	// http://danni-three.blogspot.be/2013/09/threejs-helpers.html
@@ -141,10 +131,7 @@ function init()
 	// bgcolor
 	renderer.setClearColor( 0x888888, 1 );
 
-	///////////////////
-	//   GUI SETUP   //	
-	///////////////////
-
+	// GUI SETUP
 	gui = new dat.GUI();
 	
 	parameters = 
@@ -210,67 +197,6 @@ function createGraph()
 	yFunc = Parser.parse(yFuncText).toJSFunction( ['i'] );
 	zFunc = Parser.parse(zFuncText).toJSFunction( ['i'] );
 
-	/*
-	meshFunction = function(x, y) 
-	{
-		x = xRange * x + xMin;
-		y = yRange * y + yMin;
-		var z = zFunc(x,y); //= Math.cos(x) * Math.sqrt(y);
-		if ( isNaN(z) )
-			return new THREE.Vector3(0,0,0); // TODO: better fix
-		else
-			return new THREE.Vector3(x, y, z);
-	};
-	
-	// true => sensible image tile repeat...
-	graphGeometry = new THREE.ParametricGeometry( meshFunction, segments, segments, true );
-	
-	///////////////////////////////////////////////
-	// calculate vertex colors based on Z values //
-	///////////////////////////////////////////////
-	graphGeometry.computeBoundingBox();
-	zMin = graphGeometry.boundingBox.min.z;
-	zMax = graphGeometry.boundingBox.max.z;
-	zRange = zMax - zMin;
-	var color, point, face, numberOfSides, vertexIndex;
-	// faces are indexed using characters
-	var faceIndices = [ 'a', 'b', 'c', 'd' ];
-	// first, assign colors to vertices as desired
-	for ( var i = 0; i < graphGeometry.vertices.length; i++ ) 
-	{
-		point = graphGeometry.vertices[ i ];
-		color = new THREE.Color( 0x0000ff );
-		color.setHSL( 0.7 * (zMax - point.z) / zRange, 1, 0.5 );
-		graphGeometry.colors[i] = color; // use this array for convenience
-	}
-	// copy the colors as necessary to the face's vertexColors array.
-	for ( var i = 0; i < graphGeometry.faces.length; i++ ) 
-	{
-		face = graphGeometry.faces[ i ];
-		numberOfSides = ( face instanceof THREE.Face3 ) ? 3 : 4;
-		for( var j = 0; j < numberOfSides; j++ ) 
-		{
-			vertexIndex = face[ faceIndices[ j ] ];
-			face.vertexColors[ j ] = graphGeometry.colors[ vertexIndex ];
-		}
-	}
-	///////////////////////
-	// end vertex colors //
-	///////////////////////
-	
-	// material choices: vertexColorMaterial, wireMaterial , normMaterial , shadeMaterial
-	
-	if (graphMesh) {
-		scene.remove( graphMesh );
-	}
-
-	wireMaterial.map.repeat.set( segments, segments );
-	
-	graphMesh = new THREE.Mesh( graphGeometry, wireMaterial );
-	graphMesh.doubleSided = true;
-	//scene.add(graphMesh);
-	*/
-
 	if (particles) {
 		scene.remove( particles );
 		//scene.remove( line );
@@ -279,13 +205,9 @@ function createGraph()
 		scene.remove( line );
 	}
 
-	// plot points
+	// draw lines
 	geometry = new THREE.Geometry();
-	//lines = new THREE.Object3D();
 	colors = [];
-
-	//Create a closed bent a sine-like wave
-	//var curve = new THREE.SplineCurve3( [ ] );
 
 	for (var i = d*-1; i < d; i++) {
 
@@ -295,12 +217,9 @@ function createGraph()
 		var material = new THREE.PointCloudMaterial({
 			size: 3,
 			color: new THREE.Color("rgb(100,255,100)"),
-			//vertexColors: THREE.VertexColors,
 			transparent: true,
 			useScreenCoordinates: false
 		});
-
-		//material.color.setHSL(1.0, 0.2, 0.7);
 
 		var vertex = new THREE.Vector3();
 		
@@ -311,36 +230,7 @@ function createGraph()
 		vertex.y = yFunc(i);
 		vertex.z = zFunc(i);
 
-		//console.log(vertex);
 		geometry.vertices.push(vertex);
-
-		/*
-		// see: http://stackoverflow.com/a/11185807
-		var numPoints = d*3;
-
-		spline = new THREE.SplineCurve3([
-		   new THREE.Vector3(0, 0, 0),
-		   new THREE.Vector3(0, 200, 0),
-		   new THREE.Vector3(150, 150, 0),
-		   new THREE.Vector3(150, 50, 0),
-		   new THREE.Vector3(250, 100, 0),
-		   new THREE.Vector3(250, 300, 0)
-		]);
-
-		var material = new THREE.LineBasicMaterial({
-			color: 0xff00f0,
-		});
-
-		var geometry = new THREE.Geometry();
-		var splinePoints = spline.getPoints(numPoints);
-
-		for(var i = 0; i < splinePoints.length; i++){
-			geometry.vertices.push(splinePoints[i]);  
-		}
-
-		var line = new THREE.Line(geometry, material);
-		scene.add(line);
-		*/
 
 	}
 

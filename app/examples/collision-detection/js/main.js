@@ -4,13 +4,9 @@
 	Date: July 2013 (three.js v59dev)
 */
 
-// MAIN
-
-// standard global variables
 var container, scene, camera, renderer, controls, stats;
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
-// custom global variables
 
 var MovingCube;
 var collidableMeshList = [];
@@ -21,11 +17,11 @@ var directionList = [];
 init();
 animate();
 
-// FUNCTIONS 		
 function init() 
 {
 	// SCENE
 	scene = new THREE.Scene();
+
 	// CAMERA
 	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
 	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
@@ -33,6 +29,7 @@ function init()
 	scene.add(camera);
 	camera.position.set(0,150,400);
 	camera.lookAt(scene.position);	
+
 	// RENDERER
 	if ( Detector.webgl )
 		renderer = new THREE.WebGLRenderer( {antialias:true} );
@@ -41,21 +38,26 @@ function init()
 	renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	container = document.getElementById( 'ThreeJS' );
 	container.appendChild( renderer.domElement );
+
 	// EVENTS
 	THREEx.WindowResize(renderer, camera);
 	THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
+
 	// CONTROLS
 	controls = new THREE.TrackballControls( camera, renderer.domElement );
+
 	// STATS
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
 	stats.domElement.style.bottom = '0px';
 	stats.domElement.style.zIndex = 100;
 	container.appendChild( stats.domElement );
+
 	// LIGHT
 	var light = new THREE.PointLight(0xffffff);
 	light.position.set(0,250,0);
 	scene.add(light);
+
 	// FLOOR
 	var floorMaterial = new THREE.MeshBasicMaterial( {color:0x444444, side:THREE.DoubleSide} );
 	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
@@ -63,16 +65,14 @@ function init()
 	floor.position.y = -0.5;
 	floor.rotation.x = Math.PI / 2;
 	scene.add(floor);
+
 	// SKYBOX/FOG
 	var skyBoxGeometry = new THREE.BoxGeometry( 10000, 10000, 10000 );
 	var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
 	var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
 	scene.add(skyBox);
 	
-	////////////
-	// CUSTOM //
-	////////////
-
+	// custom code
 	var cubeGeometry = new THREE.BoxGeometry(50,50,50,1,1,1);
 	var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
 	MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );

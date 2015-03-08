@@ -10,32 +10,35 @@
 	<body>
 		<script src="js/three.min.js"></script>
 		<script>
-			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-			var renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth, window.innerHeight );
-			document.body.appendChild( renderer.domElement );
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
 
-			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-			var material = new THREE.MeshNormalMaterial( { color: 0x00ff00 } );
-			var cube = new THREE.Mesh( geometry, material );
+            var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+            var material = new THREE.MeshNormalMaterial( { color: 0x00ff00 } );
+            var cube = new THREE.Mesh( geometry, material );
 
-			scene.add( cube );
+            scene.add( cube );
 
-			camera.position.z = 3;
+            camera.position.z = 3;
 
-			var render = function () {
+            var render = function () {
+	
 				requestAnimationFrame( render );
 
 				cube.rotation.x += 0.06;
 				cube.rotation.y += 0.02;
 				cube.rotation.z += 0.10;
 
-				renderer.render(scene, camera);
+				renderer.render( scene, camera );
+            
 			};
 
-			render();
+            render();
+
 		</script>
 	</body>
 </html>
