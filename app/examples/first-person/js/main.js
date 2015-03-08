@@ -1,249 +1,273 @@
-(function() {
+( function() {
 
-    var clock;
+	var clock;
 
-    var scene, camera, renderer;
+	var scene, camera, renderer;
 
-    var geometry, material, mesh;
+	var geometry, material, mesh;
 
-    var havePointerLock = checkForPointerLock();
+	var havePointerLock = checkForPointerLock();
 
-    var controls, controlsEnabled;
+	var controls, controlsEnabled;
 
-    var moveForward, moveBackward, moveLeft, moveRight, canJump;
+	var moveForward, moveBackward, moveLeft, moveRight, canJump;
 
-    var velocity = new THREE.Vector3();
+	var velocity = new THREE.Vector3();
 
-    var footStepSfx = new Audio('sfx/footstep.wav');
-    var ambienceSfx = new Audio('sfx/ambience.wav');
+	var footStepSfx = new Audio( 'sfx/footstep.wav' );
+	var ambienceSfx = new Audio( 'sfx/ambience.wav' );
 
-    ambienceSfx.preload = 'auto';
-    ambienceSfx.loop = true;
+	ambienceSfx.preload = 'auto';
+	ambienceSfx.loop = true;
 
-    init();
-    animate();
+	init();
+	animate();
 
-    function init() {
+	function init() {
 
-        initControls();
-        initPointerLock();
-		THREEx.FullScreen.bindKey({ charCode : 'f'.charCodeAt(0) });
+		initControls();
+		initPointerLock();
+		THREEx.FullScreen.bindKey( { charCode : 'f'.charCodeAt( 0 ) } );
 
         //ambienceSfx.play();
-        footStepSfx.preload = 'auto';
-        footStepSfx.loop = false;
+		footStepSfx.preload = 'auto';
+		footStepSfx.loop = false;
 
-        clock = new THREE.Clock();
+		clock = new THREE.Clock();
 
-        scene = new THREE.Scene();
-        scene.fog = new THREE.Fog(0xb2e1f2, 10,  1600);
+		scene = new THREE.Scene();
+		scene.fog = new THREE.Fog( 0xb2e1f2, 10,  1600 );
 
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-        camera.position.y = 10;
+		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+		camera.position.y = 10;
 
-        controls = new THREE.PointerLockControls(camera);
-        scene.add(controls.getObject());
+		controls = new THREE.PointerLockControls( camera );
+		scene.add( controls.getObject() );
 
         // floor
-        scene.add(createFloor());
+		scene.add( createFloor() );
 
 		// skybox
-		scene.add(createSkybox());
+		scene.add( createSkybox() );
 
-		/*
-		var TextGeometry = new THREE.TextGeometry( 'type "f" for fullscreen and click to play!', {
-						size: 10, height: 10, curveSegments: 3,
-						font: "helvetiker", // weight: "regular", style: "normal",
-						bevelThickness: 1, bevelSize: 2, bevelEnabled: false
-		});
-		var Material = new THREE.MeshNormalMaterial( { color: 0x00ff00 } );
-		var Text = new THREE.Mesh( TextGeometry, Material );
-		//Text.lookAt( camera.position );
-		//Text.lookAt( camera.position );
-		scene.add( Text );
-		*/
-
-        renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0xb2e1f2);
-        document.body.appendChild(renderer.domElement);
-    }
-
-    function animate() {
-
-        requestAnimationFrame(animate);
-        updateControls();
-        renderer.render(scene, camera);
-    }
-
-    function createFloor() {
-
-        geometry = new THREE.PlaneBufferGeometry(4000, 4000, 5, 5);
-        geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
-        var texture = THREE.ImageUtils.loadTexture('textures/desert.jpg');
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(64, 64);
-        material = new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            map: texture
-        });
-        return new THREE.Mesh(geometry, material);
-    }
+		renderer = new THREE.WebGLRenderer();
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.setClearColor( 0xb2e1f2 );
+		document.body.appendChild( renderer.domElement );
 	
-	function createSkybox()
-	{
+	}
+
+	function animate() {
+
+		requestAnimationFrame( animate );
+		updateControls();
+		renderer.render( scene, camera );
+	
+	}
+
+	function createFloor() {
+
+		geometry = new THREE.PlaneBufferGeometry( 4000, 4000, 5, 5 );
+		geometry.applyMatrix( new THREE.Matrix4().makeRotationX( -Math.PI / 2 ) );
+
+		var texture = THREE.ImageUtils.loadTexture( 'textures/desert.jpg' );
+		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+		texture.repeat.set( 64, 64 );
+
+		material = new THREE.MeshBasicMaterial( {
+			color: 0xffffff,
+			map: texture
+        } );
+
+		return new THREE.Mesh( geometry, material );
+	
+	}
+	
+	function createSkybox() {
+		
 		var imagePrefix = "textures/skybox/dawnmountain-";
-		var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+		var directions  = [ "xpos", "xneg", "ypos", "yneg", "zpos", "zneg" ];
 		var imageSuffix = ".png";
+
 		var skyGeometry = new THREE.BoxGeometry( 1000, 1000, 1000 );	
 		
 		var materialArray = [];
-		for (var i = 0; i < 6; i++)
-			//console.log(imagePrefix + directions[i] + imageSuffix);
-			materialArray.push( new THREE.MeshBasicMaterial({
-				map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+
+		for ( var i = 0; i < 6; i ++ ) {
+
+			materialArray.push( new THREE.MeshBasicMaterial( {
+				map: THREE.ImageUtils.loadTexture( imagePrefix + directions[ i ] + imageSuffix ),
 				side: THREE.BackSide
-			}));
+			} ) );
+
+		}
+
 		var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+
 		return new THREE.Mesh( skyGeometry, skyMaterial );
+	
 	}
 
-    function checkForPointerLock() {
+	function checkForPointerLock() {
 
-        return 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-    }
+		return 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+	
+	}
 
-    function initPointerLock() {
+	function initPointerLock() {
 
-        var element = document.body;
+		var element = document.body;
 
-        if (havePointerLock) {
+		if ( havePointerLock ) {
 
-            var pointerlockchange = function(event) {
-                if (document.pointerLockElement === element ||
-                    document.mozPointerLockElement === element ||
-                    document.webkitPointerLockElement === element) {
-                    controlsEnabled = true;
-                    controls.enabled = true;
-                }
+			var pointerlockchange = function( event ) {
+				
+				if (	document.pointerLockElement === element ||
+						document.mozPointerLockElement === element ||
+						document.webkitPointerLockElement === element ) {
+								
+					controlsEnabled = true;
+					controls.enabled = true;
+							
+				}
 				else {
-                    controls.enabled = false;
-                }
-            };
+								
+					controls.enabled = false;
+							
+				}
+			
+			};
 
-            var pointerlockerror = function(event) {
-                element.innerHTML = 'PointerLock Error';
-            };
+			var pointerlockerror = function( event ) {
+				
+				element.innerHTML = 'PointerLock Error';
+			
+			};
 
-            document.addEventListener('pointerlockchange', pointerlockchange, false);
-            document.addEventListener('mozpointerlockchange', pointerlockchange, false);
-            document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
+			document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+			document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+			document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
 
-            document.addEventListener('pointerlockerror', pointerlockerror, false);
-            document.addEventListener('mozpointerlockerror', pointerlockerror, false);
-            document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
+			document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+			document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+			document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
 
-            var requestPointerLock = function(event) {
-                element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-                element.requestPointerLock();
-            };
+			var requestPointerLock = function( event ) {
+				
+				element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+				element.requestPointerLock();
+			
+			};
 
-            element.addEventListener('click', requestPointerLock, false);
-        }
+			element.addEventListener( 'click', requestPointerLock, false );
+        
+		}
 		else {
-            element.innerHTML = 'Bad browser; No pointer lock';
-        }
-    }
+			
+			element.innerHTML = 'Bad browser; No pointer lock';
+		
+		}
+	
+	}
 
-    function onKeyDown(e) {
+	function onKeyDown( e ) {
 
-        switch (e.keyCode) {
-            case 38: // up
-            case 87: // w
-                moveForward = true;
-                break;
-            case 37: // left
-            case 65: // a
-                moveLeft = true;
-                break;
-            case 40: // down
-            case 83: // s
-                moveBackward = true;
-                break;
-            case 39: // right
-            case 68: // d
-                moveRight = true;
-                break;
-            case 32: // space
-                if (canJump === true) velocity.y += 350;
-                canJump = false;
-                break;
-        }
+		switch ( e.keyCode ) {
+			case 38: // up
+			case 87: // w
+				moveForward = true;
+				break;
+			case 37: // left
+			case 65: // a
+				moveLeft = true;
+				break;
+			case 40: // down
+			case 83: // s
+				moveBackward = true;
+				break;
+			case 39: // right
+			case 68: // d
+				moveRight = true;
+				break;
+			case 32: // space
+				if ( canJump === true ) velocity.y += 350;
+				canJump = false;
+				break;
+		}
 
-    }
+	}
 
-    function onKeyUp(e) {
+	function onKeyUp( e ) {
 
-        switch (e.keyCode) {
-            case 38: // up
-            case 87: // w
-                moveForward = false;
-                break;
-            case 37: // left
-            case 65: // a
-                moveLeft = false;
-                break;
-            case 40: // down
-            case 83: // s
-                moveBackward = false;
-                break;
-            case 39: // right
-            case 68: // d
-                moveRight = false;
-                break;
-        }
+		switch ( e.keyCode ) {
+			case 38: // up
+			case 87: // w
+				moveForward = false;
+				break;
+			case 37: // left
+			case 65: // a
+				moveLeft = false;
+				break;
+			case 40: // down
+			case 83: // s
+				moveBackward = false;
+				break;
+			case 39: // right
+			case 68: // d
+				moveRight = false;
+				break;
+		}
 
-    }
+	}
 
-    function initControls() {
+	function initControls() {
 
-        document.addEventListener('keydown', onKeyDown, false);
-        document.addEventListener('keyup', onKeyUp, false);
-        raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
+		document.addEventListener( 'keydown', onKeyDown, false );
+		document.addEventListener( 'keyup', onKeyUp, false );
+		raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, -1, 0 ), 0, 10 );
 
-    }
+	}
 
-    function updateControls() {
+	function updateControls() {
 
-        if (controlsEnabled) {
-            var delta = clock.getDelta();
-            var walkingSpeed = 200.0;
+		if ( controlsEnabled ) {
+			
+			var delta = clock.getDelta();
+			var walkingSpeed = 200.0;
 
             //console.log(delta);
 
-            velocity.x -= velocity.x * 10.0 * delta;
-            velocity.z -= velocity.z * 10.0 * delta;
-            velocity.y -= 9.8 * 100.0 * delta;
+			velocity.x -= velocity.x * 10.0 * delta;
+			velocity.z -= velocity.z * 10.0 * delta;
+			velocity.y -= 9.8 * 100.0 * delta;
 
-            if (moveForward) velocity.z -= walkingSpeed * delta;
-            if (moveBackward) velocity.z += walkingSpeed * delta;
+			if ( moveForward ) velocity.z -= walkingSpeed * delta;
+			if ( moveBackward ) velocity.z += walkingSpeed * delta;
 
-            if (moveLeft) velocity.x -= walkingSpeed * delta;
-            if (moveRight) velocity.x += walkingSpeed * delta;
+			if ( moveLeft ) velocity.x -= walkingSpeed * delta;
+			if ( moveRight ) velocity.x += walkingSpeed * delta;
 
-            if (moveForward || moveBackward || moveLeft || moveRight) {
-                footStepSfx.play();
-            }
+			if ( moveForward || moveBackward || moveLeft || moveRight ) {
+				
+				footStepSfx.play();
+			
+			}
 
-            controls.getObject().translateX(velocity.x * delta);
-            controls.getObject().translateY(velocity.y * delta);
-            controls.getObject().translateZ(velocity.z * delta);
+			controls.getObject().translateX( velocity.x * delta );
+			controls.getObject().translateY( velocity.y * delta );
+			controls.getObject().translateZ( velocity.z * delta );
 
-            if (controls.getObject().position.y < 10) {
-                velocity.y = 0;
-                controls.getObject().position.y = 10;
-                canJump = true;
-            }
+			if ( controls.getObject().position.y < 10 ) {
+				
+				velocity.y = 0;
+				controls.getObject().position.y = 10;
+				canJump = true;
+			
+			}
+		
 		}
-    }
-})();
+	
+	}
+
+} )();
+
