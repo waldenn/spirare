@@ -70,7 +70,6 @@ function render() {
 	scene.getObjectByName( 'cube' ).rotation.y += control.rotationSpeedY;
 	scene.getObjectByName( 'cube' ).rotation.z += control.rotationSpeedZ;
 
-
 	requestAnimationFrame( render );
 
 }

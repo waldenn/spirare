@@ -1,0 +1,78 @@
+
+0) code style guideline
+
+	https://github.com/mrdoob/three.js/wiki/Mr.doob's-Code-Style%E2%84%A2
+
+1) syncing forks:
+
+	https://help.github.com/articles/syncing-a-fork/
+	https://help.github.com/articles/configuring-a-remote-for-a-fork/
+
+2) branches:
+
+	http://nvie.com/posts/a-successful-git-branching-model/
+
+	https://www.atlassian.com/git/tutorials/syncing/git-remote
+
+3) JS protoype based programming
+	http://www.javascriptkit.com/javatutors/oopjs2.shtml
+	http://pivotallabs.com/javascript-constructors-prototypes-and-the-new-keyword/
+	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+
+4) 3D coding:
+
+	- scene
+		- camera
+		- lighting
+		- textures
+		- 3D object
+			- vertices, faces
+			- Object3D
+			- geometry, buffer geometry
+			- line, mesh, sprite, pointcloud
+			- grouping: http://stackoverflow.com/questions/7985805/three-js-mesh-group-example-three-object3d-advanced
+	- vectors, matrices
+		- rotation: euler, quaternions
+	- place some "rock" objects into the scene
+	- explaining raycasting
+		- http://www.playfuljs.com/a-first-person-engine-in-265-lines/
+			- http://demos.playfuljs.com/raycaster/
+		- implement raycasting collision-detection with "rocks"
+	- object picking
+		- http://soledadpenades.com/articles/three-js-tutorials/object-picking/
+	- sound: https://github.com/egonelbre/jsfx
+	- texture: https://github.com/mrdoob/texgen.js
+	- controls:
+		- https://github.com/mrdoob/three.js/tree/master/examples/js/controls
+			- TrackBall: https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js 
+			- PointerLock: http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+5) https://makc3d.wordpress.com/2014/07/20/threejs-first-person-shooter/
+
+x)
+	live coding: fix gruntfile
+
+	PR testing: https://help.github.com/articles/checking-out-pull-requests-locally/
+
+Interesting
+	- http://media.tojicode.com/q3bsp/
+	- http://soledadpenades.com/articles/three-js-tutorials/
+	- http://www.playfuljs.com/
+		- http://www.playfuljs.com/realistic-terrain-in-130-lines/
+			- https://github.com/hunterloftis/playfuljs-demos/blob/gh-pages/terrain/index.html
+
+		/*
+		// <script src="http://mrdoob.github.com/three.js/examples/fonts/helvetiker_regular.typeface.js"></script>
+
+		var TextGeometry = new THREE.TextGeometry( 'type "f" for fullscreen and click to play!', {
+						size: 10, height: 10, curveSegments: 3,
+						font: "helvetiker", // weight: "regular", style: "normal",
+						bevelThickness: 1, bevelSize: 2, bevelEnabled: false
+		});
+		var Material = new THREE.MeshNormalMaterial( { color: 0x00ff00 } );
+		var Text = new THREE.Mesh( TextGeometry, Material );
+		//Text.lookAt( camera.position );
+		//Text.lookAt( camera.position );
+		scene.add( Text );
+		*/
+
