@@ -1,0 +1,98 @@
+# 1) git: syncing forks:
+
+	- https://help.github.com/articles/syncing-a-fork/
+	- https://help.github.com/articles/configuring-a-remote-for-a-fork/
+
+# 2) git: branches:
+
+	- http://nvie.com/posts/a-successful-git-branching-model/
+	- https://www.atlassian.com/git/tutorials/syncing/git-remote
+
+# 3) JS:
+	- code style guidelines
+	- webdev doc links
+	- protoype based programming
+		- http://www.javascriptkit.com/javatutors/oopjs2.shtml
+		- http://pivotallabs.com/javascript-constructors-prototypes-and-the-new-keyword/
+		- http://www.htmlgoodies.com/beyond/javascript/object.create-the-new-way-to-create-objects-in-javascript.html
+		- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+
+# 4) ThreeJS:
+
+	- scene (tree root datastructure)
+		- Object3D http://threejs.org/docs/#Reference/Core/Object3D
+			- camera	https://en.wikipedia.org/wiki/Viewing_frustum
+						https://en.wikipedia.org/wiki/Hidden_surface_determination
+			- lighting
+			- geometry, buffer geometry
+				- box, sphere, cylinder, textgeometry, etc.
+			- vertices, faces
+				http://en.wikipedia.org/wiki/Polygon_mesh
+				https://www.youtube.com/playlist?list=PLzH6n4zXuckrPkEUK5iMQrQyvj9Z6WCrm
+					https://www.youtube.com/watch?v=KdyvizaygyY
+					https://www.youtube.com/watch?v=OODzTMcGDD0
+			- line, mesh, sprite, pointcloud
+			- textures
+			- grouping: http://stackoverflow.com/questions/7985805/three-js-mesh-group-example-three-object3d-advanced
+			- controls:
+				- https://github.com/mrdoob/three.js/tree/master/examples/js/controls
+					- TrackBall: https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js 
+					- PointerLock: http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+	- ideas:
+		- place some "rock" objects into the scene
+		- implement raycasting collision-detection with "rocks"
+		- sound: https://github.com/egonelbre/jsfx
+		- generative texturing: https://github.com/mrdoob/texgen.js
+		- investigate: https://makc3d.wordpress.com/2014/07/20/threejs-first-person-shooter/
+
+	- explain raycasting
+		- http://www.playfuljs.com/a-first-person-engine-in-265-lines/
+			- http://demos.playfuljs.com/raycaster/
+			- atan2 http://gamedev.stackexchange.com/questions/14602/what-are-atan-and-atan2-used-for-in-games
+				- http://en.wikipedia.org/wiki/Atan2#Definition
+
+-----------
+
+	- views / projections
+		- https://www.youtube.com/watch?v=vQ60rFwh2ig
+		- http://www.codinglabs.net/article_world_view_projection_matrix.aspx
+		- http://www.inversereality.org/tutorials/graphics%20programming/3dwmatrices.html
+		- http://3dgep.com/understanding-the-view-matrix/
+		- http://www.codeproject.com/Articles/42086/Space-and-Matrix-Transformations-Building-a-D-Eng
+		- http://en.wikibooks.org/wiki/OpenGL_Programming/3D/Matrices
+
+	- vectors, matrices
+		- rotation: euler, quaternions
+
+	- object picking
+		- http://soledadpenades.com/articles/three-js-tutorials/object-picking/
+
+
+# various
+
+	- todo: fix live coding setup
+	- PR testing: https://help.github.com/articles/checking-out-pull-requests-locally/
+	- links:
+		- https://www.udacity.com/course/cs291
+		- http://media.tojicode.com/q3bsp/
+		- http://soledadpenades.com/articles/three-js-tutorials/
+		- http://www.playfuljs.com/
+			- http://www.playfuljs.com/realistic-terrain-in-130-lines/
+				- https://github.com/hunterloftis/playfuljs-demos/blob/gh-pages/terrain/index.html
+
+~~~
+		/*
+		// <script src="http://mrdoob.github.com/three.js/examples/fonts/helvetiker_regular.typeface.js"></script>
+
+		var TextGeometry = new THREE.TextGeometry( 'type "f" for fullscreen and click to play!', {
+						size: 10, height: 10, curveSegments: 3,
+						font: "helvetiker", // weight: "regular", style: "normal",
+						bevelThickness: 1, bevelSize: 2, bevelEnabled: false
+		});
+		var Material = new THREE.MeshNormalMaterial( { color: 0x00ff00 } );
+		var Text = new THREE.Mesh( TextGeometry, Material );
+		//Text.lookAt( camera.position );
+		//Text.lookAt( camera.position );
+		scene.add( Text );
+		*/
+~~~
