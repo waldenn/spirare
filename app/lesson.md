@@ -91,6 +91,9 @@ git
 # various
 
 	- todo: fix live coding setup
+	- regexps:
+		- http://davidwalsh.name/regular-expressions-rest
+		- https://www.debuggex.com/
 	- PR testing: https://help.github.com/articles/checking-out-pull-requests-locally/
 	- fetch() http://updates.html5rocks.com/2015/03/introduction-to-fetch
 	- UX: http://aestheticio.com/learn-user-experience-design/
