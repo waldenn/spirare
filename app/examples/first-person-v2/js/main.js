@@ -10,7 +10,7 @@
 
 	var controls, controlsEnabled;
 
-	var moveForward, moveBackward, moveLeft, moveRight, canJump;
+	var moveForward, moveBackward, moveLeft, moveRight, canJump = true, canPlaceBlock = true;
 
 	var velocity = new THREE.Vector3();
 
@@ -32,11 +32,11 @@
         //ambienceSfx.play();
 		footStepSfx.preload = 'auto';
 		footStepSfx.loop = false;
-
+		
 		clock = new THREE.Clock();
 
 		scene = new THREE.Scene();
-		scene.fog = new THREE.Fog( 0xb2e1f2, 10,  1600 );
+		scene.fog = new THREE.Fog( 0xb2e1f2, 10, 3000 );
 
 		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
 		camera.position.y = 10;
@@ -78,9 +78,12 @@
 			color: 0xffffff,
 			map: texture
         } );
-
-		return new THREE.Mesh( geometry, material );
-	
+		
+		var floor = new THREE.Mesh( geometry, material );
+		floor.name = "floor";
+		
+		return floor;
+		
 	}
 	
 	function createSkybox() {
@@ -89,7 +92,7 @@
 		var directions  = [ "xpos", "xneg", "ypos", "yneg", "zpos", "zneg" ];
 		var imageSuffix = ".png";
 
-		var skyGeometry = new THREE.BoxGeometry( 1000, 1000, 1000 );	
+		var skyGeometry = new THREE.BoxGeometry( 2000, 2000, 2000 );	
 		
 		var materialArray = [];
 
@@ -104,7 +107,10 @@
 
 		var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
 
-		return new THREE.Mesh( skyGeometry, skyMaterial );
+		var skybox = new THREE.Mesh( skyGeometry, skyMaterial );
+		skybox.position.y = 200;
+		
+		return skybox;
 	
 	}
 
@@ -202,7 +208,13 @@
 				if ( canJump === true ) velocity.y += 350;
 				canJump = false;
 				break;
-
+			
+			case 88: // x
+				if ( canPlaceBlock === true ) {
+					addCube();
+					canPlaceBlock = false;
+				}
+				break;
 		}
 
 	}
@@ -234,8 +246,44 @@
 			case 68: // d
 				moveRight = false;
 				break;
+				
+			case 88: // x
+				canPlaceBlock = true;
+				break;
 		}
 
+	}
+	
+	function addCube() {
+		
+		var ahead = new THREE.Vector3( 0, 0, -1 );
+		ahead.transformDirection( camera.matrixWorld );
+		
+		var origin = new THREE.Vector3();
+		origin.setFromMatrixPosition( camera.matrixWorld );
+		
+		raycaster = new THREE.Raycaster( origin, ahead );
+		
+		var intersects = raycaster.intersectObjects( [ scene.getObjectByName( "floor" ) ], true );
+		
+		
+		if ( intersects.length > 0 ) {
+			
+			var Height = 10;
+			
+			var cubeGeometry = new THREE.BoxGeometry( 10, Height, 10 );
+			var cubeMaterial = new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } );
+			
+			var block = new THREE.Mesh( cubeGeometry, cubeMaterial );
+			
+			block.position.copy( intersects[ 0 ].point );
+			block.position.y += Height / 2;
+			
+			scene.add( block );
+			
+		}
+		
+		
 	}
 
 	function initControls() {
