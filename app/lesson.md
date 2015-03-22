@@ -95,6 +95,7 @@ git
 		- http://davidwalsh.name/regular-expressions-rest
 		- https://www.debuggex.com/
 	- PR testing: https://help.github.com/articles/checking-out-pull-requests-locally/
+	- http://www.sitepoint.com/understanding-collisions-physics-babylon-js-oimo-js/
 	- fetch() http://updates.html5rocks.com/2015/03/introduction-to-fetch
 	- UX: http://aestheticio.com/learn-user-experience-design/
 	- links:
