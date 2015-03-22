@@ -208,13 +208,7 @@
 				if ( canJump === true ) velocity.y += 350;
 				canJump = false;
 				break;
-			
-			case 88: // x
-				if ( canPlaceBlock === true ) {
-					addCube();
-					canPlaceBlock = false;
-				}
-				break;
+
 		}
 
 	}
@@ -253,34 +247,38 @@
 		}
 
 	}
+
+	function onClick(event) {
+
+		//event.preventDefault();
+
+		if ( event.which === 1 ) { // left mouse click
+
+			var origin = new THREE.Vector3();
+			origin.setFromMatrixPosition( camera.matrixWorld );
 	
-	function addCube() {
+			var ahead = new THREE.Vector3( 0, 0, -1 );
+			ahead.transformDirection( camera.matrixWorld );
 		
-		var ahead = new THREE.Vector3( 0, 0, -1 );
-		ahead.transformDirection( camera.matrixWorld );
-		
-		var origin = new THREE.Vector3();
-		origin.setFromMatrixPosition( camera.matrixWorld );
-		
-		raycaster = new THREE.Raycaster( origin, ahead );
-		
-		var intersects = raycaster.intersectObjects( [ scene.getObjectByName( "floor" ) ], true );
-		
-		
-		if ( intersects.length > 0 ) {
+			raycaster = new THREE.Raycaster( origin, ahead );
 			
-			var Height = 10;
+			var intersects = raycaster.intersectObjects( [ scene.getObjectByName( "floor" ) ], true );
 			
-			var cubeGeometry = new THREE.BoxGeometry( 10, Height, 10 );
-			var cubeMaterial = new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } );
-			
-			var block = new THREE.Mesh( cubeGeometry, cubeMaterial );
-			
-			block.position.copy( intersects[ 0 ].point );
-			block.position.y += Height / 2;
-			
-			scene.add( block );
-			
+			if ( intersects.length > 0 ) {
+				
+				var height = 10;
+				
+				var cubeGeometry = new THREE.BoxGeometry( 10, height, 10 );
+				var cubeMaterial = new THREE.MeshNormalMaterial( );
+				
+				var block = new THREE.Mesh( cubeGeometry, cubeMaterial );
+				
+				block.position.copy( intersects[ 0 ].point );
+				block.position.y += height / 2;
+				
+				scene.add( block );
+				
+			}
 		}
 		
 		
@@ -288,6 +286,7 @@
 
 	function initControls() {
 
+    	document.addEventListener( 'mousedown', onClick, false );
 		document.addEventListener( 'keydown', onKeyDown, false );
 		document.addEventListener( 'keyup', onKeyUp, false );
 		raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, -1, 0 ), 0, 10 );
