@@ -81,6 +81,7 @@
 		document.body.appendChild( renderer.domElement );
 	
 		$( "#hud" ).show();
+		$( "#hud-permanent" ).show();
 	}
 
 	function animate() {
