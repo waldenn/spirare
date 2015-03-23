@@ -14,6 +14,7 @@
 	- http://aerotwist.com/tutorials/an-introduction-to-shaders-part-1/
 		- aerotwist.com/static/tutorials/an-introduction-to-shaders-part-1/demo/
 	- http://aerotwist.com/tutorials/an-introduction-to-shaders-part-2/
+		- http://betterexplained.com/articles/vector-calculus-understanding-the-dot-product/
 	- http://www.adriancourreges.com/blog/2015/03/10/deus-ex-human-revolution-graphics-study/
 
 - research: non-flat player movement physics, some sample raytrace-based-physics code here:

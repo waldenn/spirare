@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Sample Three.js</title>
+		<style>
+			#container {
+				background: #000;
+				width: 400px;
+				height: 300px;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<div id="container">
+			
+			
+		</div>
+		
+	</body>
+	<!-- Shaders -->
+	<script type="x-shader/x-vertex" id="vertexshader">
+		
+		// switch on high precision floats
+		#ifdef GL_ES
+		precision highp float;
+		#endif
+		
+		uniform float amplitude;
+		attribute float displacement;
+		varying vec3 vNormal;
+
+		void main() {
+
+			vNormal = normal;
+			
+			// multiply our displacement by the
+			// amplitude. The amp will get animated
+			// so we'll have animated displacement
+			vec3 newPosition = position + 
+							   normal * 
+							   vec3(displacement * amplitude);
+
+			gl_Position = projectionMatrix *
+						  modelViewMatrix *
+						  vec4(newPosition,1.0);
+		}
+	</script>
+	
+	<script type="x-shader/x-fragment" id="fragmentshader">
+	
+		#ifdef GL_ES
+		precision highp float;
+		#endif
+		
+		// same name and type as VS
+		varying vec3 vNormal;
+
+		void main() {
+
+			// calc the dot product and clamp
+			// 0 -> 1 rather than -1 -> 1
+			vec3 light = vec3(0.5,0.2,1.0);
+			
+			// ensure it's normalized
+			light = normalize(light);
+			
+			float dProd = max(0.0, dot(vNormal, light));
+			
+			// feed into our frag colour
+			gl_FragColor = vec4(dProd, dProd, dProd, 1.0);
+			
+		}
+	
+	</script>
+	
+	<!-- End Shaders -->
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/Three.js"></script>
+
+	<script src="js/main.js"></script>
+	
+</html>
