@@ -17,8 +17,11 @@
 	var footStepSfx = new Audio( 'sfx/footstep.wav' );
 	var ambienceSfx = new Audio( 'sfx/ambience.wav' );
 
+	var cubes;
+
 	ambienceSfx.preload = 'auto';
 	ambienceSfx.loop = true;
+
 
 	init();
 	animate();
@@ -48,13 +51,36 @@
 		scene.add( createFloor() );
 
 		// skybox
-		scene.add( createSkybox() );
+		//scene.add( createSkybox() );
+
+		// http://www.ianww.com/2014/02/17/making-a-skydome-in-three-dot-js/
+		var g = new THREE.SphereGeometry(3000, 60, 40);
+		var uniforms = {
+			  texture: { type: 't', value: THREE.ImageUtils.loadTexture('textures/skysphere/clouds01.jpg') }
+		};
+
+		var m = new THREE.ShaderMaterial( {
+			  uniforms:       uniforms,
+			  vertexShader:   document.getElementById('sky-vertex').textContent,
+			  fragmentShader: document.getElementById('sky-fragment').textContent
+		});
+
+		skyBox = new THREE.Mesh(g, m);
+		skyBox.scale.set(-1, 1, 1);
+		skyBox.eulerOrder = 'XZY';
+		skyBox.renderDepth = 1000.0;
+		scene.add(skyBox);
+
+		// cube group parent
+		cubes = new THREE.Object3D();
+		scene.add( cubes );
 
 		renderer = new THREE.WebGLRenderer();
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		renderer.setClearColor( 0xb2e1f2 );
 		document.body.appendChild( renderer.domElement );
 	
+		$( "#hud" ).show();
 	}
 
 	function animate() {
@@ -209,6 +235,9 @@
 				canJump = false;
 				break;
 
+			case 72: // h
+				$( "#hud" ).toggle();
+				break;
 		}
 
 	}
@@ -252,16 +281,16 @@
 
 		//event.preventDefault();
 
+		var origin = new THREE.Vector3();
+		origin.setFromMatrixPosition( camera.matrixWorld );
+
+		var ahead = new THREE.Vector3( 0, 0, -1 );
+		ahead.transformDirection( camera.matrixWorld );
+	
+		raycaster = new THREE.Raycaster( origin, ahead );
+
 		if ( event.which === 1 ) { // left mouse click
 
-			var origin = new THREE.Vector3();
-			origin.setFromMatrixPosition( camera.matrixWorld );
-	
-			var ahead = new THREE.Vector3( 0, 0, -1 );
-			ahead.transformDirection( camera.matrixWorld );
-		
-			raycaster = new THREE.Raycaster( origin, ahead );
-			
 			var intersects = raycaster.intersectObjects( [ scene.getObjectByName( "floor" ) ], true );
 			
 			if ( intersects.length > 0 ) {
@@ -272,15 +301,31 @@
 				var cubeMaterial = new THREE.MeshNormalMaterial( );
 				
 				var block = new THREE.Mesh( cubeGeometry, cubeMaterial );
+				block.name = 'blocks';
 				
 				block.position.copy( intersects[ 0 ].point );
 				block.position.y += height / 2;
 				
-				scene.add( block );
+				cubes.add( block );
 				
 			}
 		}
-		
+        else if ( event.which === 3 ) { // right mouse click
+
+			// TODO
+            // deactivate PointerLock for HUD GUI
+            //scene.remove( controls.getObject() );
+
+			var intersects = raycaster.intersectObjects( cubes.children , true);
+
+			if ( intersects.length > 0 ) {
+				cubes.remove( intersects[ 0 ].object );
+
+				// .. or change visibility
+				//intersects[ 0 ].object.visible = false;
+			}
+
+        }
 		
 	}
 
@@ -310,7 +355,7 @@
 		if ( controlsEnabled ) {
 			
 			var delta = clock.getDelta();
-			var walkingSpeed = 200.0;
+			var walkingSpeed = 350;
 
             //console.log(delta);
 
@@ -341,7 +386,8 @@
 				canJump = true;
 			
 			}
-		
+
+			$( "#shells" ).html(cubes.children.length);
 		}
 	
 	}
