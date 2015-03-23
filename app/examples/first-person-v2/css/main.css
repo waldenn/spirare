@@ -26,7 +26,7 @@ body{
 	visibility: visible
 }
 
-#hud {
+#hud, #hud-permanent {
 	color: blue;
 	display: none;
 	font-family: 'doomregular';
