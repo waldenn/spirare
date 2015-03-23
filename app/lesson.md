@@ -6,9 +6,19 @@
 - idea: create some 3D model, convert it to Three.js JSON format, import it into your scene. (the Three.js editor might be useful here)
 - idea: create a maze as done [here](https://github.com/josdirksen/essential-threejs/tree/master/chapter-03) using [this](https://github.com/felipecsl/random-maze-generator)
 - idea: allow for horizontal movement together with a jump
+- learn: OpenGL basics
+	- http://www.ntu.edu.sg/home/ehchua/programming/opengl/cg_basicstheory.html 
+- learn: shader programming
+	- http://en.wikipedia.org/wiki/OpenGL_Shading_Language
+	- http://threejs.org/docs/#Reference/Materials/ShaderMaterial
+	- http://aerotwist.com/tutorials/an-introduction-to-shaders-part-1/
+		- aerotwist.com/static/tutorials/an-introduction-to-shaders-part-1/demo/
+	- http://aerotwist.com/tutorials/an-introduction-to-shaders-part-2/
+	- http://www.adriancourreges.com/blog/2015/03/10/deus-ex-human-revolution-graphics-study/
 
 - research: non-flat player movement physics, some sample raytrace-based-physics code here:
 	- spirare/app/examples/first-person-game-a/js/modules/systems/applyPhysics.js
+
 - research: better user interface switching between with HUD controls and PointerLock mode
 
 - todo: fix live reloading using Grunt
