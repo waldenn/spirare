@@ -1,18 +1,24 @@
-# 1) git: syncing forks:
-git
+- idea: add moving objects to the scene
+- idea: add collision detection with objects on the ground (pre-calculations needed for robustness?)
+- idea: create a small city with: buildings, roads, trees, etc.
+- idea: create a maze as done [here](https://github.com/josdirksen/essential-threejs/tree/master/chapter-03) using [this](https://github.com/felipecsl/random-maze-generator)
+
+- todo: research non-flat moving physics, some sample raytrace-based-physics code here: first-person-game-a/js/modules/systems/applyPhysics.js
+- todo: better user interface switching between with HUD controls and PointerLock mode
+- todo: fix live reloading using Grunt
+- todo: matrix projections math explained
+
+-----------
+
+- git
 	- https://help.github.com/articles/syncing-a-fork/
 	- https://help.github.com/articles/configuring-a-remote-for-a-fork/
 
-# 1) git: merging, resetting, rebasing
+- git: merging, resetting, rebasing
 	- http://www.hostingadvice.com/how-to/git-undo-commit/
  	- http://www.hostingadvice.com/how-to/git-rollback-commit/
 	- http://www.hostingadvice.com/blog/git-no-ff-rebase/
 	- http://www.hostingadvice.com/how-to/git-merge-rebase/
-
-# 1) raycasting
-	- http://threejs.org/docs/#Reference/Core/Raycaster
-	- http://mrdoob.github.io/three.js/examples/canvas_interactive_cubes.html
-	- http://threejs.org/examples/canvas_interactive_particles.html
 
 
 # 2) git: branches:
