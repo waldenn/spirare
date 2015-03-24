@@ -1,11 +1,5 @@
 # current notes
 
-- idea: add moving objects to the scene
-- idea: add collision detection with objects on the ground (pre-calculations needed for robustness?)
-- idea: create a small city with: buildings, roads, trees, etc.
-- idea: create some 3D model, convert it to Three.js JSON format, import it into your scene. (the Three.js editor might be useful here)
-- idea: create a maze as done [here](https://github.com/josdirksen/essential-threejs/tree/master/chapter-03) using [this](https://github.com/felipecsl/random-maze-generator)
-- idea: allow for horizontal movement together with a jump
 - learn: OpenGL basics
 	- http://www.ntu.edu.sg/home/ehchua/programming/opengl/cg_basicstheory.html 
 - learn: shader programming
@@ -17,9 +11,16 @@
 		- http://betterexplained.com/articles/vector-calculus-understanding-the-dot-product/
 	- http://www.adriancourreges.com/blog/2015/03/10/deus-ex-human-revolution-graphics-study/
 
+
+- idea: add moving objects to the scene
+- idea: create a small city with: buildings, roads, trees, etc.
+- idea: create some 3D model, convert it to Three.js JSON format, import it into your scene. (the Three.js editor might be useful here)
+- idea: create a maze as done [here](https://github.com/josdirksen/essential-threejs/tree/master/chapter-03) using [this](https://github.com/felipecsl/random-maze-generator)
+- idea: add collision detection with objects on the ground (pre-calculations needed for robustness?)
+- idea: allow for horizontal movement together with a jump
+
 - research: non-flat player movement physics, some sample raytrace-based-physics code here:
 	- spirare/app/examples/first-person-game-a/js/modules/systems/applyPhysics.js
-
 - research: better user interface switching between with HUD controls and PointerLock mode
 
 - todo: fix live reloading using Grunt
