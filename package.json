@@ -1,14 +1,14 @@
 {
-    "name": "spirare",
-    "version": "0.0.0",
+	"name": "spirare",
+	"version": "0.0.0",
 	"repository": {
-	  "type": "git",
-	  "url": "git://github.com/waldenn/spirare.git"
+		"type": "git",
+		"url": "git://github.com/waldenn/spirare.git"
 	},
-    "dependencies": {},
-    "devDependencies": {
-        "livereloadx": "^0.3.7"
-    },
+	"dependencies": {},
+	"devDependencies": {
+		"livereloadx": "^0.3.7"
+	},
 	"scripts": {
 		"start": "live.sh"
 	}
