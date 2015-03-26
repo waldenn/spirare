@@ -8,4 +8,4 @@
 * cd spirare
 * npm install
 * npm start
-* browse to http://localhost:8000
+* browse to [http://localhost:8000](http://localhost:8000)
