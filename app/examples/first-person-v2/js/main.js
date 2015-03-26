@@ -2,6 +2,8 @@
 
 	var clock;
 
+	var stats;
+
 	var scene, camera, renderer;
 
 	var geometry, material, mesh;
@@ -79,6 +81,8 @@
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		renderer.setClearColor( 0xb2e1f2 );
 		document.body.appendChild( renderer.domElement );
+
+		addStatsObject();
 	
 		$( "#hud" ).show();
 		$( "#hud-permanent" ).show();
@@ -87,6 +91,7 @@
 	function animate() {
 
 		requestAnimationFrame( animate );
+		stats.update();
 		updateControls();
 		renderer.render( scene, camera );
 	
@@ -239,6 +244,10 @@
 			case 72: // h
 				$( "#hud" ).toggle();
 				break;
+
+			case 73: // i
+				$( "#stats" ).toggle();
+				break;
 		}
 
 	}
@@ -330,6 +339,18 @@
 		
 	}
 
+    function addStatsObject() {
+        stats = new Stats();
+        stats.setMode(0);
+
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.bottom = '0px';
+
+        document.body.appendChild( stats.domElement );
+		$( "#stats" ).toggle();
+    }
+
 	function initControls() {
 
     	document.addEventListener( 'mousedown', onClick, false );
@@ -349,7 +370,6 @@
 		renderer.setSize( window.innerWidth, window.innerHeight );
 
 	}
-
 
 	function updateControls() {
 
