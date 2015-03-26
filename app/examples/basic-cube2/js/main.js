@@ -30,7 +30,6 @@ function init() {
 	light.position.set( 20, 30, 20 );
 	scene.add( light );
 
-
 	// position and point the camera to the center of the scene
 	camera.position.x = 15;
 	camera.position.y = 16;
@@ -64,8 +63,9 @@ function addControls( controlObject ) {
 }
 
 function render() {
-	
+
 	renderer.render( scene, camera );
+
 	scene.getObjectByName( 'cube' ).rotation.x += control.rotationSpeedX;
 	scene.getObjectByName( 'cube' ).rotation.y += control.rotationSpeedY;
 	scene.getObjectByName( 'cube' ).rotation.z += control.rotationSpeedZ;
