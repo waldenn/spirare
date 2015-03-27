@@ -17,22 +17,22 @@
 - idea: create some 3D model, convert it to Three.js JSON format, import it into your scene. (the Three.js editor might be useful here)
 - idea: create a maze as done [here](https://github.com/josdirksen/essential-threejs/tree/master/chapter-03) using [this](https://github.com/felipecsl/random-maze-generator)
 - idea: add collision detection with objects on the ground (pre-calculations needed for robustness?)
-- idea: allow for horizontal movement together with a jump
+- idea: allow for horizontal movement when jumping
+- idea: add dynamically generated assets: sounds, textures, ...
 
 - research: non-flat player movement physics, some sample raytrace-based-physics code here:
-	- spirare/app/examples/first-person-game-a/js/modules/systems/applyPhysics.js
+	- minimal approach: spirare/app/examples/first-person-game-a/js/modules/systems/applyPhysics.js
+	- navmesh and 3D pathfinding:
+		- http://nickjanssen.github.io/PatrolJS/demo/demo.html
+		- https://github.com/nickjanssen/PatrolJS
+		- http://www.ai-blog.net/archives/000152.html
+		- https://www.youtube.com/watch?v=v4d_6ZCGlAg&feature=youtu.be&t=6m8s
+		- https://www.youtube.com/watch?v=XyfLSocd9ec
+		- https://www.youtube.com/watch?v=aMWeTXL98mM
+
 - research: better user interface switching between with HUD controls and PointerLock mode
 
-- todo: fix live reloading using Grunt
 - todo: matrix projections math explained
-
-- navmesh and 3D pathfinding:
-	- http://nickjanssen.github.io/PatrolJS/demo/demo.html
-	- https://github.com/nickjanssen/PatrolJS
-	- http://www.ai-blog.net/archives/000152.html
-	- https://www.youtube.com/watch?v=v4d_6ZCGlAg&feature=youtu.be&t=6m8s
-	- https://www.youtube.com/watch?v=XyfLSocd9ec
-	- https://www.youtube.com/watch?v=aMWeTXL98mM
 
 - demo: http://codepen.io/nicolasdnl/pen/zxedvW
 

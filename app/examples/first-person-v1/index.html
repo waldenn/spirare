@@ -20,10 +20,40 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
+        <script src="js/vendor/jquery.min.js"></script>
         <script src="js/vendor/three.min.js"></script>
         <script src="js/vendor/PointerLockControls.js"></script>
 		<script src="js/vendor/THREEx.FullScreen.js" type="text/javascript"> </script>
-		<!--script src="js/vendor/THREEx.WindowResize.js" type="text/javascript"> </script-->
+		<script src="js/stats.min.js"></script>
+
+		<script type="application/x-glsl" id="sky-vertex">
+			varying vec2 vUV;
+
+			void main() {
+			  vUV = uv;
+			  vec4 pos = vec4(position, 1.0);
+			  gl_Position = projectionMatrix * modelViewMatrix * pos;
+			}
+		</script>
+
+		<script type="application/x-glsl" id="sky-fragment">
+			uniform sampler2D texture;
+			varying vec2 vUV;
+
+			void main() {
+			  vec4 sample = texture2D(texture, vUV);
+			  gl_FragColor = vec4(sample.xyz, sample.w);
+			}
+		</script>
+
+        <div id="hud">
+            <div id="d">blocks<div id="shells">0</div></div>
+            <div id="e">health<div id="health">100</div></div>
+        </div>
+
+        <div id="hud-permanent">
+            <div id="visor">+</div>
+        </div>
 
         <script src="js/main.js"></script>
 
