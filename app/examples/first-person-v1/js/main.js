@@ -13,6 +13,8 @@
 	var controls, controlsEnabled;
 
 	var moveForward, moveBackward, moveLeft, moveRight, canJump = true, canPlaceBlock = true;
+	
+	var walkingSpeed = 350;
 
 	var velocity = new THREE.Vector3();
 
@@ -212,6 +214,10 @@
 
 		switch ( e.keyCode ) {
 
+			case 16: // shift
+				walkingSpeed = 1200; // run
+				break;
+			
 			case 38: // up
 
 			case 87: // w
@@ -255,7 +261,11 @@
 	function onKeyUp( e ) {
 
 		switch ( e.keyCode ) {
-
+			
+			case 16: // shift
+				walkingSpeed = 350;
+				break;
+			
 			case 38: // up
 
 			case 87: // w
@@ -376,7 +386,6 @@
 		if ( controlsEnabled ) {
 			
 			var delta = clock.getDelta();
-			var walkingSpeed = 350;
 
             //console.log(delta);
 
