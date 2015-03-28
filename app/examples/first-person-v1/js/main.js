@@ -16,6 +16,8 @@
 
 	var velocity = new THREE.Vector3();
 
+	var walkingSpeed = 350;
+
 	var footStepSfx = new Audio( 'sfx/footstep.wav' );
 	var ambienceSfx = new Audio( 'sfx/ambience.wav' );
 
@@ -212,6 +214,10 @@
 
 		switch ( e.keyCode ) {
 
+			case 16: // shift
+				walkingSpeed = 1200; // run
+				break;
+
 			case 38: // up
 
 			case 87: // w
@@ -255,6 +261,10 @@
 	function onKeyUp( e ) {
 
 		switch ( e.keyCode ) {
+
+			case 16: // shift
+				walkingSpeed = 350;
+				break;
 
 			case 38: // up
 
@@ -376,9 +386,6 @@
 		if ( controlsEnabled ) {
 			
 			var delta = clock.getDelta();
-			var walkingSpeed = 350;
-
-            //console.log(delta);
 
 			velocity.x -= velocity.x * 10.0 * delta;
 			velocity.z -= velocity.z * 10.0 * delta;
