@@ -67,7 +67,7 @@ var shaderMaterial = new THREE.MeshShaderMaterial({
 
 // set up the sphere vars
 // console.log( Math.min(WIDTH, HEIGHT ) );
-var radius = Math.min(HEIGHT/6, WIDTH/6 ), segments = 5, rings = 20;
+var radius = Math.min(HEIGHT/10, WIDTH/10 ), segments = 5, rings = 7;
 
 // create a new mesh with sphere geometry -
 // we will cover the sphereMaterial next!
@@ -80,7 +80,7 @@ var vertices = sphere.geometry.vertices;
 var values = attributes.displacement.value
 
 for (var v = 0; v < vertices.length; v++) {
-	values.push(Math.random() * 20);
+	values.push(Math.random() * 15);
 }
 
 // add the sphere to the scene
