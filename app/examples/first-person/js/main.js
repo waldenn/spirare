@@ -219,11 +219,7 @@
 			case 16: // shift
 				walkingSpeed = 1200; // run
 				break;
-<<<<<<< HEAD
 
-=======
-			
->>>>>>> 45880bc1cbc4ac577ce0f5c79cb908089f82ba4a
 			case 38: // up
 
 			case 87: // w
