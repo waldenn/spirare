@@ -10,9 +10,10 @@ window.requestAnimFrame = (function(){
 		  };
 })();
 
-// set the scene size
-var WIDTH = 400,
-	HEIGHT = 300;
+// set the inner-window size
+var WIDTH = window.innerWidth; 
+var HEIGHT = window.innerHeight; 
+var h = window.innerHeight; 
 
 // set some camera attributes
 var VIEW_ANGLE = 45,
@@ -65,7 +66,8 @@ var shaderMaterial = new THREE.MeshShaderMaterial({
 });
 
 // set up the sphere vars
-var radius = 100, segments = 5, rings = 20;
+// console.log( Math.min(WIDTH, HEIGHT ) );
+var radius = Math.min(HEIGHT/6, WIDTH/6 ), segments = 5, rings = 20;
 
 // create a new mesh with sphere geometry -
 // we will cover the sphereMaterial next!
@@ -83,6 +85,18 @@ for (var v = 0; v < vertices.length; v++) {
 
 // add the sphere to the scene
 scene.addChild(sphere);
+
+window.addEventListener( 'resize', onWindowResize, false );
+
+    function onWindowResize() {
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+    }
+
 
 var frame = 0;
 
