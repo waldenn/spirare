@@ -13,6 +13,8 @@
 	var controls, controlsEnabled;
 
 	var moveForward, moveBackward, moveLeft, moveRight, canJump = true, canPlaceBlock = true;
+	
+	var walkingSpeed = 350;
 
 	var velocity = new THREE.Vector3();
 
@@ -217,7 +219,11 @@
 			case 16: // shift
 				walkingSpeed = 1200; // run
 				break;
+<<<<<<< HEAD
 
+=======
+			
+>>>>>>> 45880bc1cbc4ac577ce0f5c79cb908089f82ba4a
 			case 38: // up
 
 			case 87: // w
@@ -261,11 +267,19 @@
 	function onKeyUp( e ) {
 
 		switch ( e.keyCode ) {
+<<<<<<< HEAD
 
 			case 16: // shift
 				walkingSpeed = 350;
 				break;
 
+=======
+			
+			case 16: // shift
+				walkingSpeed = 350;
+				break;
+			
+>>>>>>> 45880bc1cbc4ac577ce0f5c79cb908089f82ba4a
 			case 38: // up
 
 			case 87: // w
@@ -386,6 +400,11 @@
 		if ( controlsEnabled ) {
 			
 			var delta = clock.getDelta();
+<<<<<<< HEAD
+=======
+
+            //console.log(delta);
+>>>>>>> 45880bc1cbc4ac577ce0f5c79cb908089f82ba4a
 
 			velocity.x -= velocity.x * 10.0 * delta;
 			velocity.z -= velocity.z * 10.0 * delta;
