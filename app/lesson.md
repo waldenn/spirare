@@ -1,17 +1,5 @@
 # current notes
 
-- learn: OpenGL basics
-	- http://www.ntu.edu.sg/home/ehchua/programming/opengl/cg_basicstheory.html 
-- learn: shader programming
-	- http://en.wikipedia.org/wiki/OpenGL_Shading_Language
-	- http://threejs.org/docs/#Reference/Materials/ShaderMaterial
-	- http://aerotwist.com/tutorials/an-introduction-to-shaders-part-1/
-		- aerotwist.com/static/tutorials/an-introduction-to-shaders-part-1/demo/
-	- http://aerotwist.com/tutorials/an-introduction-to-shaders-part-2/
-		- http://betterexplained.com/articles/vector-calculus-understanding-the-dot-product/
-	- http://www.adriancourreges.com/blog/2015/03/10/deus-ex-human-revolution-graphics-study/
-
-
 - idea: add moving objects to the scene
 - idea: create a small city with: buildings, roads, trees, etc.
 - idea: create some 3D model, convert it to Three.js JSON format, import it into your scene. (the Three.js editor might be useful here)
@@ -34,7 +22,15 @@
 
 - todo: matrix projections math explained
 
-- demo: http://codepen.io/nicolasdnl/pen/zxedvW
+- demos:
+	- http://codepen.io/nicolasdnl/pen/zxedvW
+	- http://stemkoski.github.io/7DFPS/index.html
+	- https://github.com/zacharystenger/Speak3D
+
+- JS package management
+	- http://jspm.io/
+		- https://github.com/jspm/jspm-cli
+	- http://javascriptplayground.com/blog/2014/11/js-modules-jspm-systemjs/
 
 -----------
 
@@ -134,6 +130,8 @@
 	- http://www.sitepoint.com/understanding-collisions-physics-babylon-js-oimo-js/
 	- fetch() http://updates.html5rocks.com/2015/03/introduction-to-fetch
 	- UX: http://aestheticio.com/learn-user-experience-design/
+	- algorithms:
+		- http://h3manth.com/javascript-sorting/
 	- links:
 		- 
 		- https://www.udacity.com/course/csFOO

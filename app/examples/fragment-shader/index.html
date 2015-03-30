@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>fragment shader</title>
+    <script src="js/three.min.js"></script>
+    <script src="js/dat.gui.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<script id="simple-fragment" type="x-shader/x-fragment">
+    varying vec3 vNormal;
+
+    uniform float delta;
+    uniform float mNear;
+    uniform float mFar;
+
+    float PI = 3.14159265358979323846264;
+
+    void main()
+    {
+        float depth = gl_FragCoord.z / gl_FragCoord.w;
+        float depthColor = smoothstep( mNear, mFar, depth );
+
+        gl_FragColor = vec4(abs(sin(delta + 0.7*PI) + cos(normalize(vNormal).x)/2.0) - depthColor,
+                            abs(sin(delta + 1.0*PI) + cos(normalize(vNormal).y)/2.0) - depthColor,
+                            abs(sin(delta + 1.2*PI) + cos(normalize(vNormal).z)/2.0) - depthColor, 1.0);
+
+
+
+    }
+
+</script>
+
+<script src="js/main.js"></script>
+
+<body>
+</body>
+</html>
