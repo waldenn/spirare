@@ -103,28 +103,28 @@ function moveCube( e ) {
 	if ( e.keyCode == '37' ) {
 		// left arrow
 		cube.position.x -= moveDistance;
-	
-    } else if ( e.keyCode == '38' ) {
-		    // up arrow
-	    cube.position.z -= moveDistance;
-	
-    } else if ( e.keyCode == '39' ) {
-		    // right arrow
-	    cube.position.x += moveDistance;
-	
-    } else if ( e.keyCode == '40' ) {
-		    // down arrow
-	    cube.position.z += moveDistance;
-	
-    } else if ( e.keyCode == '65' ) {
+
+	} else if ( e.keyCode == '38' ) {
+			// up arrow
+		cube.position.z -= moveDistance;
+
+	} else if ( e.keyCode == '39' ) {
+			// right arrow
+		cube.position.x += moveDistance;
+
+	} else if ( e.keyCode == '40' ) {
+			// down arrow
+		cube.position.z += moveDistance;
+
+	} else if ( e.keyCode == '65' ) {
 		
-	    cube.rotation.y -= moveDistance;
-	
-    } else if ( e.keyCode == '83' ) {
+		cube.rotation.y -= moveDistance;
+
+	} else if ( e.keyCode == '83' ) {
 		
-	    cube.rotation.y += moveDistance;
-	
-    }
+		cube.rotation.y += moveDistance;
+
+	}
 
 }
 
@@ -151,6 +151,7 @@ function checkCollision() {
 
 		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
 		var collisionResults = ray.intersectObjects( cubes );
+
 		if ( collisionResults.length > 0 && collisionResults[ 0 ].distance < directionVector.length() ) {
 			
 			console.log( collisionResults[ 0 ].object.name );
