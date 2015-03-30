@@ -23,6 +23,7 @@ function init() {
 	var basicShader = THREE.ShaderLib['basic'];
 
 	uniforms = THREE.UniformsUtils.merge([basicShader.uniforms]);
+
 	var texture = THREE.ImageUtils.loadTexture('debug.png');
 	uniforms['map'].value = texture;
 	uniforms.delta = {type: 'f', value: 0.0};
