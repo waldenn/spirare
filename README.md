@@ -1,6 +1,6 @@
-# spirare
+# spirare 
 
-[online demos](http://waldenn.github.io/spirare/app/)
+* [online demos](http://waldenn.github.io/spirare/app/)
 
 # install
 

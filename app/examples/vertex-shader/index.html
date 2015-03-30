@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>vertex shader</title>
+    <script src="js/three.min.js"></script>
+    <script src="js/dat.gui.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<script id="simpleVertexShader" type="x-shader/x-vertex">
+    varying vec2 vUv;
+    void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix *
+    modelViewMatrix * vec4(position, 1.0 );
+    }
+
+</script>
+
+<script id="sinusVertexShader" type="x-shader/x-vertex">
+
+	varying vec2 vUv;
+
+	uniform float delta;
+	uniform float scale;
+
+	void main() {
+
+		vUv = uv;
+
+		vec3 p = position;
+
+		p.z += sin(2.0 * p.y + delta) * 5.0;
+		p.z += cos(2.0 * p.z + delta / 2.0) * 5.0;
+		p.z += cos(2.0 * p.x + delta) * 5.0;
+		p.x += sin(p.y + delta / 2.0) * 10.0;
+
+		vec4 mvPosition = modelViewMatrix * vec4(scale * p, 1.0 );
+
+		gl_Position = projectionMatrix * mvPosition;
+
+	}
+
+</script>
+
+<script src="js/main.js"></script>
+
+<body>
+</body>
+</html>
