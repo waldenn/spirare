@@ -23,11 +23,11 @@
 	var footStepSfx = new Audio( 'sfx/footstep.wav' );
 	var ambienceSfx = new Audio( 'sfx/ambience.wav' );
 
+	var playercube;
 	var cubes;
 
 	ambienceSfx.preload = 'auto';
 	ambienceSfx.loop = true;
-
 
 	init();
 	animate();
@@ -56,6 +56,8 @@
         // floor
 		scene.add( createFloor() );
 
+		scene.add( createPlayerCube() );
+
 		// skybox
 		//scene.add( createSkybox() );
 
@@ -73,7 +75,7 @@
 
 		skyBox = new THREE.Mesh(g, m);
 		skyBox.scale.set(-1, 1, 1);
-		skyBox.eulerOrder = 'XZY';
+		//skyBox.eulerOrder = 'XZY';
 		skyBox.renderDepth = 1000.0;
 		scene.add(skyBox);
 
@@ -90,12 +92,48 @@
 	
 		$( "#hud" ).show();
 		$( "#hud-permanent" ).show();
+
+		//T("sin", {freq:880, mul:0.5}).play();
+		playSoundtrack();
+	}
+
+	function playSoundtrack() {
+
+		timbre.rec(function(output) {
+		  var midis = [69, 71, 72, 76, 69, 71, 72, 76].scramble();
+		  var msec  = timbre.timevalue("bpm60 l8");
+		  var synth = T("OscGen", {env:T("perc", {r:msec, ar:true})});
+
+		  T("interval", {interval:msec}, function(count) {
+			if (count < midis.length) {
+			  synth.noteOn(midis[count], 100);
+			} else {
+			  output.done();
+			}
+		  }).start();
+
+		  output.send(synth);
+		}).then(function(result) {
+		  var L = T("buffer", {buffer:result, loop:true});
+		  var R = T("buffer", {buffer:result, loop:true});
+
+		  var num = 400;
+		  var duration = L.duration;
+
+		  R.pitch = (duration * (num - 1)) / (duration * num);
+
+		  T("delay", {time:"bpm30 l16", fb:0.1, cross:true},
+			T("pan", {pos:-0.6}, L), T("pan", {pos:+0.6}, R)
+		  ).play();
+		});
+
 	}
 
 	function animate() {
 
 		requestAnimationFrame( animate );
 		stats.update();
+		checkCollision();
 		updateControls();
 		renderer.render( scene, camera );
 	
@@ -121,7 +159,21 @@
 		return floor;
 		
 	}
-	
+
+	function createPlayerCube() {
+
+		var height = 10;
+		var cubeGeometry = new THREE.BoxGeometry( 10, height, 10 );
+		var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xff2255 } );
+		playercube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+		playercube.position.y += height / 2;
+
+		//cube.visible = false;
+		playercube.name = 'playercube';
+
+		return playercube;
+	}
+
 	function createSkybox() {
 		
 		var imagePrefix = "textures/skybox/dawnmountain-";
@@ -319,7 +371,7 @@
 				
 				var height = 10;
 				
-				var cubeGeometry = new THREE.BoxGeometry( 10, height, 10 );
+				var cubeGeometry = new THREE.BoxGeometry( 10, 10, 10 );
 				var cubeMaterial = new THREE.MeshNormalMaterial( );
 				
 				var block = new THREE.Mesh( cubeGeometry, cubeMaterial );
@@ -327,7 +379,9 @@
 				
 				block.position.copy( intersects[ 0 ].point );
 				block.position.y += height / 2;
+				// var nearness = Math.max ( 4000 / Math.abs( block.position.x , 0.5) );
 				
+				T("pluck", {freq:500, mul:0.5}).bang().play();
 				cubes.add( block );
 				
 			}
@@ -341,6 +395,8 @@
 			var intersects = raycaster.intersectObjects( cubes.children , true);
 
 			if ( intersects.length > 0 ) {
+				T("pluck", {freq:700, mul:0.4}).bang().play();
+
 				cubes.remove( intersects[ 0 ].object );
 
 				// .. or change visibility
@@ -350,6 +406,52 @@
         }
 		
 	}
+
+	function checkCollision() {
+
+		/*
+		cubes.forEach( function ( cube ) {
+			cube.material.transparent = false;
+			cube.material.opacity = 1.0;
+		} );
+		*/
+
+		//var cube = scene.getObjectByName( 'cube' );
+		//var originPoint = cube.position.clone();
+
+		var cube = scene.getObjectByName( 'playercube' );
+		//var origin = new THREE.Vector3();
+		//origin.setFromMatrixPosition( camera.matrixWorld );
+		cube.position = camera.position;
+
+		var originPoint = cube.position.clone();
+
+		for ( var vertexIndex = 0; vertexIndex < cube.geometry.vertices.length; vertexIndex ++ ) {
+
+			// console.log( vertexIndex );
+
+			/*
+			var localVertex = cube.geometry.vertices[ vertexIndex ].clone();
+			var globalVertex = localVertex.applyMatrix4( cube.matrix );
+			var directionVector = globalVertex.sub( cube.position );
+
+			var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+			var collisionResults = ray.intersectObjects( cubes );
+
+			if ( collisionResults.length > 0 && collisionResults[ 0 ].distance < directionVector.length() ) {
+
+				console.log( collisionResults[ 0 ].object.name );
+				collisionResults[ 0 ].object.material.transparent = true;
+				collisionResults[ 0 ].object.material.opacity = 0.4;
+
+			}
+			*/
+
+		}
+
+	}
+
+
 
     function addStatsObject() {
         stats = new Stats();
