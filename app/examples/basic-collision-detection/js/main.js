@@ -19,8 +19,9 @@ function init() {
 	renderer.setClearColor( 0x000000, 1.0 );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 
-	// create a cube and add to scene
+	// add some cubes to the scene
 	var cubeGeometry = new THREE.BoxGeometry( 2, 2, 2 );
+
 	var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xff2255 } );
 	var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
 	cube.name = 'cube';
@@ -54,19 +55,10 @@ function init() {
 	scene.add( cube5 );
 	cubes.push( cube5 );
 
-	var groundPlane = new THREE.PlaneBufferGeometry( 50, 50, 50, 50 );
-
-	var groundMat = new THREE.MeshNormalMaterial( { } );
-	var groundMat  = new THREE.MeshBasicMaterial( {
-		color: 0x0000ff,
-		wireframe: true
-	} );
-
-	var physMesh = new THREE.Mesh( groundPlane, groundMat );
-
-	physMesh.rotation.x = -0.5 * Math.PI;
-	physMesh.receiveShadow = true;
-	physMesh.position.y = -2;
+    var gridXY = new THREE.GridHelper(50, 1);
+    gridXY.setColors( new THREE.Color(0x0000ff), new THREE.Color(0x0000ff) );
+	gridXY.position.y = -2;
+    scene.add(gridXY);
 
 	var dirLight = new THREE.DirectionalLight();
 	dirLight.position.set( 25, 23, 15 );
@@ -75,8 +67,6 @@ function init() {
 	var dirLight2 = new THREE.DirectionalLight();
 	dirLight2.position.set( -25, 23, 15 );
 	scene.add( dirLight2 );
-
-	scene.add( physMesh );
 
 	// position and point the camera to the center of the scene
 	camera.position.x = 15;
