@@ -122,6 +122,7 @@
 		
 	}
 	
+	// unused, replaced by skydome
 	function createSkybox() {
 		
 		var imagePrefix = "textures/skybox/dawnmountain-";
@@ -311,11 +312,17 @@
 	
 		raycaster = new THREE.Raycaster( origin, ahead );
 
-		if ( event.which === 1 ) { // left mouse click
-
-			var intersects = raycaster.intersectObjects( [ scene.getObjectByName( "floor" ) ], true );
+		
+		if ( event.which === 1 ) { // left mouse click --> add a cube
+		
+			var intersects = raycaster.intersectObject( cubes, true );
 			
-			if ( intersects.length > 0 ) {
+			// There's always just one point when you collide with one thing.
+			intersects.push( raycaster.intersectObject( scene.getObjectByName( "floor" ), true )[0] );
+			
+			if ( intersects[0] !== undefined ) {
+				
+				// TODO: Add better cube positions to cube, they collide while they shouldn't.
 				
 				var height = 10;
 				
