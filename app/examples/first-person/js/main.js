@@ -23,11 +23,11 @@
 	var footStepSfx = new Audio( 'sfx/footstep.wav' );
 	var ambienceSfx = new Audio( 'sfx/ambience.wav' );
 
+	var playercube;
 	var cubes;
 
 	ambienceSfx.preload = 'auto';
 	ambienceSfx.loop = true;
-
 
 	init();
 	animate();
@@ -53,11 +53,74 @@
 		controls = new THREE.PointerLockControls( camera );
 		scene.add( controls.getObject() );
 
-        // floor
 		scene.add( createFloor() );
+		scene.add( createPlayerCube() );
+		scene.add( createSkysphere() );
 
-		// skybox
-		//scene.add( createSkybox() );
+		cubes = new THREE.Object3D(); // parent object
+		scene.add( cubes );
+
+		renderer = new THREE.WebGLRenderer();
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.setClearColor( 0xb2e1f2 );
+		document.body.appendChild( renderer.domElement );
+
+		addStatsObject();
+	
+		$( "#hud" ).show();
+		$( "#hud-permanent" ).show();
+
+		// todo: background audio handling
+		//playSoundtrack();
+	}
+
+	function playSoundtrack() {
+
+		timbre.rec(function(output) {
+		  var midis = [69, 71, 72, 76, 69, 71, 72, 76].scramble();
+		  var msec  = timbre.timevalue("bpm60 l8");
+		  var synth = T("OscGen", {env:T("perc", {r:msec, ar:true})});
+
+		  T("interval", {interval:msec}, function(count) {
+			if (count < midis.length) {
+			  synth.noteOn(midis[count], 100);
+			} else {
+			  output.done();
+			}
+		  }).start();
+
+		  output.send(synth);
+		}).then(function(result) {
+		  var L = T("buffer", {buffer:result, loop:true});
+		  var R = T("buffer", {buffer:result, loop:true});
+
+		  var num = 400;
+		  var duration = L.duration;
+
+		  R.pitch = (duration * (num - 1)) / (duration * num);
+
+		  T("delay", {time:"bpm30 l16", fb:0.1, cross:true},
+			T("pan", {pos:-0.6}, L), T("pan", {pos:+0.6}, R)
+		  ).play();
+		});
+
+	}
+
+	function stopSoundtrack() {
+		timbre.pause();
+	}
+
+	function animate() {
+
+		requestAnimationFrame( animate );
+		stats.update();
+		checkCollision();
+		updateControls();
+		renderer.render( scene, camera );
+	
+	}
+
+	function createSkysphere() {
 
 		// http://www.ianww.com/2014/02/17/making-a-skydome-in-three-dot-js/
 		var g = new THREE.SphereGeometry(3000, 60, 40);
@@ -71,34 +134,12 @@
 			  fragmentShader: document.getElementById('sky-fragment').textContent
 		});
 
-		skyBox = new THREE.Mesh(g, m);
-		skyBox.scale.set(-1, 1, 1);
-		skyBox.eulerOrder = 'XZY';
-		skyBox.renderDepth = 1000.0;
-		scene.add(skyBox);
+		skySphere = new THREE.Mesh(g, m);
+		skySphere.scale.set(-1, 1, 1);
+		//skySpere.eulerOrder = 'XZY';
+		skySphere.renderDepth = 1000.0;
 
-		// cube group parent
-		cubes = new THREE.Object3D();
-		scene.add( cubes );
-
-		renderer = new THREE.WebGLRenderer();
-		renderer.setSize( window.innerWidth, window.innerHeight );
-		renderer.setClearColor( 0xb2e1f2 );
-		document.body.appendChild( renderer.domElement );
-
-		addStatsObject();
-	
-		$( "#hud" ).show();
-		$( "#hud-permanent" ).show();
-	}
-
-	function animate() {
-
-		requestAnimationFrame( animate );
-		stats.update();
-		updateControls();
-		renderer.render( scene, camera );
-	
+		return skySphere;
 	}
 
 	function createFloor() {
@@ -119,9 +160,22 @@
 		floor.name = "floor";
 		
 		return floor;
-		
 	}
-	
+
+	function createPlayerCube() {
+
+		var height = 10;
+		var cubeGeometry = new THREE.BoxGeometry( 10, height, 10 );
+		var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xff2255 } );
+		playercube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+		playercube.position.y += height / 2;
+
+		//cube.visible = false;
+		playercube.name = 'playercube';
+
+		return playercube;
+	}
+
 	function createSkybox() {
 		
 		var imagePrefix = "textures/skybox/dawnmountain-";
@@ -256,6 +310,10 @@
 			case 73: // i
 				$( "#stats" ).toggle();
 				break;
+
+			case 77: // m
+				stopSoundtrack();
+				break;
 		}
 
 	}
@@ -319,15 +377,17 @@
 				
 				var height = 10;
 				
-				var cubeGeometry = new THREE.BoxGeometry( 10, height, 10 );
+				var cubeGeometry = new THREE.BoxGeometry( 10, 10, 10 );
 				var cubeMaterial = new THREE.MeshNormalMaterial( );
 				
 				var block = new THREE.Mesh( cubeGeometry, cubeMaterial );
-				block.name = 'blocks';
+				block.name = 'block';
 				
 				block.position.copy( intersects[ 0 ].point );
 				block.position.y += height / 2;
+				// var nearness = Math.max ( 4000 / Math.abs( block.position.x , 0.5) );
 				
+				T("pluck", {freq:500, mul:0.5}).bang().play();
 				cubes.add( block );
 				
 			}
@@ -341,6 +401,8 @@
 			var intersects = raycaster.intersectObjects( cubes.children , true);
 
 			if ( intersects.length > 0 ) {
+				T("pluck", {freq:700, mul:0.4}).bang().play();
+
 				cubes.remove( intersects[ 0 ].object );
 
 				// .. or change visibility
@@ -350,6 +412,48 @@
         }
 		
 	}
+
+	function checkCollision() {
+
+		/*
+		cubes.forEach( function ( cube ) {
+			cube.material.transparent = false;
+			cube.material.opacity = 1.0;
+		} );
+		*/
+
+		playercube.position = camera.position;
+		var origin = playercube.position.clone();
+		//origin.setFromMatrixPosition( camera.matrixWorld );
+		//console.log(origin);
+
+		for ( var vertexIndex = 0; vertexIndex < playercube.geometry.vertices.length; vertexIndex ++ ) {
+
+			// console.log( vertexIndex );
+
+			var localVertex = playercube.geometry.vertices[ vertexIndex ].clone();
+			var globalVertex = localVertex.applyMatrix4( playercube.matrix );
+			var directionVector = globalVertex.sub( playercube.position );
+
+			var ray = new THREE.Raycaster( origin, directionVector.clone().normalize() );
+
+			var collisionResults = ray.intersectObjects( cubes.children );
+
+			if ( collisionResults.length > 0 && collisionResults[ 0 ].distance < directionVector.length() ) {
+
+				var obj = collisionResults[ 0 ].object;
+
+				console.log( 'collission with: ', obj.name, obj.id );
+				//collisionResults[ 0 ].object.material.transparent = true;
+				//collisionResults[ 0 ].object.material.opacity = 0.4;
+
+			}
+
+		}
+
+	}
+
+
 
     function addStatsObject() {
         stats = new Stats();
@@ -416,6 +520,9 @@
 				canJump = true;
 			
 			}
+
+			// todo: use simpler code: clone position
+			playercube.position.set ( controls.getObject().position.x, controls.getObject().position.y, controls.getObject().position.z );
 
 			$( "#shells" ).html(cubes.children.length);
 		}
