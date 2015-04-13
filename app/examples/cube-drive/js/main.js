@@ -58,16 +58,16 @@ function updateMovingFigure() {
   var rotationAngle = Math.PI / rotationSteed * delta;
 
   // Basic rotation
-  if (keyboard.pressed('w')) {
+  if (keyboard.pressed('w') || keyboard.pressed('up') ) {
     movingFigure.translateZ(-moveDistance);
   }
-  if (keyboard.pressed('s')) {
+  if (keyboard.pressed('s') || keyboard.pressed('down') ) {
     movingFigure.translateZ(moveDistance);
   }
-  if (keyboard.pressed('a')) {
+  if (keyboard.pressed('a') || keyboard.pressed('left') ) {
     movingFigure.rotation.y += rotationAngle;
   }
-  if (keyboard.pressed('d')) {
+  if (keyboard.pressed('d') || keyboard.pressed('right') ) {
     movingFigure.rotation.y -= rotationAngle;
   }
 
