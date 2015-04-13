@@ -24,6 +24,7 @@
 	var ambienceSfx = new Audio( 'sfx/ambience.wav' );
 
 	var playercube;
+
 	var cubes;
 
 	ambienceSfx.preload = 'auto';
@@ -114,7 +115,6 @@
 
 		requestAnimationFrame( animate );
 		stats.update();
-		checkCollision();
 		updateControls();
 		renderer.render( scene, camera );
 	
@@ -166,9 +166,10 @@
 
 		var height = 10;
 		var cubeGeometry = new THREE.BoxGeometry( 10, height, 10 );
-		var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xff2255 } );
+		var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xff2255, transparent: true, opacity: 0.5 } );
 		playercube = new THREE.Mesh( cubeGeometry, cubeMaterial );
 		playercube.position.y += height / 2;
+		//playercube.goodposition = playercube.position.clone();
 
 		//cube.visible = false;
 		playercube.name = 'playercube';
@@ -441,18 +442,29 @@
 
 			if ( collisionResults.length > 0 && collisionResults[ 0 ].distance < directionVector.length() ) {
 
+				T("pluck", {freq:300, mul:0.2}).bang().play();
+
 				var obj = collisionResults[ 0 ].object;
 
 				console.log( 'collission with: ', obj.name, obj.id );
-				//collisionResults[ 0 ].object.material.transparent = true;
-				//collisionResults[ 0 ].object.material.opacity = 0.4;
+				collisionResults[ 0 ].object.material.transparent = true;
+				collisionResults[ 0 ].object.material.opacity = 0.4;
+
+				//controls.getObject().translateX( -10 );
+				//controls.getObject().translateY( -10 );
+				//controls.getObject().position = playercube.goodposition;
+
+			}
+			else { // update last good position
+
+				//playercube.goodposition = playercube.position.clone();
+				//console.log(playercube.goodposition);
 
 			}
 
 		}
 
 	}
-
 
 
     function addStatsObject() {
@@ -503,10 +515,11 @@
 			if ( moveLeft ) velocity.x -= walkingSpeed * delta;
 			if ( moveRight ) velocity.x += walkingSpeed * delta;
 
-			if ( moveForward || moveBackward || moveLeft || moveRight ) {
+			if ( moveForward || moveBackward || moveLeft || moveRight || !canJump ) {
 				
 				//footStepSfx.play();
-			
+				checkCollision();
+
 			}
 
 			controls.getObject().translateX( velocity.x * delta );
@@ -521,7 +534,7 @@
 			
 			}
 
-			// todo: use simpler code: clone position
+			// todo: use simpler code
 			playercube.position.set ( controls.getObject().position.x, controls.getObject().position.y, controls.getObject().position.z );
 
 			$( "#shells" ).html(cubes.children.length);
