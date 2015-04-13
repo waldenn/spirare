@@ -53,34 +53,11 @@
 		controls = new THREE.PointerLockControls( camera );
 		scene.add( controls.getObject() );
 
-        // floor
 		scene.add( createFloor() );
-
 		scene.add( createPlayerCube() );
+		scene.add( createSkysphere() );
 
-		// skybox
-		//scene.add( createSkybox() );
-
-		// http://www.ianww.com/2014/02/17/making-a-skydome-in-three-dot-js/
-		var g = new THREE.SphereGeometry(3000, 60, 40);
-		var uniforms = {
-			  texture: { type: 't', value: THREE.ImageUtils.loadTexture('textures/skysphere/clouds01.jpg') }
-		};
-
-		var m = new THREE.ShaderMaterial( {
-			  uniforms:       uniforms,
-			  vertexShader:   document.getElementById('sky-vertex').textContent,
-			  fragmentShader: document.getElementById('sky-fragment').textContent
-		});
-
-		skyBox = new THREE.Mesh(g, m);
-		skyBox.scale.set(-1, 1, 1);
-		//skyBox.eulerOrder = 'XZY';
-		skyBox.renderDepth = 1000.0;
-		scene.add(skyBox);
-
-		// cube group parent
-		cubes = new THREE.Object3D();
+		cubes = new THREE.Object3D(); // parent object
 		scene.add( cubes );
 
 		renderer = new THREE.WebGLRenderer();
@@ -93,8 +70,8 @@
 		$( "#hud" ).show();
 		$( "#hud-permanent" ).show();
 
-		//T("sin", {freq:880, mul:0.5}).play();
-		playSoundtrack();
+		// todo: background audio handling
+		//playSoundtrack();
 	}
 
 	function playSoundtrack() {
@@ -129,6 +106,10 @@
 
 	}
 
+	function stopSoundtrack() {
+		timbre.pause();
+	}
+
 	function animate() {
 
 		requestAnimationFrame( animate );
@@ -137,6 +118,28 @@
 		updateControls();
 		renderer.render( scene, camera );
 	
+	}
+
+	function createSkysphere() {
+
+		// http://www.ianww.com/2014/02/17/making-a-skydome-in-three-dot-js/
+		var g = new THREE.SphereGeometry(3000, 60, 40);
+		var uniforms = {
+			  texture: { type: 't', value: THREE.ImageUtils.loadTexture('textures/skysphere/clouds01.jpg') }
+		};
+
+		var m = new THREE.ShaderMaterial( {
+			  uniforms:       uniforms,
+			  vertexShader:   document.getElementById('sky-vertex').textContent,
+			  fragmentShader: document.getElementById('sky-fragment').textContent
+		});
+
+		skySphere = new THREE.Mesh(g, m);
+		skySphere.scale.set(-1, 1, 1);
+		//skySpere.eulerOrder = 'XZY';
+		skySphere.renderDepth = 1000.0;
+
+		return skySphere;
 	}
 
 	function createFloor() {
@@ -157,7 +160,6 @@
 		floor.name = "floor";
 		
 		return floor;
-		
 	}
 
 	function createPlayerCube() {
@@ -308,6 +310,10 @@
 			case 73: // i
 				$( "#stats" ).toggle();
 				break;
+
+			case 77: // m
+				stopSoundtrack();
+				break;
 		}
 
 	}
@@ -375,7 +381,7 @@
 				var cubeMaterial = new THREE.MeshNormalMaterial( );
 				
 				var block = new THREE.Mesh( cubeGeometry, cubeMaterial );
-				block.name = 'blocks';
+				block.name = 'block';
 				
 				block.position.copy( intersects[ 0 ].point );
 				block.position.y += height / 2;
@@ -416,36 +422,32 @@
 		} );
 		*/
 
-		//var cube = scene.getObjectByName( 'cube' );
-		//var originPoint = cube.position.clone();
-
-		var cube = scene.getObjectByName( 'playercube' );
-		//var origin = new THREE.Vector3();
+		playercube.position = camera.position;
+		var origin = playercube.position.clone();
 		//origin.setFromMatrixPosition( camera.matrixWorld );
-		cube.position = camera.position;
+		//console.log(origin);
 
-		var originPoint = cube.position.clone();
-
-		for ( var vertexIndex = 0; vertexIndex < cube.geometry.vertices.length; vertexIndex ++ ) {
+		for ( var vertexIndex = 0; vertexIndex < playercube.geometry.vertices.length; vertexIndex ++ ) {
 
 			// console.log( vertexIndex );
 
-			/*
-			var localVertex = cube.geometry.vertices[ vertexIndex ].clone();
-			var globalVertex = localVertex.applyMatrix4( cube.matrix );
-			var directionVector = globalVertex.sub( cube.position );
+			var localVertex = playercube.geometry.vertices[ vertexIndex ].clone();
+			var globalVertex = localVertex.applyMatrix4( playercube.matrix );
+			var directionVector = globalVertex.sub( playercube.position );
 
-			var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
-			var collisionResults = ray.intersectObjects( cubes );
+			var ray = new THREE.Raycaster( origin, directionVector.clone().normalize() );
+
+			var collisionResults = ray.intersectObjects( cubes.children );
 
 			if ( collisionResults.length > 0 && collisionResults[ 0 ].distance < directionVector.length() ) {
 
-				console.log( collisionResults[ 0 ].object.name );
-				collisionResults[ 0 ].object.material.transparent = true;
-				collisionResults[ 0 ].object.material.opacity = 0.4;
+				var obj = collisionResults[ 0 ].object;
+
+				console.log( 'collission with: ', obj.name, obj.id );
+				//collisionResults[ 0 ].object.material.transparent = true;
+				//collisionResults[ 0 ].object.material.opacity = 0.4;
 
 			}
-			*/
 
 		}
 
@@ -518,6 +520,9 @@
 				canJump = true;
 			
 			}
+
+			// todo: use simpler code: clone position
+			playercube.position.set ( controls.getObject().position.x, controls.getObject().position.y, controls.getObject().position.z );
 
 			$( "#shells" ).html(cubes.children.length);
 		}
