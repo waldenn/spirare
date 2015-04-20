@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" /><title>2D overlays in three.js - js do it</title>
+<meta name="Description" content="jsdo.it - share JavaScript, HTML5 and CSS - " />
+<meta name="Keywords"  content="JavaScript,HTML5,CSS" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+
+<style type="text/css">* {
+
+  margin: 0;
+
+  padding: 0;
+
+  border: 0;
+
+}
+
+
+
+#container {
+
+    overflow: hidden;
+
+    position: absolute;
+
+    width: 400px;
+
+    height: 400px;
+
+    outline: 1px dashed grey;
+
+    margin-left: -200px;
+
+    margin-top: -200px;
+
+    left: 50%;
+
+    top: 50%;
+
+}
+
+
+
+.balloon {
+
+    position: absolute;
+
+    color: white;
+
+    background: black;
+
+    border-radius: 100px;
+
+    font-family: sans-serif;
+
+    font-size: 20px;
+
+    width: 100px;
+
+    height: 30px;
+
+    text-align: center;
+
+    padding-top: 10px;
+
+}
+
+
+
+.balloon .arrow {
+
+    left: 40px;
+
+    margin-top: 9px;
+
+    border-width: 10px 10px 0px;
+
+    border-color: black transparent transparent;
+
+    position: absolute;
+
+    width: 0px;
+
+    height: 0px;
+
+    border-style: solid;
+
+}</style></head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+
+<div id="container"></div>
+<script type="text/javascript">
+
+// see: https://makc3d.wordpress.com/2015/04/04/three-js-and-2d-overlays/
+// we start with basic example from https://github.com/mrdoob/three.js/blob/master/README.md
+// we define this balloon class to handle 2D overlay stuff for us
+
+
+function Balloon( html ) {
+
+    THREE.Object3D.call( this );
+
+    
+
+    this.popup = document.createElement( 'div' );
+
+    this.popup.classList.add( 'balloon' );
+
+    this.popup.innerHTML = html;
+
+    
+
+    this.addEventListener( 'added', (function () {
+
+        container.appendChild( this.popup );
+
+    }).bind( this ));
+
+    
+
+    this.addEventListener( 'removed', (function () {
+
+        container,removeChild( this.popup );
+
+    }).bind( this ));
+
+}
+
+
+
+Balloon.prototype = Object.create( THREE.Object3D.prototype );
+
+Balloon.prototype.constructor = Balloon;
+
+
+
+Balloon.prototype.updateMatrixWorld = (function () {
+
+    var screenVector = new THREE.Vector3 ();
+
+    var raycaster = new THREE.Raycaster ();
+
+
+
+    return function( force ) {
+
+        THREE.Object3D.prototype.updateMatrixWorld.call( this, force );
+
+
+
+        screenVector.set( 0, 0, 0 ); this.localToWorld( screenVector );
+
+        
+
+        raycaster.ray.direction.copy( screenVector );
+
+
+
+        raycaster.ray.origin.set( 0, 0, 0 ); camera.localToWorld( raycaster.ray.origin );
+
+        raycaster.ray.direction.sub( raycaster.ray.origin );
+
+        
+
+        var distance = raycaster.ray.direction.length();
+
+        raycaster.ray.direction.normalize();
+
+        
+
+        var intersections = raycaster.intersectObject( scene, true );
+
+        if( intersections.length && ( intersections[0].distance < distance )) {
+
+            
+
+            // overlay anchor is obscured
+
+            this.popup.style.display = 'none';
+
+            
+
+        } else {
+
+            
+
+            // overlay anchor is visible
+
+            screenVector.project( camera );
+
+            
+
+            this.popup.style.display = '';
+
+            this.popup.style.left = Math.round((screenVector.x + 1) * container.offsetWidth / 2 - 50) + 'px';
+
+            this.popup.style.top = Math.round((1 - screenVector.y) * container.offsetHeight / 2 - 50) + 'px';
+
+        }
+
+    };
+
+}) ();
+
+
+
+var scene, camera, renderer;
+
+var geometry, material, mesh;
+
+
+
+init();
+
+animate();
+
+
+
+function init() {
+
+    
+
+    scene = new THREE.Scene();
+
+    
+
+    camera = new THREE.PerspectiveCamera( 75, container.offsetWidth / container.offsetHeight, 1, 10000 );
+
+    camera.position.z = 1000;
+
+    
+
+    // we change here box to sphere, apply earth texture to it
+
+    
+
+    THREE.ImageUtils.crossOrigin = '';
+
+    
+
+    geometry = new THREE.SphereGeometry( 400, 30, 20 );
+
+    material = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('http://i.imgur.com/DhOF0XH.jpg') } );
+
+    
+
+    mesh = new THREE.Mesh( geometry, material );
+
+    scene.add( mesh );
+
+
+
+    renderer = new THREE.WebGLRenderer();
+
+    renderer.setClearColor( 0xffffff );
+
+    renderer.setSize( container.offsetWidth, container.offsetHeight );
+
+    
+
+    // and wrap the whole thing into the div
+
+    
+
+    container.appendChild( renderer.domElement );
+
+    
+
+    // oh yes, add some overlays
+
+    
+
+    var africa = new Balloon( 'Africa<div class="arrow"></div>' );
+
+    africa.position.set( 1, 0.2, -0.4 ).normalize().multiplyScalar( 400 + 1 );
+
+    mesh.add( africa );
+
+
+
+    var australia = new Balloon( 'Australia<div class="arrow"></div>' );
+
+    australia.position.set( -1, -0.6, -1 ).normalize().multiplyScalar( 400 + 1 );
+
+    mesh.add( australia );
+
+}
+
+
+
+function animate() {
+
+    
+
+    requestAnimationFrame( animate );
+
+    
+
+    mesh.rotation.x += 0.001;
+
+    mesh.rotation.y += 0.020;
+
+    
+
+    renderer.render( scene, camera );
+
+    
+
+}
+</script>
+</body>
+</html>
+
