@@ -27,6 +27,14 @@
 
 	var cubes;
 
+	// navmesh vars
+	var player;
+	var target;
+	var playerNavMeshGroup;
+	var calculatedPath = null;
+	var pathLines;
+	
+	
 	ambienceSfx.preload = 'auto';
 	ambienceSfx.loop = true;
 
@@ -39,7 +47,7 @@
 		initPointerLock();
 		THREEx.FullScreen.bindKey( { charCode : 'f'.charCodeAt( 0 ) } );
 
-        //ambienceSfx.play();
+		//ambienceSfx.play();
 		footStepSfx.preload = 'auto';
 		footStepSfx.loop = false;
 		
@@ -48,6 +56,8 @@
 		scene = new THREE.Scene();
 		scene.fog = new THREE.Fog( 0xb2e1f2, 10, 3000 );
 
+		scene.add( new THREE.AmbientLight( 0x101030 )  );
+
 		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
 		camera.position.y = 10;
 
@@ -55,12 +65,41 @@
 		scene.add( controls.getObject() );
 
 		scene.add( createFloor() );
-		scene.add( createPlayerCube() );
+		camera.add( createPlayerCube() );
 		scene.add( createSkysphere() );
 
 		cubes = new THREE.Object3D(); // parent object
 		scene.add( cubes );
 
+		var jsonLoader = new THREE.JSONLoader();
+
+		jsonLoader.load( 'meshes/level.js', function( geometry, materials ) {
+			level = new THREE.Mesh(geometry, new THREE.MeshNormalMaterial(materials));
+			level.scale.set( 20, 20, 20 );
+			//console.log( level );
+			scene.add( level );
+			//scene.add(level.scale.set(4,4,4) );
+		}, null);
+
+		jsonLoader.load( 'meshes/level.nav.js', function( geometry, materials ) {
+
+			var zoneNodes = patrol.buildNodes(geometry);
+
+			patrol.setZoneData('level', zoneNodes);
+
+			var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+				color: 0xd79fd4,
+				opacity: 0.5,
+				transparent: true
+			}));
+
+			scene.add(mesh);
+
+			// Set the player's navigation mesh group
+			playerNavMeshGroup = patrol.getGroup('level', camera.position );
+
+		}, null);
+				
 		renderer = new THREE.WebGLRenderer();
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		renderer.setClearColor( 0xb2e1f2 );
@@ -73,6 +112,50 @@
 
 		// todo: background audio handling
 		//playSoundtrack();
+	}
+
+	function navmeshTest() {
+
+		camera.updateMatrixWorld();
+
+		target.position.copy( player.position );
+
+		// Calculate a path to the target and store it
+		calculatedPath = patrol.findPath(player.position, target.position, 'level', playerNavMeshGroup);
+
+		if (calculatedPath && calculatedPath.length) {
+
+			if (pathLines) {
+				scene.remove(pathLines);
+			}
+
+			var material = new THREE.LineBasicMaterial({
+				color: 0x0000ff,
+				linewidth: 2
+			});
+
+			var geometry = new THREE.Geometry();
+			geometry.vertices.push(player.position);
+
+			// Draw debug lines
+			for (var i = 0; i < calculatedPath.length; i++) {
+				geometry.vertices.push(calculatedPath[i].clone().add(new THREE.Vector3(0, 0.2, 0)));
+			}
+
+			pathLines = new THREE.Line( geometry, material );
+			scene.add( pathLines );
+
+			// Draw debug cubes except the last one. Also, add the player position.
+			var debugPath = [player.position].concat(calculatedPath);
+
+			for (var i = 0; i < debugPath.length - 1; i++) {
+				geometry = new THREE.BoxGeometry( 0.3, 0.3, 0.3 );
+				var material = new THREE.MeshBasicMaterial( {color: 0x00ffff} );
+				var node = new THREE.Mesh( geometry, material );
+				node.position.copy(debugPath[i]);
+				pathLines.add( node );
+			}
+		}
 	}
 
 	function playSoundtrack() {
@@ -161,10 +244,6 @@
 		
 		return floor;
 	}
-<<<<<<< HEAD
-	
-	// unused, replaced by skydome
-=======
 
 	function createPlayerCube() {
 
@@ -175,13 +254,12 @@
 		playercube.position.y += height / 2;
 		//playercube.goodposition = playercube.position.clone();
 
-		//cube.visible = false;
+		playercube.visible = false;
 		playercube.name = 'playercube';
 
 		return playercube;
 	}
 
->>>>>>> upstream/master
 	function createSkybox() {
 		
 		var imagePrefix = "textures/skybox/dawnmountain-";
@@ -320,6 +398,10 @@
 			case 77: // m
 				stopSoundtrack();
 				break;
+
+			case 78: // n
+				navmeshTest();
+				break;
 		}
 
 	}
@@ -375,17 +457,11 @@
 	
 		raycaster = new THREE.Raycaster( origin, ahead );
 
-		
-		if ( event.which === 1 ) { // left mouse click --> add a cube
-		
-			var intersects = raycaster.intersectObject( cubes, true );
+		if ( event.which === 1 ) { // left mouse click
+
+			var intersects = raycaster.intersectObjects( [ scene.getObjectByName( "floor" ) ], true );
 			
-			// There's always just one point when you collide with one thing.
-			intersects.push( raycaster.intersectObject( scene.getObjectByName( "floor" ), true )[0] );
-			
-			if ( intersects[0] !== undefined ) {
-				
-				// TODO: Add better cube positions to cube, they collide while they shouldn't.
+			if ( intersects.length > 0 ) {
 				
 				var height = 10;
 				
