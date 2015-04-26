@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+	<title>snake</title>
+	<!-- This assumes your project will be responsive -->
+	<meta name="viewport" content="width=device-width">
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+
+    <div id="pause" class="paused hidden">Paused</div>
+
+    <div class="infobox">
+      <div class="panels">
+        <div class="hd">game controls</div>
+        <code>A</code><span> pan camera left</span><br/>
+        <code>D</code><span> pan camera right</span><br/>
+        <code>W</code><span> - move up </span><br/>
+        <code>S</code><span> - move down </span><br/>
+        <code>&uarr;</code><span> move backwards </span><br/>
+        <code>&darr;</code><span> move forward </span></br>
+        <code>&rarr;</code><span> move right </span><br/>
+        <code>&larr;</code><span> move left </span><br/>
+      <code>spacebar</code><span> pause (use <code>arrows keys</code> to resume) </span><br/>
+      </div>
+      <div class="panels">
+        <div class="hd">game options</div>
+        <label>level: &nbsp;</label>
+        <select id="leveloptions">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+      <div class="panels">
+        <div class="hd">game score</div>
+        <div id="gamescore" class="score">0</div>
+      </div>
+    </div>
+
+    <script src="js/libs/three.min.js"></script>
+    <script src="js/libs/Detector.js"></script>
+	<script src="js/libs/THREEx.FullScreen.js"></script>
+    <script src="js/libs/PointerLockControls.js"></script>
+    <script src="js/snake.js"></script>
+    <script src="js/main.js"></script>
+
+  </body>
+</html>
