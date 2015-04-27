@@ -1,11 +1,10 @@
-//snake
-function Snake( scene, size, color ) {
+function Snake( scene, size, color, unitsize ) {
 
 	this.snake = [];
 	this.scene = scene;
 	this.size = size; // snake is made up of cubes
 	this.color = color;
-	this.distance = 50; // distance to move by
+	this.distance = size; // distance to move by
 
 	this.direction = null;
 	this.axis = null;
@@ -13,22 +12,18 @@ function Snake( scene, size, color ) {
 	this.onSelfCollision = function() {};
 	this.onTagCollision = function() {};
 
-	this.position = 0; // current position of the snake instance
-	this.position.x = 0;
-	this.position.y = 0;
-	this.position.z = 0;
+	this.position = {}; // current position of the snake instance
 
-	this.tagPosition = 0; // the current position of the tag to be hit
-	this.tagPosition.x = 0;
-	this.tagPosition.y = 0;
-	this.tagPosition.z = 0;
+	this.tagPosition = {}; // the current position of the tag to be hit
 
 	this.geometry = new THREE.BoxGeometry( this.size, this.size, this.size );
 
 	this.material = new THREE.MeshLambertMaterial( {
+
 		color: this.color,
 		transparent: true,
 		opacity: 0.5
+
     } );
 
 	this.init();
@@ -48,6 +43,7 @@ Snake.prototype = {
 	setDefaultPositions: function() {
 		
 		var self = this;
+
 		this.snake.forEach( function( cube, index ) {
 			
 			cube.position.z = -1 * ( self.size / 2 * ( index + 1 ) );
@@ -96,19 +92,12 @@ Snake.prototype = {
 	   	
 	},
 	
-	createCube: function( position ) {
-		
-		var cube = new THREE.Mesh( this.geometry, this.material );
-		
-		return cube;
-	   	
-	},
-	
 	addCube: function() {
 		
-		this.snake.push( this.createCube() );
+		this.snake.push( new THREE.Mesh( this.geometry, this.material )  );
 	   	
 	},
+
 	render: function() {
 		
 		var self = this;
@@ -117,6 +106,7 @@ Snake.prototype = {
 		this.snake.forEach( function( cube ) {
 			
 			var temp = null;
+
 			if ( self.axis !== null && self.direction !== null ) {
 				
 				if ( !next ) {
@@ -126,12 +116,15 @@ Snake.prototype = {
 						y: cube.position.y,
 						z: cube.position.z
 	                };
+
 					cube.position[ self.axis ] += ( self.direction * self.distance );
+
 					self.position = {
 						x: cube.position.x,
 						y: cube.position.y,
 						z: cube.position.z
 	                };
+
 					if ( self.tagPosition ) {
 						
 						if ( self.isHit( self.position, self.tagPosition ) ) {
@@ -150,13 +143,16 @@ Snake.prototype = {
 						y: cube.position.y,
 						z: cube.position.z
 	                };
+
 					cube.position.set( next.x, next.y, next.z );
+
 	                // check if it collides with itself
 					if ( self.isHit( self.position, cube.position ) ) {
 						
 						self.selfCollision();
 					
 					};
+
 					next = {
 						x: temp.x,
 						y: temp.y,
@@ -166,6 +162,7 @@ Snake.prototype = {
 				}
 			
 			}
+
 			self.renderCube( cube );
 		
 		} );

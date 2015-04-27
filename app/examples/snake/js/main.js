@@ -1,12 +1,13 @@
 !(function() {
+
     if (!Detector.webgl) Detector.addGetWebGLMessage();
 
-    var havePointerLock = checkForPointerLock();
-    var controls, controlsEnabled;
+    var gridSize = 1000;
+    var unitSize = 50;
 
+    var controls;
     var scene, camera, renderer, cube;
-    var gridSize = 1000,
-        unitSize = 50;
+
     var pos;
     var raf;
     var snake = null;
@@ -137,11 +138,10 @@
     function init() {
 
         window.addEventListener('resize', onWindowResize, false);
+
         THREEx.FullScreen.bindKey({
             charCode: 'f'.charCodeAt(0)
         });
-
-        initPointerLock();
 
         // --- Scene ---
         scene = new THREE.Scene();
@@ -167,7 +167,7 @@
         scene.add(line);
 
         // --- Snake ---
-        snake = new Snake(scene, unitSize, 0xff0000);
+        snake = new Snake(scene, unitSize, 0xff0000 );
         snake.render();
         
         snake.onTagCollision = function() {
@@ -184,11 +184,10 @@
 
         // --- Camera ---
         camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 10000);
-        //camera.position.set(500, 800, 1300);
-        //camera.position.z = 500;
-        //camera.lookAt(new THREE.Vector3());
 
-        controls = new THREE.PointerLockControls(camera);
+        controls = new THREE.PointerLockControls( camera );
+
+		controls.initPointerLock( controls , controls.checkForPointerLock() );
 
         // place camera object at the snake head
         snake.snake[0].add( controls.getObject() );
@@ -202,13 +201,11 @@
 
         document.body.appendChild(renderer.domElement);
 
-        //var ambientLight = new THREE.AmbientLight( 0xcccccc );
-        //scene.add(ambientLight);
-
         // --- Directional Lighting ---
         var directionalLight = new THREE.DirectionalLight(0xffffff);
         directionalLight.position.set(500, 800, 1300).normalize();
         scene.add(directionalLight);
+
     }
 
     function onWindowResize() {
@@ -227,28 +224,36 @@
     }
 
     function triggerRenders() {
+
         if (renderCounter === levels[level].renderCount) {
             snake.render();
             render();
             renderCounter = 0;
         }
+
         renderCounter++;
+
         raf = window.requestAnimationFrame(triggerRenders);
     }
 
     function addTagToScene(x, y, z) {
+
         var geometry = new THREE.BoxGeometry(unitSize, unitSize, unitSize);
+
         var material = new THREE.MeshLambertMaterial({
             color: 0x00ff00
         });
+
         var sphere = new THREE.Mesh(geometry, material);
         sphere.position.set(x, y, z);
         scene.add(sphere);
+
         snake.setCurrentTagPosition({
             x: x,
             y: y,
             z: z
         });
+
         return sphere;
     }
 
@@ -276,9 +281,13 @@
     }
 
     function onKeyPressUp(e) {
+
         var keyAction = keyActions[keys[e.keyCode]];
+
         if (keyAction && keyAction.enabled) {
+
             keyAction.action();
+
             if (raf) {
                 window.cancelAnimationFrame(raf);
             }
@@ -288,77 +297,13 @@
 
     function render() {
 
-        //console.log ( snake.position );
-        //camera.position.set( snake.position.x, snake.position.y, snake.position.z );
-        //camera.lookAt( snake.tagPosition.x, snake.tagPosition.y, snake.tagPosition.z );
-
         renderer.render(scene, camera);
     }
-
-    function checkForPointerLock() {
-
-        return 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-
-    }
-
-    function initPointerLock() {
-
-        var element = document.body;
-
-        if (havePointerLock) {
-
-            var pointerlockchange = function(event) {
-
-                if (document.pointerLockElement === element ||
-                    document.mozPointerLockElement === element ||
-                    document.webkitPointerLockElement === element) {
-
-                    controlsEnabled = true;
-                    controls.enabled = true;
-
-                } else {
-
-                    controls.enabled = false;
-
-                }
-
-            };
-
-            var pointerlockerror = function(event) {
-
-                element.innerHTML = 'PointerLock Error';
-
-            };
-
-            document.addEventListener('pointerlockchange', pointerlockchange, false);
-            document.addEventListener('mozpointerlockchange', pointerlockchange, false);
-            document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
-
-            document.addEventListener('pointerlockerror', pointerlockerror, false);
-            document.addEventListener('mozpointerlockerror', pointerlockerror, false);
-            document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
-
-            var requestPointerLock = function(event) {
-
-                element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-                element.requestPointerLock();
-
-            };
-
-            element.addEventListener('click', requestPointerLock, false);
-
-        } else {
-
-            element.innerHTML = 'Bad browser; No pointer lock';
-
-        }
-
-    }
-
 
     init();
 
     render();
 
     document.addEventListener('keyup', onKeyPressUp, false);
+
 })();
