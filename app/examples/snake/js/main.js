@@ -1,7 +1,9 @@
 !(function() {
 
+	// check for webgl support
     if (!Detector.webgl) Detector.addGetWebGLMessage();
 
+	// set grid dimension
     var gridSize = 1000;
     var unitSize = 50;
 
@@ -13,7 +15,6 @@
     var snake = null;
     var renderCounter = 0;
     var tag = null;
-
     var level = 1;
 
     var gameScoreBoard = document.getElementById('gamescore');
@@ -30,7 +31,8 @@
         pauseScreen.className = 'paused hidden';
     }
 
-    var obstacles = []; // Array of obstacles
+	// todo
+	//var obstacles = []; // Array of obstacles
 
     var keys = {
         38: 'backward', // up key
@@ -41,12 +43,41 @@
         83: 'down', // S key
         32: 'pause' // spacebar
     }
+  
+
+	function getDirection(dir) {
+		console.log( dir );
+
+		if ( dir === 'z1' ) {
+				return 'north';
+		}
+		else if ( dir === 'z-1' ) {
+				return 'south';
+		}
+		else if ( dir === 'x1' ) {
+				return 'east';
+		}
+		else if ( dir === 'x-1' ) {
+				return 'west';
+		}
+	}
 
     var keyActions = {
     
         'backward': {
             enabled: true,
             action: function() {
+
+				// FIXME
+				// choose N-S-E-W mode based on direction
+				//var dir = getDirection( snake.axis + snake.direction )
+
+				// choose the right movement for that mode
+				//if ( dir === 'north' ) { snake.back(); }
+				//else if ( dir === 'south' ) { snake.forward(); }
+				//else if ( dir === 'east' ) { snake.left(); }
+				//else if ( dir === 'west' ) { snake.right(); }
+
                 snake.back();
                 keyActions.forward.enabled = false;
                 keyActions.left.enabled = true;
@@ -59,7 +90,11 @@
         'forward': {
             enabled: true,
             action: function() {
+
+				getDirection( snake.axis + snake.direction )
+
                 snake.forward();
+
                 keyActions.backward.enabled = false;
                 keyActions.left.enabled = true;
                 keyActions.right.enabled = true;
@@ -71,7 +106,11 @@
         'right': {
             enabled: true,
             action: function() {
+
+				getDirection( snake.axis + snake.direction )
+
                 snake.right();
+
                 keyActions.left.enabled = false;
                 keyActions.forward.enabled = true;
                 keyActions.backward.enabled = true;
@@ -117,10 +156,10 @@
         
     };
 
-    // Game Levels
+    // game levels
     var levels = {
         1: {
-            renderCount: 15
+            renderCount: 15 // speed control
         },
         2: {
             renderCount: 10
@@ -201,7 +240,7 @@
 
         document.body.appendChild(renderer.domElement);
 
-        // --- Directional Lighting ---
+        // lighting
         var directionalLight = new THREE.DirectionalLight(0xffffff);
         directionalLight.position.set(500, 800, 1300).normalize();
         scene.add(directionalLight);
@@ -216,7 +255,6 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
 
     }
-
 
     function randomAxis() {
         var point = randomPoint();
