@@ -1,2 +1,6 @@
-# 3dsnakegame
-A 3D Snake game with THREE.js
+# snake
+
+First-person snake game.
+
+* [original source](https://github.com/bomsy/3dsnakegame)
+
