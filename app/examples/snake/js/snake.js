@@ -100,7 +100,16 @@ Snake.prototype = {
 
 	render: function() {
 		
-		var self = this;
+                // TODO: Make pretty(sorry I´m in a hurry)
+                var cube = this; // stupid javascript is stupid
+		this.snake.forEach(function(c){cube.renderCube( c );});
+	   	
+	},
+        
+        update: function() {
+            
+            // TODO: Implement time based movement!
+            var self = this;
 		var next = null;
 		
 		this.snake.forEach( function( cube ) {
@@ -162,12 +171,10 @@ Snake.prototype = {
 				}
 			
 			}
-
-			self.renderCube( cube );
 		
 		} );
-	   	
-	},
+            
+        },
 
 	back: function() {
 		
