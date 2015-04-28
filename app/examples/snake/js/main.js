@@ -11,7 +11,6 @@
     var scene, camera, renderer, cube;
 
     var pos;
-    var raf;
     var snake = null;
     var renderCounter = 0;
     var tag = null;
@@ -245,6 +244,8 @@
         directionalLight.position.set(500, 800, 1300).normalize();
         scene.add(directionalLight);
 
+        // TODO: Move to window.onready()?
+        animate();
     }
 
     function onWindowResize() {
@@ -260,18 +261,14 @@
         var point = randomPoint();
         return point > gridSize ? (gridSize - point) - 25 : point - 25;
     }
-
-    function triggerRenders() {
-
-        if (renderCounter === levels[level].renderCount) {
-            snake.render();
-            render();
-            renderCounter = 0;
-        }
-
-        renderCounter++;
-
-        raf = window.requestAnimationFrame(triggerRenders);
+    
+    function animate() {
+        // TODO: Implement clock
+        snake.update();
+        
+        render();
+        
+        window.requestAnimationFrame( animate );
     }
 
     function addTagToScene(x, y, z) {
@@ -325,16 +322,13 @@
         if (keyAction && keyAction.enabled) {
 
             keyAction.action();
-
-            if (raf) {
-                window.cancelAnimationFrame(raf);
-            }
-            raf = window.requestAnimationFrame(triggerRenders);
+            
         }
     }
 
     function render() {
 
+        snake.render();
         renderer.render(scene, camera);
     }
 
