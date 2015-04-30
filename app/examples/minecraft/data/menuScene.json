@@ -1,0 +1,25 @@
+{
+	"size": {
+		"x": 3,
+		"y": 3,
+		"z": 3
+	},
+	"offset": {
+		"x": -1,
+		"y": -1,
+		"z": -1
+	},
+	"data": [
+		{"id":"Stone"},{"id":"Stone"},{"id":"Stone"},
+		{"id":"Stone"},{"id":"Stone"},{"id":"Stone"},
+		{"id":"Stone"},{"id":"Stone"},{"id":"Stone"},
+
+		{"id":"Stone"},{"id":"Stone"},{"id":"Stone"},
+		{"id":"Stone"},{"id":"Stone"},{"id":"Stone"},
+		{"id":"Stone"},{"id":"Stone"},{"id":"Stone"},
+
+		{"id":"Stone"},{"id":"Stone"},{"id":"Stone"},
+		{"id":"Stone"},{"id":"Stone"},{"id":"Stone"},
+		{"id":"Stone"},{"id":"Stone"},{"id":"Stone"}
+	]
+}
