@@ -10,6 +10,10 @@
     var controls;
     var scene, camera, renderer, cube;
 
+	var clock = new THREE.Clock();
+	var timerCurrent = 0;
+	var timerTotal = 0.5;
+
     var pos;
     var snake = null;
     var renderCounter = 0;
@@ -43,39 +47,11 @@
         32: 'pause' // spacebar
     }
   
-
-	function getDirection(dir) {
-		console.log( dir );
-
-		if ( dir === 'z1' ) {
-				return 'north';
-		}
-		else if ( dir === 'z-1' ) {
-				return 'south';
-		}
-		else if ( dir === 'x1' ) {
-				return 'east';
-		}
-		else if ( dir === 'x-1' ) {
-				return 'west';
-		}
-	}
-
     var keyActions = {
     
         'backward': {
             enabled: true,
             action: function() {
-
-				// FIXME
-				// choose N-S-E-W mode based on direction
-				//var dir = getDirection( snake.axis + snake.direction )
-
-				// choose the right movement for that mode
-				//if ( dir === 'north' ) { snake.back(); }
-				//else if ( dir === 'south' ) { snake.forward(); }
-				//else if ( dir === 'east' ) { snake.left(); }
-				//else if ( dir === 'west' ) { snake.right(); }
 
                 snake.back();
                 keyActions.forward.enabled = false;
@@ -90,8 +66,6 @@
             enabled: true,
             action: function() {
 
-				getDirection( snake.axis + snake.direction )
-
                 snake.forward();
 
                 keyActions.backward.enabled = false;
@@ -105,8 +79,6 @@
         'right': {
             enabled: true,
             action: function() {
-
-				getDirection( snake.axis + snake.direction )
 
                 snake.right();
 
@@ -134,6 +106,7 @@
             enabled: true,
             action: function() {
                 snake.up();
+
             }
         },
         
@@ -263,10 +236,28 @@
     }
     
     function animate() {
+
         // TODO: Implement clock
-        snake.update();
-        
-        render();
+		// every second
+
+		//timerCurrent;
+		//timerTotal;
+		timerCurrent += clock.getDelta();;
+
+		if( timerCurrent >= timerTotal) {
+		
+			//console.log( timerCurrent, timerTotal);
+        	snake.update();
+
+			timerCurrent -= timerTotal;
+		}
+
+
+		//var time = clock.getElapsedTime();
+		//console.log( delta );
+
+        snake.render();
+        renderer.render(scene, camera);
         
         window.requestAnimationFrame( animate );
     }
@@ -321,20 +312,23 @@
 
         if (keyAction && keyAction.enabled) {
 
+			// if no key was hit yet
+			if ( snake.direction === null ){
+				// default to north mode
+				snake.axis = 'z';
+				snake.direction = '-1';
+			}
+
             keyAction.action();
+
+			console.log('dir: ', snake.direction);
+			console.log('axis: ', snake.axis);
+
             
         }
     }
 
-    function render() {
-
-        snake.render();
-        renderer.render(scene, camera);
-    }
-
     init();
-
-    render();
 
     document.addEventListener('keyup', onKeyPressUp, false);
 
