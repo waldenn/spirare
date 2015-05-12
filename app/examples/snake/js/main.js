@@ -53,12 +53,14 @@
             enabled: true,
             action: function() {
 
-                snake.back();
+                snake.backward();
+				/*
                 keyActions.forward.enabled = false;
                 keyActions.left.enabled = true;
                 keyActions.right.enabled = true;
                 keyActions.pause.enabled = true;
                 hidePauseScreen();
+				*/
             }
         },
         
@@ -68,11 +70,13 @@
 
                 snake.forward();
 
+				/*
                 keyActions.backward.enabled = false;
                 keyActions.left.enabled = true;
                 keyActions.right.enabled = true;
                 keyActions.pause.enabled = true;
                 hidePauseScreen();
+				*/
             }
         },
         
@@ -82,29 +86,36 @@
 
                 snake.right();
 
+				/*
                 keyActions.left.enabled = false;
                 keyActions.forward.enabled = true;
                 keyActions.backward.enabled = true;
                 keyActions.pause.enabled = true;
                 hidePauseScreen();
+				*/
             }
         },
         
         'left': {
             enabled: true,
             action: function() {
+
                 snake.left();
+
+				/*
                 keyActions.right.enabled = false;
                 keyActions.backward.enabled = true;
                 keyActions.forward.enabled = true;
                 keyActions.pause.enabled = true;
                 hidePauseScreen();
+				*/
             }
         },
         
         'up': {
             enabled: true,
             action: function() {
+
                 snake.up();
 
             }
@@ -113,16 +124,20 @@
         'down': {
             enabled: true,
             action: function() {
+
                 snake.down();
+
             }
         },
         
         'pause': {
             enabled: false,
             action: function() {
+
                 snake.clear();
                 keyActions.pause.enabled = false;
                 showPauseScreen();
+
             }
         }
         
@@ -154,10 +169,10 @@
             charCode: 'f'.charCodeAt(0)
         });
 
-        // --- Scene ---
+        // scene
         scene = new THREE.Scene();
 
-        // --- Grid ---
+        // grid
         var gridGeometry = new THREE.Geometry();
         
         for (var i = -gridSize; i <= gridSize; i += unitSize) {
@@ -177,7 +192,7 @@
         
         scene.add(line);
 
-        // --- Snake ---
+        // snake
         snake = new Snake(scene, unitSize, 0xff0000 );
         snake.render();
         
@@ -193,7 +208,7 @@
 
         tag = addTagToScene(randomAxis(), unitSize / 2, randomAxis());
 
-        // --- Camera ---
+        // camera
         camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 10000);
 
         controls = new THREE.PointerLockControls( camera );
@@ -203,7 +218,9 @@
         // place camera object at the snake head
         snake.snake[0].add( controls.getObject() );
 
-        // --- Renderer ---
+        // todo: add navigation pointer to next position
+
+        // renderer
         renderer = new THREE.WebGLRenderer({
             antialias: true
         });
@@ -217,7 +234,6 @@
         directionalLight.position.set(500, 800, 1300).normalize();
         scene.add(directionalLight);
 
-        // TODO: Move to window.onready()?
         animate();
     }
 
@@ -237,24 +253,15 @@
     
     function animate() {
 
-        // TODO: Implement clock
-		// every second
-
-		//timerCurrent;
-		//timerTotal;
+		//var timeElapsed = clock.getElapsedTime();
 		timerCurrent += clock.getDelta();;
 
 		if( timerCurrent >= timerTotal) {
 		
-			//console.log( timerCurrent, timerTotal);
         	snake.update();
-
 			timerCurrent -= timerTotal;
+
 		}
-
-
-		//var time = clock.getElapsedTime();
-		//console.log( delta );
 
         snake.render();
         renderer.render(scene, camera);
@@ -270,9 +277,9 @@
             color: 0x00ff00
         });
 
-        var sphere = new THREE.Mesh(geometry, material);
-        sphere.position.set(x, y, z);
-        scene.add(sphere);
+        var box = new THREE.Mesh(geometry, material);
+        box.position.set(x, y, z);
+        scene.add(box);
 
         snake.setCurrentTagPosition({
             x: x,
@@ -280,7 +287,7 @@
             z: z
         });
 
-        return sphere;
+        return box;
     }
 
     function onLevelChange(e) {
@@ -315,6 +322,7 @@
 			// if no key was hit yet
 			if ( snake.direction === null ){
 				// default to north mode
+				console.log('foo');
 				snake.axis = 'z';
 				snake.direction = '-1';
 			}
@@ -324,7 +332,6 @@
 			console.log('dir: ', snake.direction);
 			console.log('axis: ', snake.axis);
 
-            
         }
     }
 
