@@ -27,12 +27,13 @@ function Snake( scene, size, color, unitsize ) {
     } );
 
     this.nav = {
-        'forward':	['z1', 'z-1', 'x1', 'x-1', 'z1', 'z-1'],
-        'backward': ['z-1', 'z1', 'x-1', 'x1', 'z-1', 'z1'],
-        'right' :   ['x1', 'x-1', 'z-1', 'z1', 'x1', 'x-1'],
-        'left' :    ['x-1', 'x1', 'z1', 'z-1', 'x-1', 'x1'],
-        'up' :      ['y1', 'y1', 'y1', 'y1', 'y1', 'y-1'],
-        'down' :    ['y-1', 'y-1', 'y-1', 'y-1', 'y-1', 'y1'],
+					//   n,     s,    e,      w,     u,    d
+        'forward':	['z-1',  'z1', 'x1' , 'x-1', 'z1' , 'z-1'],
+        'backward': ['z1' , 'z-1', 'x-1', 'x1' , 'z-1', 'z1' ],
+        'right' :   ['x1' , 'x-1', 'z-1', 'z1' , 'x1' , 'x-1'],
+        'left' :    ['x-1', 'x1' , 'z1' , 'z-1', 'x-1', 'x1' ],
+        'up' :      ['y1' , 'y1' , 'y1' , 'y1' , 'y1' , 'y-1'],
+        'down' :    ['y-1', 'y-1', 'y-1', 'y-1', 'y-1', 'y1' ],
     };
 
 	this.init();
@@ -210,7 +211,7 @@ Snake.prototype = {
     },
 
 
-	back: function() {
+	backward: function() {
 
 		//console.log ( 'current heading: ', this.getDirection( this.direction + this.axis ) );
 		
