@@ -1,28 +1,29 @@
 !(function() {
 
-	// check for webgl support
+	// webgl support check
     if (!Detector.webgl) Detector.addGetWebGLMessage();
-
-	// set grid dimension
-    var gridSize = 1000;
-    var unitSize = 50;
 
     var controls;
     var scene, camera, renderer, cube;
 
-	var clock = new THREE.Clock();
-	var timerCurrent = 0;
-	var timerTotal = 0.5;
+	// configurable
+    var gridSize		= 100;
+    var unitSize		= 50;
+	var timerTotal		= 0.4;
+
+	var timerCurrent	= 0;
+	var clock			= new THREE.Clock();
+	var TAU				= 2 * Math.PI;
 
     var pos;
-    var snake = null;
-    var renderCounter = 0;
-    var tag = null;
-    var level = 1;
+    var snake			= null;
+    var renderCounter	= 0;
+    var fruit			= null;
+    var level			= 1;
 
-    var gameScoreBoard = document.getElementById('gamescore');
-    var pauseScreen = document.getElementById('pause');
-    var leveloptions = document.getElementById('leveloptions');
+    var gameScoreBoard	= document.getElementById('gamescore');
+    var pauseScreen		= document.getElementById('pause');
+    var leveloptions	= document.getElementById('leveloptions');
 
     leveloptions.addEventListener('change', onLevelChange, false);
 
@@ -53,14 +54,8 @@
             enabled: true,
             action: function() {
 
+				//camera.rotation.y = 0;
                 snake.backward();
-				/*
-                keyActions.forward.enabled = false;
-                keyActions.left.enabled = true;
-                keyActions.right.enabled = true;
-                keyActions.pause.enabled = true;
-                hidePauseScreen();
-				*/
             }
         },
         
@@ -68,15 +63,9 @@
             enabled: true,
             action: function() {
 
+				//camera.rotation.y = TAU / 2;
                 snake.forward();
 
-				/*
-                keyActions.backward.enabled = false;
-                keyActions.left.enabled = true;
-                keyActions.right.enabled = true;
-                keyActions.pause.enabled = true;
-                hidePauseScreen();
-				*/
             }
         },
         
@@ -84,15 +73,9 @@
             enabled: true,
             action: function() {
 
+				//camera.rotation.y = TAU / 4;
                 snake.right();
 
-				/*
-                keyActions.left.enabled = false;
-                keyActions.forward.enabled = true;
-                keyActions.backward.enabled = true;
-                keyActions.pause.enabled = true;
-                hidePauseScreen();
-				*/
             }
         },
         
@@ -100,15 +83,9 @@
             enabled: true,
             action: function() {
 
+				//camera.rotation.y = TAU * 3 / 4;
                 snake.left();
 
-				/*
-                keyActions.right.enabled = false;
-                keyActions.backward.enabled = true;
-                keyActions.forward.enabled = true;
-                keyActions.pause.enabled = true;
-                hidePauseScreen();
-				*/
             }
         },
         
@@ -193,37 +170,47 @@
         scene.add(line);
 
         // snake
-        snake = new Snake(scene, unitSize, 0xff0000 );
+        snake = new Snake(scene, unitSize, gridSize, 0xff0000 );
         snake.render();
         
-        snake.onTagCollision = function() {
-            scene.remove(tag);
-            tag = addTagToScene(randomAxis(), unitSize / 2, randomAxis());
-            setScore();
-        };
-        
-        snake.onSelfCollision = function() {
-            snake.reset();
-        };
-
-        tag = addTagToScene(randomAxis(), unitSize / 2, randomAxis());
+        fruit = addFruitToScene(randomAxis(), unitSize / 2, randomAxis());
 
         // camera
         camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 10000);
 
         controls = new THREE.PointerLockControls( camera );
-
 		controls.initPointerLock( controls , controls.checkForPointerLock() );
 
         // place camera object at the snake head
         snake.snake[0].add( controls.getObject() );
 
-        // todo: add navigation pointer to next position
+		// static camera
+        //snake.snake[0].add( camera );
+
+        snake.onFruitCollision = function() {
+
+            scene.remove(fruit);
+            fruit = addFruitToScene(randomAxis(), unitSize / 2, randomAxis());
+            setScore();
+
+        };
+        
+        snake.onSelfCollision = function() {
+
+			console.log('game over!');
+            snake.reset();
+        	snake.snake[0].add( controls.getObject() );
+
+        };
+
+        // todo: add navigation pointer to next position?
+		// ...
 
         // renderer
         renderer = new THREE.WebGLRenderer({
             antialias: true
         });
+
         renderer.setSize(window.innerWidth - 10, window.innerHeight - 10);
         renderer.setClearColor(0xf0f0f0);
 
@@ -269,7 +256,7 @@
         window.requestAnimationFrame( animate );
     }
 
-    function addTagToScene(x, y, z) {
+    function addFruitToScene(x, y, z) {
 
         var geometry = new THREE.BoxGeometry(unitSize, unitSize, unitSize);
 
@@ -281,7 +268,7 @@
         box.position.set(x, y, z);
         scene.add(box);
 
-        snake.setCurrentTagPosition({
+        snake.setCurrentFruitPosition({
             x: x,
             y: y,
             z: z
@@ -307,8 +294,7 @@
     }
 
     function randomPoint() {
-        // Generate random points between 0 and the gridSize
-        // in steps for unitSize i.e 0, 50, 350, 700, 40 etc
+        // Generate random points between 0 and the gridSize in steps for unitSize
         var pos = Math.floor(Math.random() * gridSize * 2);
         return pos - (pos % unitSize);
     }
@@ -317,20 +303,18 @@
 
         var keyAction = keyActions[keys[e.keyCode]];
 
-        if (keyAction && keyAction.enabled) {
+        if ( keyAction ) {
 
 			// if no key was hit yet
-			if ( snake.direction === null ){
+			if ( snake.move === null ){
 				// default to north mode
-				console.log('foo');
-				snake.axis = 'z';
-				snake.direction = '-1';
+
+				snake.move = [ 0, 0, -1 ];
+				//snake.axis = 'z';
+				//snake.direction = '-1';
 			}
 
             keyAction.action();
-
-			console.log('dir: ', snake.direction);
-			console.log('axis: ', snake.axis);
 
         }
     }
