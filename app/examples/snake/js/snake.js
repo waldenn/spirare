@@ -1,20 +1,29 @@
-function Snake( scene, size, color, unitsize ) {
+function Snake( scene, size, gridsize, color ) {
 
-	this.snake = [];
-	this.scene = scene;
-	this.size = size; // snake is made up of cubes
-	this.color = color;
-	this.distance = size; // distance to move by
+	this.snake		= [];
+	this.scene		= scene;
+	this.size		= size;
+	this.gridsize	= gridsize;
+	this.color		= color;
+	this.distance	= size; // distance to move by
+    this.move    	= null; // current move vector
 
-	this.direction = null;
-	this.axis = null;
+    this.direction  = {
 
-	this.onSelfCollision = function() {};
-	this.onTagCollision = function() {};
+        NORTH: 0,
+        EAST:  1,
+        SOUTH: 2,
+        WEST:  3,
+        UP:    4,
+        DOWN:  5
 
-	this.position = {}; // current position of the snake instance
+    };
 
-	this.tagPosition = {}; // the current position of the tag to be hit
+	this.onSelfCollision	= function() {};
+	this.onFruitCollision	= function() {};
+
+	this.position			= {}; // snake head position
+	this.fruitPosition		= {};
 
 	this.geometry = new THREE.BoxGeometry( this.size, this.size, this.size );
 
@@ -26,16 +35,6 @@ function Snake( scene, size, color, unitsize ) {
 
     } );
 
-    this.nav = {
-					//   n,     s,    e,      w,     u,    d
-        'forward':	['z-1',  'z1', 'x1' , 'x-1', 'z1' , 'z-1'],
-        'backward': ['z1' , 'z-1', 'x-1', 'x1' , 'z-1', 'z1' ],
-        'right' :   ['x1' , 'x-1', 'z-1', 'z1' , 'x1' , 'x-1'],
-        'left' :    ['x-1', 'x1' , 'z1' , 'z-1', 'x-1', 'x1' ],
-        'up' :      ['y1' , 'y1' , 'y1' , 'y1' , 'y1' , 'y-1'],
-        'down' :    ['y-1', 'y-1', 'y-1', 'y-1', 'y-1', 'y1' ],
-    };
-
 	this.init();
 
 };
@@ -43,6 +42,20 @@ function Snake( scene, size, color, unitsize ) {
 Snake.prototype = {
 	
 	init: function() {
+		this.snake = [];
+    	this.move  = null;
+		this.literaldir = this.direction.NORTH;
+		//updateDirection();
+
+		// remove old snake cubes from the scene
+		for ( var i = this.scene.children.length - 1; i >= 0 ; i -- ) {
+			var obj = this.scene.children[ i ];
+
+			if ( obj.name === 'snake') {
+				this.scene.remove(obj);
+				console.log('removed a cube');
+			}
+		}
 		
 		this.addCube();
 		this.addCube();
@@ -58,7 +71,7 @@ Snake.prototype = {
 			
 			cube.position.z = -1 * ( self.size / 2 * ( index + 1 ) );
 			cube.position.y = self.size / 2;
-			cube.position.x = -500 + 25;
+			cube.position.x = -1 * ( self.gridsize / 2 ) + ( self.size / 2 );
 		
 		} );
 	   	
@@ -77,16 +90,16 @@ Snake.prototype = {
 	   	
 	},
 	
-	tagCollision: function() {
+	fruitCollision: function() {
 		
-		this.onTagCollision();
+		this.onFruitCollision();
 		this.addCube();
 	   	
 	},
 	
-	setCurrentTagPosition: function( position ) {
+	setCurrentFruitPosition: function( position ) {
 		
-		this.tagPosition = position;
+		this.fruitPosition = position;
 	   	
 	},
 	
@@ -103,16 +116,22 @@ Snake.prototype = {
 	},
 	
 	addCube: function() {
-		
-		this.snake.push( new THREE.Mesh( this.geometry, this.material )  );
+
+        var c = new THREE.Mesh( this.geometry, this.material )
+        c.name = 'snake';
+
+        this.snake.push( c );
+
 	   	
 	},
 
 	render: function() {
 		
-        // TODO: Make pretty(sorry I´m in a hurry)
-		var cube = this; // stupid javascript is stupid
-		this.snake.forEach(function(c){cube.renderCube( c );});
+		var self = this;
+
+		this.snake.forEach( function(c) {
+			self.renderCube( c );
+		});
 	   	
 	},
         
@@ -126,8 +145,9 @@ Snake.prototype = {
 			
 			var temp = null;
 
-			if ( self.axis !== null && self.direction !== null ) {
-				
+			if ( self.move !== null ) {
+
+				// update snake head position
 				if ( !next ) {
 					
 					next = {
@@ -136,7 +156,10 @@ Snake.prototype = {
 						z: cube.position.z
 					};
 
-					cube.position[ self.axis ] += ( self.direction * self.distance );
+					cube.position.x += self.move[0] * self.distance;
+					cube.position.y += self.move[1] * self.distance;
+					cube.position.z += self.move[2] * self.distance;
+
 
 					self.position = {
 						x: cube.position.x,
@@ -144,18 +167,18 @@ Snake.prototype = {
 						z: cube.position.z
 					};
 
-					if ( self.tagPosition ) {
+					if ( self.fruitPosition ) {
 						
-						if ( self.isHit( self.position, self.tagPosition ) ) {
+						if ( self.isHit( self.position, self.fruitPosition ) ) {
 							
-							self.tagCollision();
+							self.fruitCollision();
 						
 						}
 					
 					}
 				
 				}
-				else {
+				else { // update each trailing snake cube position
 					
 					temp = {
 						x: cube.position.x,
@@ -186,87 +209,145 @@ Snake.prototype = {
 		
 	},
 
-	getDirection: function(dir) {
-        console.log( dir );
+	// changes literaldir relatively
+	changeRelativeDirection: function( dir ) {
 
-        if ( dir === 'z-1' ) {
-                return '0'; // north
-        }
-        else if ( dir === 'z1' ) {
-                return '1'; // south
-        }
-        else if ( dir === 'x1' ) {
-                return '2'; // east
-        }
-        else if ( dir === 'x-1' ) {
-                return '3'; // west
-        }
-        else if ( dir === 'y1' ) {
-                return '4'; // up
-        }
-        else if ( dir === 'y-1' ) {
-                return '5'; // down
-        }
+		/*
+		NORTH: 0,
+		EAST:  1,
+		SOUTH: 2,
+		WEST:  3,
+		UP:    4,
+		DOWN:  5
+		*/
 
+		// determine literaldir based on dir
+		// 6 options / 3 opposite-pairs
+
+		if ( dir == this.direction.NORTH ) {
+			// no relative direction change is needed here
+			// option: we could also speed up the snake here
+		}
+		else if ( dir == this.direction.EAST) {
+
+			if ( this.literaldir = 1 ){		 // EAST
+				this.literaldir = 2; // S
+			}
+			else if ( this.literaldir = 2 ){ // SOUTH
+				this.literaldir = 1; // E
+			}
+			else if ( this.literaldir = 3 ){ // WEST
+				this.literaldir = 0; // N
+			}
+
+		}
+		else if ( dir == this.direction.SOUTH) {
+
+			if ( this.literaldir = 1 ){		 // EAST
+				this.literaldir = 3;
+			}
+			else if ( this.literaldir = 2 ){ // SOUTH
+				// illegal move, dont change direction
+			}
+			else if ( this.literaldir = 3 ){ // WEST
+				this.literaldir = 1;
+			}
+
+		}
+		else if ( dir == this.direction.WEST) {
+
+			if ( this.literaldir = 1 ){		 // EAST
+				this.literaldir = 0; // N
+			}
+			else if ( this.literaldir = 2 ){ // SOUTH
+				this.literaldir = 3; // W
+			}
+			else if ( this.literaldir = 3 ){ // WEST
+				this.literaldir = 2; // S
+			}
+
+		}
+		else if ( dir == this.direction.UP) {
+			// todo
+		}
+		else if ( dir == this.direction.DOWN) {
+			// todo
+		}
+
+		this.updateDirection();
+	}, 
+
+    updateDirection: function() {
+
+        switch (this.literaldir)
+        {
+            case this.direction.NORTH:
+                this.move = [ 0, 0, -1 ];
+                break;
+
+            case this.direction.SOUTH:
+                this.move = [ 0, 0, 1 ];
+                break;
+
+            case this.direction.WEST:
+                this.move = [ -1, 0, 0 ];
+                break;
+
+            case this.direction.EAST:
+                this.move = [ 1, 0, 0 ];
+                break;
+
+            case this.direction.UP:
+                this.move = [ 0, 1, 0 ];
+                break;
+
+            case this.direction.DOWN:
+                this.move = [ 0, -1, 0 ];
+                break;
+
+        }
     },
 
 
 	backward: function() {
 
-		//console.log ( 'current heading: ', this.getDirection( this.direction + this.axis ) );
-		
-		// lookup nav string
-		var m = this.nav.backward[  this.getDirection( this.axis + this.direction )  ];
-
-		// set movement
-		this.axis = m.substring(0,1);
-		this.direction = m.substring(1)
+		this.move = [ 0, 0, -1 ];
 	   	
 	},
 
 	forward: function() {
 
-		var m = this.nav.forward[  this.getDirection( this.axis + this.direction )  ];
-		this.axis = m.substring(0,1);
-		this.direction = m.substring(1)
+		//snake.changeRelativeDirection( snake.direction.NORTH );
+		this.move = [ 0, 0, 1 ];
 
-	},
-
-	up: function() {
-		
-		var m = this.nav.up[  this.getDirection( this.axis + this.direction )  ];
-		this.axis = m.substring(0,1);
-		this.direction = m.substring(1)
-	},
-
-	down: function() {
-		
-		var m = this.nav.down[  this.getDirection( this.axis + this.direction )  ];
-		this.axis = m.substring(0,1);
-		this.direction = m.substring(1)
-	   	
 	},
 
 	right: function() {
 
-		var m = this.nav.right[  this.getDirection( this.axis + this.direction )  ];
-		this.axis = m.substring(0,1);
-		this.direction = m.substring(1)
+		this.move = [ 1, 0, 0 ];
 	   	
 	},
 
 	left: function() {
 
-		var m = this.nav.left[  this.getDirection( this.axis + this.direction )  ];
-		this.axis = m.substring(0,1);
-		this.direction = m.substring(1)
+		this.move = [ -1, 0, 1];
 		
+	},
+
+	up: function() {
+		
+		this.move = [ 0, 1, 0 ];
+	},
+
+	down: function() {
+		
+		this.move = [ 0, -1, 0 ];
+	   	
 	},
 
 	clear: function() {
 		
-		this.axis = null;
-		this.direction = null;
+		this.move = null;
 	   	
 	},
 
