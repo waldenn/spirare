@@ -19,6 +19,14 @@ function Snake( scene, size, gridsize, color ) {
 
     };
 
+	this.matrix	= [
+		// 0 lit-north    , 1 lit-east      , 2 lit-south     , 3 lit-west 
+		[ [0,0,-1,'NORTH'], [0,0,1,'SOUTH'] , [1,0,0,'EAST']  , [-1,0,0,'WEST']  ],  // 0 rel-north
+		[ [1,0,0,'EAST']  , [-1,0,0,'WEST'] , [0,0,-1,'NORTH'], [0,0,1,'SOUTH']  ],  // 1 rel-east
+		[ [0,0,1,'SOUTH'] , [1,0,0,'EAST']  , [-1,0,0,'WEST'] , [0,0,-1,'NORTH'] ],  // 2 rel-south
+		[ [-1,0,0,'WEST'] , [0,0,-1,'NORTH'], [0,0,1,'SOUTH'] , [1,0,0,'EAST']   ]   // 3 rel-west
+	];
+
 	this.onSelfCollision	= function() {};
 	this.onFruitCollision	= function() {};
 
@@ -44,8 +52,9 @@ Snake.prototype = {
 	init: function() {
 		this.snake = [];
     	this.move  = null;
+
+		//this.literaldir = null;
 		this.literaldir = this.direction.NORTH;
-		//updateDirection();
 
 		// remove old snake cubes from the scene
 		for ( var i = this.scene.children.length - 1; i >= 0 ; i -- ) {
@@ -209,139 +218,76 @@ Snake.prototype = {
 		
 	},
 
-	// changes literaldir relatively
-	changeRelativeDirection: function( dir ) {
 
-		/*
-		NORTH: 0,
-		EAST:  1,
-		SOUTH: 2,
-		WEST:  3,
-		UP:    4,
-		DOWN:  5
-		*/
+	forward: function() {
 
-		// determine literaldir based on dir
-		// 6 options / 3 opposite-pairs
 
-		if ( dir == this.direction.NORTH ) {
-			// no relative direction change is needed here
-			// option: we could also speed up the snake here
-		}
-		else if ( dir == this.direction.EAST) {
+		this.move = this.matrix[ this.direction.NORTH ][ this.literaldir ];
+		console.log( this.direction.NORTH, this.literaldir, this.move );
 
-			if ( this.literaldir = 1 ){		 // EAST
-				this.literaldir = 2; // S
-			}
-			else if ( this.literaldir = 2 ){ // SOUTH
-				this.literaldir = 1; // E
-			}
-			else if ( this.literaldir = 3 ){ // WEST
-				this.literaldir = 0; // N
-			}
+		this.literaldir =  this.direction[ this.move[ 3 ] ];
+		console.log( this.literaldir );
 
-		}
-		else if ( dir == this.direction.SOUTH) {
+		//this.move = [ 0, 0, -1 ];
 
-			if ( this.literaldir = 1 ){		 // EAST
-				this.literaldir = 3;
-			}
-			else if ( this.literaldir = 2 ){ // SOUTH
-				// illegal move, dont change direction
-			}
-			else if ( this.literaldir = 3 ){ // WEST
-				this.literaldir = 1;
-			}
-
-		}
-		else if ( dir == this.direction.WEST) {
-
-			if ( this.literaldir = 1 ){		 // EAST
-				this.literaldir = 0; // N
-			}
-			else if ( this.literaldir = 2 ){ // SOUTH
-				this.literaldir = 3; // W
-			}
-			else if ( this.literaldir = 3 ){ // WEST
-				this.literaldir = 2; // S
-			}
-
-		}
-		else if ( dir == this.direction.UP) {
-			// todo
-		}
-		else if ( dir == this.direction.DOWN) {
-			// todo
-		}
-
-		this.updateDirection();
-	}, 
-
-    updateDirection: function() {
-
-        switch (this.literaldir)
-        {
-            case this.direction.NORTH:
-                this.move = [ 0, 0, -1 ];
-                break;
-
-            case this.direction.SOUTH:
-                this.move = [ 0, 0, 1 ];
-                break;
-
-            case this.direction.WEST:
-                this.move = [ -1, 0, 0 ];
-                break;
-
-            case this.direction.EAST:
-                this.move = [ 1, 0, 0 ];
-                break;
-
-            case this.direction.UP:
-                this.move = [ 0, 1, 0 ];
-                break;
-
-            case this.direction.DOWN:
-                this.move = [ 0, -1, 0 ];
-                break;
-
-        }
-    },
+	},
 
 
 	backward: function() {
 
-		this.move = [ 0, 0, -1 ];
-	   	
-	},
+		this.move = this.matrix[ this.direction.SOUTH ][ this.literaldir ];
+		console.log( this.direction.SOUTH, this.literaldir, this.move );
 
-	forward: function() {
+		this.literaldir =  this.direction[ this.move[ 3 ] ];
+		console.log( this.literaldir );
 
-		//snake.changeRelativeDirection( snake.direction.NORTH );
-		this.move = [ 0, 0, 1 ];
-
+		//this.move = [ 0, 0, 1 ];
 	},
 
 	right: function() {
 
-		this.move = [ 1, 0, 0 ];
+		this.move = this.matrix[ this.direction.EAST ][ this.literaldir ];
+		console.log( this.direction.EAST, this.literaldir, this.move );
+
+		this.literaldir =  this.direction[ this.move[ 3 ] ];
+		console.log( this.literaldir );
+
+		//this.move = [ 1, 0, 0 ];
 	   	
 	},
 
 	left: function() {
 
-		this.move = [ -1, 0, 1];
+		this.move = this.matrix[ this.direction.WEST ][ this.literaldir ];
+		console.log( this.direction.WEST, this.literaldir, this.move );
+
+		this.literaldir =  this.direction[ this.move[ 3 ] ];
+		console.log( this.literaldir );
+
+		//this.move = [ -1, 0, 1];
 		
 	},
 
 	up: function() {
 		
-		this.move = [ 0, 1, 0 ];
+		this.move = this.matrix[ this.direction.UP ][ this.literaldir ];
+		console.log( this.direction.UP, this.literaldir, this.move );
+
+		this.literaldir =  this.direction[ this.move[ 3 ] ];
+		console.log( this.literaldir );
+
+		//this.move = [ 0, 1, 0 ];
 	},
 
 	down: function() {
 		
-		this.move = [ 0, -1, 0 ];
+		this.move = this.matrix[ this.direction.DOWN ][ this.literaldir ];
+		console.log( this.direction.DOWN, this.literaldir, this.move );
+
+		this.literaldir =  this.direction[ this.move[ 3 ] ];
+		console.log( this.literaldir );
+
+		//this.move = [ 0, -1, 0 ];
 	   	
 	},
 
