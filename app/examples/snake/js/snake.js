@@ -20,11 +20,11 @@ function Snake( scene, size, gridsize, color ) {
     };
 
 	this.matrix	= [
-		// lit-north      , lit-east        , lit-south       , lit-west 
-		[ [0,0,-1,'NORTH'], [0,0,1,'SOUTH'] , [1,0,0,'EAST']  , [-1,0,0,'WEST']  ],  // rel-north
-		[ [1,0,0,'EAST']  , [-1,0,0,'WEST'] , [0,0,-1,'NORTH'], [0,0,1,'SOUTH']  ],  // rel-east
-		[ [0,0,1,'SOUTH'] , [1,0,0,'EAST']  , [-1,0,0,'WEST'] , [0,0,-1,'NORTH'] ],  // rel-south
-		[ [-1,0,0,'WEST'] , [0,0,-1,'NORTH'], [0,0,1,'SOUTH'] , [1,0,0,'EAST']   ]   // rel-west
+		// 0 lit-north    , 1 lit-east      , 2 lit-south     , 3 lit-west 
+		[ [0,0,-1,'NORTH'], [0,0,1,'SOUTH'] , [1,0,0,'EAST']  , [-1,0,0,'WEST']  ],  // 0 rel-north
+		[ [1,0,0,'EAST']  , [-1,0,0,'WEST'] , [0,0,-1,'NORTH'], [0,0,1,'SOUTH']  ],  // 1 rel-east
+		[ [0,0,1,'SOUTH'] , [1,0,0,'EAST']  , [-1,0,0,'WEST'] , [0,0,-1,'NORTH'] ],  // 2 rel-south
+		[ [-1,0,0,'WEST'] , [0,0,-1,'NORTH'], [0,0,1,'SOUTH'] , [1,0,0,'EAST']   ]   // 3 rel-west
 	];
 
 	this.onSelfCollision	= function() {};
@@ -221,12 +221,14 @@ Snake.prototype = {
 
 	forward: function() {
 
-		//this.changeRelativeDirection( this.direction.SOUTH );
-		//this.move = [ 0, 0, -1 ];
 
 		this.move = this.matrix[ this.direction.NORTH ][ this.literaldir ];
+		console.log( this.direction.NORTH, this.literaldir, this.move );
+
 		this.literaldir =  this.direction[ this.move[ 3 ] ];
 		console.log( this.literaldir );
+
+		//this.move = [ 0, 0, -1 ];
 
 	},
 
@@ -234,35 +236,58 @@ Snake.prototype = {
 	backward: function() {
 
 		this.move = this.matrix[ this.direction.SOUTH ][ this.literaldir ];
+		console.log( this.direction.SOUTH, this.literaldir, this.move );
+
 		this.literaldir =  this.direction[ this.move[ 3 ] ];
-		//console.log( this.move );
 		console.log( this.literaldir );
+
+		//this.move = [ 0, 0, 1 ];
 	},
 
 	right: function() {
 
-		//this.changeRelativeDirection( this.direction.EAST );
-		this.move = [ 1, 0, 0 ];
+		this.move = this.matrix[ this.direction.EAST ][ this.literaldir ];
+		console.log( this.direction.EAST, this.literaldir, this.move );
+
+		this.literaldir =  this.direction[ this.move[ 3 ] ];
+		console.log( this.literaldir );
+
+		//this.move = [ 1, 0, 0 ];
 	   	
 	},
 
 	left: function() {
 
-		//this.changeRelativeDirection( this.direction.WEST );
-		this.move = [ -1, 0, 1];
+		this.move = this.matrix[ this.direction.WEST ][ this.literaldir ];
+		console.log( this.direction.WEST, this.literaldir, this.move );
+
+		this.literaldir =  this.direction[ this.move[ 3 ] ];
+		console.log( this.literaldir );
+
+		//this.move = [ -1, 0, 1];
 		
 	},
 
 	up: function() {
 		
-		//this.changeRelativeDirection( this.direction.UP );
-		this.move = [ 0, 1, 0 ];
+		this.move = this.matrix[ this.direction.UP ][ this.literaldir ];
+		console.log( this.direction.UP, this.literaldir, this.move );
+
+		this.literaldir =  this.direction[ this.move[ 3 ] ];
+		console.log( this.literaldir );
+
+		//this.move = [ 0, 1, 0 ];
 	},
 
 	down: function() {
 		
-		//this.changeRelativeDirection( this.direction.DOWN );
-		this.move = [ 0, -1, 0 ];
+		this.move = this.matrix[ this.direction.DOWN ][ this.literaldir ];
+		console.log( this.direction.DOWN, this.literaldir, this.move );
+
+		this.literaldir =  this.direction[ this.move[ 3 ] ];
+		console.log( this.literaldir );
+
+		//this.move = [ 0, -1, 0 ];
 	   	
 	},
 
