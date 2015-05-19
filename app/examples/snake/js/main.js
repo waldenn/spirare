@@ -7,7 +7,7 @@
     var scene, camera, renderer, cube;
 
 	// configurable
-    var gridSize		= 100;
+    var gridSize		= 300;
     var unitSize		= 50;
 	var timerTotal		= 0.4;
 
@@ -39,8 +39,8 @@
 	//var obstacles = []; // Array of obstacles
 
     var keys = {
-        38: 'backward', // up key
-        40: 'forward', // down key
+        38: 'forward', // up key
+        40: 'backward', // down key
         39: 'right', // -> key
         37: 'left', // <- key
         87: 'up', // W key
@@ -56,6 +56,7 @@
 
 				//camera.rotation.y = 0;
                 snake.backward();
+				hidePauseScreen();
             }
         },
         
@@ -63,8 +64,8 @@
             enabled: true,
             action: function() {
 
-				//camera.rotation.y = TAU / 2;
                 snake.forward();
+				hidePauseScreen();
 
             }
         },
@@ -73,8 +74,9 @@
             enabled: true,
             action: function() {
 
-				//camera.rotation.y = TAU / 4;
+				//camera.rotation.y = -1 * TAU / 4;
                 snake.right();
+				hidePauseScreen();
 
             }
         },
@@ -83,8 +85,9 @@
             enabled: true,
             action: function() {
 
-				//camera.rotation.y = TAU * 3 / 4;
+				//camera.rotation.y = TAU / 4;
                 snake.left();
+				hidePauseScreen();
 
             }
         },
@@ -94,6 +97,7 @@
             action: function() {
 
                 snake.up();
+				hidePauseScreen();
 
             }
         },
@@ -103,6 +107,7 @@
             action: function() {
 
                 snake.down();
+				hidePauseScreen();
 
             }
         },
@@ -307,14 +312,13 @@
 
 			// if no key was hit yet
 			if ( snake.move === null ){
-				// default to north mode
 
-				snake.move = [ 0, 0, -1 ];
-				//snake.axis = 'z';
-				//snake.direction = '-1';
+				// default to north mode
+				//snake.move = [ 0, 0, -1 ];
+
 			}
 
-            keyAction.action();
+			keyAction.action();
 
         }
     }
