@@ -1,5 +1,12 @@
 # current notes
 
+- spirare event calendar
+	- dokuwiki + https://www.dokuwiki.org/template:bootstrap3#lightbox/0/
+	- calendar system
+		- google calendar
+		- ? http://fullcalendar.io
+		- ? https://github.com/netgusto/Baikal http://baikal2.scalingo.io/
+
 - idea: add moving objects to the scene
 - idea: create a small city with: buildings, roads, trees, etc.
 - idea: create some 3D model, convert it to Three.js JSON format, import it into your scene. (the Three.js editor might be useful here)
