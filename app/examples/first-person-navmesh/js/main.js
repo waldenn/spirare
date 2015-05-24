@@ -475,7 +475,7 @@
 				block.position.y += height / 2;
 				// var nearness = Math.max ( 4000 / Math.abs( block.position.x , 0.5) );
 				
-				T("pluck", {freq:500, mul:0.5}).bang().play();
+				//T("pluck", {freq:500, mul:0.5}).bang().play();
 				cubes.add( block );
 				
 			}
@@ -489,7 +489,7 @@
 			var intersects = raycaster.intersectObjects( cubes.children , true);
 
 			if ( intersects.length > 0 ) {
-				T("pluck", {freq:700, mul:0.4}).bang().play();
+				//T("pluck", {freq:700, mul:0.4}).bang().play();
 
 				cubes.remove( intersects[ 0 ].object );
 
