@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   background: #EEE;
-  font: 10px/13px 'Lucida Sans',sans-serif;
+  font: 13px/20px 'Lucida Sans',sans-serif;
 }
 
 .wrap {
@@ -46,6 +46,7 @@ body {
   color: #FFF;
   padding: 10px;
   text-align: center;
+  font-weight: bold;
   -webkit-transition: all 0.3s ease-out;
   -moz-transition: all 0.3s ease-out;
   -o-transition: all 0.3s ease-out;
