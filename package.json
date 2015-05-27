@@ -11,5 +11,5 @@
   },
   "scripts": {
     "start": "./live.sh"
-  },
+  }
 }
