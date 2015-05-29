@@ -146,7 +146,6 @@ Snake.prototype = {
         
 	update: function() {
 		
-		// TODO: Implement time based movement!
 		var self = this;
 		var next = null;
 		
@@ -220,7 +219,6 @@ Snake.prototype = {
 
 
 	forward: function() {
-
 
 		this.move = this.matrix[ this.direction.NORTH ][ this.literaldir ];
 		console.log( this.direction.NORTH, this.literaldir, this.move );

@@ -48,6 +48,7 @@
         32: 'pause' // spacebar
     }
   
+	// todo: simplify key handling
     var keyActions = {
     
         'backward': {
