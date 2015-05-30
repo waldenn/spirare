@@ -226,7 +226,7 @@ Snake.prototype = {
 		this.literaldir =  this.direction[ this.move[ 3 ] ];
 		console.log( this.literaldir );
 
-		//this.move = [ 0, 0, -1 ];
+		this.move = [ 0, 0, -1 ];
 
 	},
 
@@ -239,7 +239,7 @@ Snake.prototype = {
 		this.literaldir =  this.direction[ this.move[ 3 ] ];
 		console.log( this.literaldir );
 
-		//this.move = [ 0, 0, 1 ];
+		this.move = [ 0, 0, 1 ];
 	},
 
 	right: function() {
@@ -250,7 +250,7 @@ Snake.prototype = {
 		this.literaldir =  this.direction[ this.move[ 3 ] ];
 		console.log( this.literaldir );
 
-		//this.move = [ 1, 0, 0 ];
+		this.move = [ 1, 0, 0 ];
 	   	
 	},
 
@@ -262,30 +262,31 @@ Snake.prototype = {
 		this.literaldir =  this.direction[ this.move[ 3 ] ];
 		console.log( this.literaldir );
 
-		//this.move = [ -1, 0, 1];
+		this.move = [ -1, 0, 0];
 		
 	},
 
 	up: function() {
 		
-		this.move = this.matrix[ this.direction.UP ][ this.literaldir ];
-		console.log( this.direction.UP, this.literaldir, this.move );
+		//this.move = this.matrix[ this.direction.UP ][ this.literaldir ];
+		//console.log( this.direction.UP, this.literaldir, this.move );
 
-		this.literaldir =  this.direction[ this.move[ 3 ] ];
-		console.log( this.literaldir );
+		//this.literaldir =  this.direction[ this.move[ 3 ] ];
+		//console.log( this.literaldir );
 
-		//this.move = [ 0, 1, 0 ];
+		this.move = [ 0, 1, 0 ];
 	},
 
 	down: function() {
 		
-		this.move = this.matrix[ this.direction.DOWN ][ this.literaldir ];
-		console.log( this.direction.DOWN, this.literaldir, this.move );
+		//this.move = this.matrix[ this.direction.DOWN ][ this.literaldir ];
+		//console.log( this.direction.DOWN, this.literaldir, this.move );
 
-		this.literaldir =  this.direction[ this.move[ 3 ] ];
-		console.log( this.literaldir );
+		//this.literaldir =  this.direction[ this.move[ 3 ] ];
+		//console.log( this.literaldir );
+		console.log('down down down');
 
-		//this.move = [ 0, -1, 0 ];
+		this.move = [ 0, -1, 0 ];
 	   	
 	},
 
