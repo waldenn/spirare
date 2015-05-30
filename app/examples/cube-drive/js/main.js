@@ -20,8 +20,8 @@ var zoomZ = 40;
 
 // Example figure
 var movingFigure;
-var pixelsPerSec = 20;
-var rotationSteed = 1.5;
+var pixelsPerSec = 30;
+var rotationSteed = 1.2;
 
 
 /***************************************************************
