@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Title</title>
+    <title>workshop programmeren</title>
     <meta charset="utf-8">
     <style>
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -60,13 +60,13 @@ class: middle, inverse
 &nbsp;
 <img src="http://spirare.js.org/app/images/tiles/game-a.jpg" alt="shortest path" style="width: 200px;"/>
 
-# Agenda
+# Menu
 
 1. Waarom programmeren?
 
 2. Wat doen we bij Spirare?
 
-3. Lets code something
+3. Code time!
 
 ---
 
@@ -93,23 +93,23 @@ class: middle, inverse
 
 # Waarom programmeren?
 
-Je kan er veel mee maken en ervaren:
+Je kan er veel mee creëren en ervaren:
 
-- informatie systemen en archieven &nbsp; ⌨
+- informatie systemen en archieven &nbsp; 💻
 
-- sociale communicatie netwerken &nbsp; ☎
+- communicatie systemen &nbsp; &#128231;
 
 - data visualisatie &nbsp; ☼
 
-- games &nbsp; ♞
+- games &nbsp; ♞ 
 
-- virtual reality simulaties 
+- virtual reality &nbsp; ⏣ 
 
-- kunstmatige intelligentie &nbsp; ⏣
+- kunstmatige intelligentie &nbsp; 𐄳 
 
 - robotica, domotica &nbsp; ✈
 
-- 3D printing &nbsp; ⫹ ⫺
+- 3D design &nbsp; ⫹⫺
 
 - kunst &nbsp; ⟅_⟆
 
@@ -121,9 +121,9 @@ class: middle, inverse
 
 # Wat doen we bij Spirare?
 
-- http://spirare.js.org
+- [spirare.js.org](http://spirare.js.org)
 
-- https://www.khanacademy.org/profile/spirare123/programs
+- [khanacademy.org/profile/spirare123](https://www.khanacademy.org/profile/spirare123/programs)
 
 - Veel gebruik van web technologieën en opensource
 
@@ -145,17 +145,17 @@ class: middle, inverse
 
 	- [tussen kunst en wiskunde](https://www.khanacademy.org/computer-programming/maurer-rose-spirograph/4943174527090688)
 
-	- [de verborgen stelling van pythagoras](https://www.khanacademy.org/computer-programming/collision-detection-sphere-sphere/1119358514)
+	- [verborgen stelling van pythagoras](https://www.khanacademy.org/computer-programming/collision-detection-sphere-sphere/1119358514)
 
-	- [physica simulatie](https://www.khanacademy.org/computer-programming/elastic-collision-response/4536743497826304)
+	- [behoud van momentum](https://www.khanacademy.org/computer-programming/elastic-collision-response/4536743497826304)
 
-	- [graaf theorie is o zo handig](https://www.khanacademy.org/computer-programming/a-pathfinding/5478556475850752)
+	- [het kortste pad](https://www.khanacademy.org/computer-programming/a-pathfinding/5478556475850752)
 
-	- [alle functies zijn mogelijk](https://www.khanacademy.org/computer-programming/graph-plotter/1133435325)
+	- [2D functies plotten](https://www.khanacademy.org/computer-programming/graph-plotter/1133435325)
 
-	- [alle functies zijn mogelijk, ook in 3D](http://spirare.js.org/app/examples/xyz-grapher/index.html)
+	- [3D functies plotten](http://spirare.js.org/app/examples/xyz-grapher/index.html)
 
-	- [first-person game](http://spirare.js.org/app/examples/first-person-navmesh/index.html)
+	- [first-person 'game'](http://spirare.js.org/app/examples/first-person-navmesh/index.html)
 
 	- [snake in 3D](http://spirare.js.org/app/examples/snake/index.html)
 
@@ -164,9 +164,72 @@ class: middle, inverse
 
 class: middle, inverse
 
-# Enough talking... lets code something
+<img src="http://www.troll.me/images/ancient-aliens-guy/gravity.jpg" alt="gravity meme" style="width: 400px; float: right;"/>
+# Enough talking... lets code a **[gravity ball](https://www.khanacademy.org/computer-programming/gravity-ball/6511207861190656)**
 
-- [gravity ball](https://www.khanacademy.org/computer-programming/gravity-ball/6511207861190656)
+---
+
+class: middle, inverse
+
+# code
+
+~~~~
+// taal: JS met de ProcessingJS library // live coding canvas, 400x400 pixels
+// data en functies // data in variabelen // functies transformeren data
+
+// variabele declaratie en toekenning
+var x = 200;
+var y = 200;
+var d = 50;
+var xspeed = 16;
+var yspeed = 14;
+var friction = 0.9;
+var gravity  = 1;
+
+var mouseClicked = function(){
+    x = random(d,width-d);
+    y = random(d,height-d);
+    xspeed = random(-16, 16);
+    yspeed = random(-10, 10);
+};
+
+var draw = function() {
+    
+    background(54, 106, 115);
+
+    yspeed += gravity;
+    
+    x += xspeed;
+    y += yspeed;
+
+    if (x >= 400 - d/2){
+        x = 400 - d/2;
+        xspeed *= -1 * friction;
+        yspeed *= friction;
+    }
+
+    if (x <= d/2){
+        x = d/2;
+        xspeed *= -1 * friction;
+        yspeed *= friction;
+    }
+
+    if (y >= 400 - d/2){
+        y = 400 - d/2;
+        xspeed *= friction;
+        yspeed *= -1 * friction;
+    }
+
+    if (y <= d/2){
+        y = d/2;
+        xspeed *= friction;
+        yspeed *= -1 * friction;
+    }
+
+    ellipse(x, y, d, d);
+
+};
+~~~~
 
     </textarea>
     <script src="remark-latest.min.js">
