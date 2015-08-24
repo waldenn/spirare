@@ -57,6 +57,15 @@ a:hover {
   transition: all 0.3s ease-out;
 }
 
+.boxDivider {
+  font-size: large;
+  font-weight: bold;
+  line-height: normal;
+  text-align: center;
+  background-color: #ffff42;
+}
+
+
 body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleBox {
   margin-bottom: 0;
 }

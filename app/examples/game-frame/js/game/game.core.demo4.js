@@ -25,7 +25,7 @@ window.game.core = function () {
 
 			// Jump flags
 			isGrounded: false,
-			jumpHeight: 38,
+			jumpHeight: 138,
 
 			// Configuration for player speed (acceleration and maximum speed)
 			speed: 1.5,
