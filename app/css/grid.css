@@ -67,6 +67,15 @@ a:hover {
   margin-right: 10px;
   transform: rotate(-3deg);
   box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.35);
+
+  -webkit-transition: transform 0.3s ease-out;
+  -moz-transition: transform 0.3s ease-out;
+  -o-transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out;
+}
+
+.boxInner:hover .boxDivider {
+  transform: none;
 }
 
 
