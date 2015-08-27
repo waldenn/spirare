@@ -332,6 +332,14 @@ window.game.core = function () {
 					physicsMaterial: _cannon.solidMaterial
 				});
 
+                _cannon.createRigidBody({
+                    shape: new CANNON.Sphere( 60 ),
+                    mass: 5,
+                    position: new CANNON.Vec3(900, -110, 285),
+                    meshMaterial: new THREE.MeshLambertMaterial({ color: window.game.static.colors.cyan }),
+                    physicsMaterial: _cannon.solidMaterial
+                });
+
 				// Grid Helper
 				var grid = new THREE.GridHelper(floorSize, floorSize / 10);
 				grid.position.z = 0.5;
