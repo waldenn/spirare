@@ -87,7 +87,18 @@ window.game.core = function () {
 
 				// Create the shape, mesh and rigid body for the player character and assign the physics material to it
 				_game.player.shape = new CANNON.Box(_game.player.model.halfExtents);
+
+				// TODO: upgrade to newer Cannon.js
+				/*
+				_game.player.rigidBody = new CANNON.Body({
+					mass: _game.player.mass, // kg
+					shape: _game.player.shape,
+					material: _cannon.createPhysicsMaterial(_cannon.playerPhysicsMaterial)
+				});
+				*/
+
 				_game.player.rigidBody = new CANNON.RigidBody(_game.player.mass, _game.player.shape, _cannon.createPhysicsMaterial(_cannon.playerPhysicsMaterial));
+				//
 				_game.player.rigidBody.position.set(0, 0, 50);
 				_game.player.mesh = _cannon.addVisual(_game.player.rigidBody, null, _game.player.model.mesh);
 

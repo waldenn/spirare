@@ -60,12 +60,15 @@
 		<script src="js/game/game.core.demo4.js"></script>
 
 		<script>
+
 			if (!Detector.webgl) {
 				Detector.addGetWebGLMessage();
-			} else {
+			}
+			else {
 				var loader = new THREE.JSONLoader();
 
 				loader.load("js/game/game.models.async.js", function(geometry, materials) {
+
 					window.game.models = {
 						player: {
 							geometry: geometry,
@@ -74,6 +77,8 @@
 					};
 
 					window.gameInstance = window.game.core();
+					console.log(window.gameInstance);
+
 					window.gameInstance.init({
 						domContainer: document.querySelector("#game"),
 						rendererClearColor: window.game.static.colors.white
@@ -98,6 +103,7 @@
 					})();
 				});
 			}
+
 		</script>
 	</body>
 </html>

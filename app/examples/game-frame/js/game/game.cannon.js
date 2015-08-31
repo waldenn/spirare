@@ -112,6 +112,7 @@ window.game.cannon = function() {
 			var mesh = customMesh || null;
 
 			// Check for rigid body and convert the shape to a THREE.js mesh representation
+			//if (body instanceof CANNON.Body && !mesh) {
 			if (body instanceof CANNON.RigidBody && !mesh) {
 				mesh = _cannon.shape2mesh(body.shape, material);
 			}
@@ -220,7 +221,7 @@ window.game.cannon = function() {
 					break;
 
 				case CANNON.Shape.types.BOX:
-					var box_geometry = new THREE.CubeGeometry(shape.halfExtents.x * 2,
+					var box_geometry = new THREE.BoxGeometry(shape.halfExtents.x * 2,
 							shape.halfExtents.y * 2,
 							shape.halfExtents.z * 2);
 					mesh = new THREE.Mesh(box_geometry, currentMaterial);
@@ -304,7 +305,7 @@ window.game.cannon = function() {
 				}
 			};
 
-			var bboxGeometry = new THREE.CubeGeometry(1, 1, 1);
+			var bboxGeometry = new THREE.BoxGeometry(1, 1, 1);
 
 			var bboxMaterial = new THREE.MeshBasicMaterial({
 				color: 0xffffff,
