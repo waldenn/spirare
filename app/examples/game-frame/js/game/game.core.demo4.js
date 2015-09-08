@@ -335,14 +335,6 @@ window.game.core = function () {
 					physicsMaterial: _cannon.solidMaterial
 				});
 
-				_cannon.createRigidBody({
-					shape: new CANNON.Box(new CANNON.Vec3(30, 30, 30)),
-					mass: 0,
-					position: new CANNON.Vec3(900, -110, 285),
-					meshMaterial: new THREE.MeshLambertMaterial({ color: window.game.static.colors.cyan }),
-					physicsMaterial: _cannon.solidMaterial
-				});
-
                 _cannon.createRigidBody({
                     shape: new CANNON.Sphere( 60 ),
                     mass: 5,
