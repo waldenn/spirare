@@ -1,0 +1,28 @@
+<iframe id="rotator" src="http://teamup.com/ksbe7454e41b4afec2" style="position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;"></iframe>
+
+<script>
+
+window.onload = function() { // starts when the page is loaded
+
+  var urls = [
+	"http://teamup.com/ksbe7454e41b4afec2/?view=a",
+  ];
+
+  var index = 1;
+  var el = document.getElementById("rotator");
+
+  setTimeout(function rotate() {
+
+    if ( index === urls.length ) {
+      index = 0;
+    }
+
+    el.src = urls[index];
+    index  = index + 1;
+
+    // continue rotating iframes
+    setTimeout(rotate, 3600000);
+
+  }, 3600000); // updates every hour
+};
+</script>
