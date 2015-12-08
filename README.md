@@ -10,4 +10,4 @@ This is a educational programming project for the [Spirare school](http://spirar
 * cd spirare
 * npm install
 * npm start
-* browse to [http://localhost:8000](http://localhost:8000) (or your external IP-address at port 8080)
+* browse to [http://localhost:8000](http://localhost:8000) (note: live reloading upon edits is enabled)
