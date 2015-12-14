@@ -99,7 +99,7 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
   }
 }
 
-@media only screen and (max-width : 1050px) and (min-width : 651px) {
+@media only screen and (max-width : 850px) and (min-width : 651px) {
   /* Small desktop / ipad view: 3 tiles */
   .box {
 	width: 33.3%;
@@ -107,10 +107,18 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
   }
 }
 
-@media only screen and (max-width : 1290px) and (min-width : 1051px) {
+@media only screen and (max-width : 1500px) and (min-width : 851px) {
   /* Medium desktop: 4 tiles */
   .box {
 	width: 25%;
 	padding-bottom: 25%;
+  }
+}
+
+@media only screen and (max-width : 3000px) and (min-width : 1501px) {
+  /* Large desktop: 5 tiles */
+  .box {
+	width: 20%;
+	padding-bottom: 20%;
   }
 }
