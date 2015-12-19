@@ -21,10 +21,6 @@
 
     var socket = io();
 
-	if (typeof io == 'undefined'){
-		document.write("Please start the NodeJS server app first, then connect again");
-	}
-
     socket.on('updatePosition', function(data){
         updatePlayerPosition(data);
     });
