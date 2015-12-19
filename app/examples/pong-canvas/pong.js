@@ -10,7 +10,6 @@ var canvas = document.getElementById("canvas"),
 	paddles = [2], // Array containing two paddles
 	mouse = {}, // Mouse object to store it's current position
 	points = 0, // Varialbe to store points
-	fps = 60, // Max FPS (frames per second)
 	particlesCount = 20, // Number of sparks when ball strikes the paddle
 	flag = 0, // Flag variable which is changed on collision
 	particlePos = {}, // Object to contain the position of collision 
@@ -81,10 +80,13 @@ startBtn = {
 	y: H/2 - 25,
 	
 	draw: function() {
+
+		// draw a box
 		ctx.strokeStyle = "white";
 		ctx.lineWidth = "2";
 		ctx.strokeRect(this.x, this.y, this.w, this.h);
 		
+		// draw text
 		ctx.font = "18px Arial, sans-serif";
 		ctx.textAlign = "center";
 		ctx.textBaseline = "middle";
@@ -126,7 +128,9 @@ function createParticles(x, y, m) {
 
 // Draw everything on canvas
 function draw() {
+
 	paintCanvas();
+
 	for(var i = 0; i < paddles.length; i++) {
 		p = paddles[i];
 		
