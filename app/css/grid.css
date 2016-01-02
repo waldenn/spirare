@@ -68,7 +68,9 @@ a:hover {
   transform: none;
 }
 body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleBox {
-  margin-bottom: 0;
+  margin: 25px;
+  border: 2px solid #ccc;
+  border-radius: 40px
 }
 @media only screen and (max-width: 480px) {
   /* Smartphone view: 1 tile */
