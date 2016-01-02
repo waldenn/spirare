@@ -48,6 +48,8 @@ a:hover {
   -moz-transition: all 0.3s ease-out;
   -o-transition: all 0.3s ease-out;
   transition: all 0.3s ease-out;
+  border: 2px solid #ccc;
+  border-radius: 40px
 }
 .boxDivider {
   font-size: large;
@@ -69,14 +71,13 @@ a:hover {
 }
 body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleBox {
   margin: 25px;
-  border: 2px solid #ccc;
-  border-radius: 40px
 }
 @media only screen and (max-width: 480px) {
   /* Smartphone view: 1 tile */
   .box {
     width: 100%;
     padding-bottom: 100%;
+    font: 15px/19px 'Lucida Sans', sans-serif;
   }
 }
 @media only screen and (max-width: 650px) and (min-width: 481px) {
