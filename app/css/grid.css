@@ -2,25 +2,21 @@ body {
   margin: 0;
   padding: 0;
   background: #EEE;
-  font: 11px/15px 'Lucida Sans',sans-serif;
+  font: 11px/15px 'Lucida Sans', sans-serif;
 }
-
-a:hover { 
+a:hover {
   background-color: #B7C8EB;
 }
-
 .wrap {
   overflow: hidden;
   margin: 10px;
 }
-
 .box {
   float: left;
   position: relative;
   width: 20%;
   padding-bottom: 20%;
 }
-
 .boxInner {
   position: absolute;
   left: 10px;
@@ -29,16 +25,13 @@ a:hover {
   bottom: 10px;
   overflow: hidden;
 }
-
 .boxInner img {
   width: 100%;
 }
-
 .boxInner a {
   color: blue;
   text-decoration: none
 }
-
 .boxInner .titleBox {
   position: absolute;
   bottom: 0;
@@ -56,7 +49,6 @@ a:hover {
   -o-transition: all 0.3s ease-out;
   transition: all 0.3s ease-out;
 }
-
 .boxDivider {
   font-size: large;
   font-weight: bold;
@@ -66,59 +58,50 @@ a:hover {
   margin-top: 10px;
   margin-right: 10px;
   transform: rotate(-3deg);
-  box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.35);
-
+  box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.35);
   -webkit-transition: transform 0.3s ease-out;
   -moz-transition: transform 0.3s ease-out;
   -o-transition: transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
 }
-
 .boxInner:hover .boxDivider {
   transform: none;
 }
-
-
 body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleBox {
   margin-bottom: 0;
 }
-
-@media only screen and (max-width : 480px) {
+@media only screen and (max-width: 480px) {
   /* Smartphone view: 1 tile */
   .box {
-	width: 100%;
-	padding-bottom: 100%;
+    width: 100%;
+    padding-bottom: 100%;
   }
 }
-
-@media only screen and (max-width : 650px) and (min-width : 481px) {
+@media only screen and (max-width: 650px) and (min-width: 481px) {
   /* Tablet view: 2 tiles */
   .box {
-	width: 50%;
-	padding-bottom: 50%;
+    width: 50%;
+    padding-bottom: 50%;
   }
 }
-
-@media only screen and (max-width : 850px) and (min-width : 651px) {
+@media only screen and (max-width: 850px) and (min-width: 651px) {
   /* Small desktop / ipad view: 3 tiles */
   .box {
-	width: 33.3%;
-	padding-bottom: 33.3%;
+    width: 33.3%;
+    padding-bottom: 33.3%;
   }
 }
-
-@media only screen and (max-width : 1500px) and (min-width : 851px) {
+@media only screen and (max-width: 1500px) and (min-width: 851px) {
   /* Medium desktop: 4 tiles */
   .box {
-	width: 25%;
-	padding-bottom: 25%;
+    width: 25%;
+    padding-bottom: 25%;
   }
 }
-
-@media only screen and (max-width : 3000px) and (min-width : 1501px) {
+@media only screen and (max-width: 3000px) and (min-width: 1501px) {
   /* Large desktop: 5 tiles */
   .box {
-	width: 20%;
-	padding-bottom: 20%;
+    width: 20%;
+    padding-bottom: 20%;
   }
 }
