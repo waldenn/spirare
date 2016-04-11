@@ -32,7 +32,9 @@ function basicFloorGrid(lines, steps, gridColor) {
   steps = steps || 2;
   gridColor = gridColor || 0xFFFFFF;
   var floorGrid = new THREE.Geometry();
+  
   var gridLine = new THREE.LineBasicMaterial( {color: gridColor} );
+ 
   for (var i = -lines; i <= lines; i += steps) {
     floorGrid.vertices.push(new THREE.Vector3(-lines, 0, i));
     floorGrid.vertices.push(new THREE.Vector3( lines, 0, i));
@@ -55,7 +57,7 @@ function simpleBox(figureSize, figureColor) {
 function updateMovingFigure() {
   var delta = clock.getDelta();
   var moveDistance = pixelsPerSec * delta;
-  var rotationAngle = Math.PI / rotationSteed * delta;
+  var rotationAngle = 0.5*Math.PI / rotationSteed * delta;
 
   // Basic rotation
   if (keyboard.pressed('w') || keyboard.pressed('up') ) {
