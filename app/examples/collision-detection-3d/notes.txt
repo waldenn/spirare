@@ -4,10 +4,16 @@ old school:
 
     brute-force  ---> O(n^2) complexity!
     Raycasting (used in DOOM)
+      introduction: http://permadi.com/1996/05/ray-casting-tutorial-1/
+      http://threejs.org/docs/#Reference/Core/Raycaster
+      http://spirare.js.org/app/examples/basic-collision-detection/index.html
+        code: http://spirare.js.org/app/examples/basic-collision-detection/js/main.js
+	    http://webmaestro.fr/collisions-detection-three-js-raycasting/
+	    http://oos.moxiecode.com/js_webgl/ray_collision/index.html
 
 modern:
 
-  broadphase
+  1) broadphase methods:
 
     sweep and prune
       naive (brute-force)
@@ -31,61 +37,55 @@ modern:
       https://www.cs.tcd.ie/publications/tech-reports/reports.99/TCD-CS-1999-10.pdf
       https://www.youtube.com/watch?v=UNdHaahy8P0
     ...
-  midphase (more precise form of broadphase)
+
+  2) midphase (more precise form of broadphase)
     ...
-  narrowphase
-    AABB (axis-aligned bounding boxes)
-    Bounding Spheres
-    --> point of intersection, the collision normal or the penetration depth.
+
+  3) narrowphase
+
+    3a) AABB (axis-aligned bounding boxes)
+
+      https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+      https://hacks.mozilla.org/2015/10/html-5-games-3d-collision-detection/
+      https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection
+      https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection/Bounding_volume_collision_detection_with_THREE.js
+
+      http://threejs.org/docs/#Reference/Math/Box3
+        http://threejs.org/docs/#Reference/Extras.Helpers/BoundingBoxHelper
+          https://www.script-tutorials.com/webgl-with-three-js-lesson-3/
+          https://github.com/jwill/net-magazine-three-js
+
+      https://www.youtube.com/watch?v=8b_reDI7iPM
+      https://www.youtube.com/watch?v=Iu6nAXFm2Wo
+      https://www.youtube.com/watch?v=NUJeuNwbqs8 (AABB and Bounding-Sphere)
+
+    3b) OBB (oriented bounding box):
+      https://en.wikipedia.org/wiki/Minimum_bounding_box
+      SAT (Separating Axis Theorem) "used to check for collisions between two simple polygons,
+        http://www.jkh.me/files/tutorials/Separating%20Axis%20Theorem%20for%20Oriented%20Bounding%20Boxes.pdf
+        http://gamedev.stackexchange.com/questions/25397/obb-vs-obb-collision-detection
+        https://github.com/Mugen87/yume/blob/master/src/javascript/engine/etc/OBB.js
+        or between a polygon and a circle":
+          http://www.wildbunny.co.uk/blog/2011/04/20/collision-detection-for-dummies/
+
+    3c) Bounding Spheres
+
+  --------------------------------
+
+challenges:
+  1) mini game based on AABB collision detection
+  2) mini game based on Sweep and Prune with AABB collision detection
+
+  --------------------------------
 
   various info:
-    broadphase methods advise: http://stackoverflow.com/questions/1616448/broad-phase-collision-detection-methods
+    broadphase method selection: http://stackoverflow.com/questions/1616448/broad-phase-collision-detection-methods
     http://www.gamasutra.com/view/feature/131598/advanced_collision_detection_.php?print=1
 
 modern collision RESPONSE:
   [todo]
 
-WebGL based physics engines:
-  Bullet -> Ammo.js -> Ammo.lab
-    /home/jama/dev/personal/Ammo.lab
-    https://gildas-lormeau.github.io/zip.js/
-  Cannon.js
-  GooJS
-  Oimo
-  ...
-
-challenge 1) build a mini game based on AABB collision detection
-challenge 2) build a mini game based on Sweep and Prune with AABB collision detection
-
-
   --------------------------------
-
-
-  OBB (oriented bounding box):
-      https://en.wikipedia.org/wiki/Minimum_bounding_box
-      http://www.jkh.me/files/tutorials/Separating%20Axis%20Theorem%20for%20Oriented%20Bounding%20Boxes.pdf
-      http://gamedev.stackexchange.com/questions/25397/obb-vs-obb-collision-detection
-      https://github.com/Mugen87/yume/blob/master/src/javascript/engine/etc/OBB.js
-
-  AABB (axis-aligned bounding box)
-
-    https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-    https://hacks.mozilla.org/2015/10/html-5-games-3d-collision-detection/
-    https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection
-    https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection/Bounding_volume_collision_detection_with_THREE.js
-
-    http://threejs.org/docs/#Reference/Math/Box3
-      http://threejs.org/docs/#Reference/Extras.Helpers/BoundingBoxHelper
-        https://www.script-tutorials.com/webgl-with-three-js-lesson-3/
-        https://github.com/jwill/net-magazine-three-js
-
-    https://www.youtube.com/watch?v=8b_reDI7iPM
-    https://www.youtube.com/watch?v=Iu6nAXFm2Wo
-    https://www.youtube.com/watch?v=NUJeuNwbqs8 (AABB and Bounding-Sphere)
-
-  SAT (Separating Axis Theorem) "used to check for collisions between two simple polygons,
-      or between a polygon and a circle":
-      http://www.wildbunny.co.uk/blog/2011/04/20/collision-detection-for-dummies/
 
     http://www.bulletphysics.org/mediawiki-1.5.8/index.php?title=Broadphase
     http://buildnewgames.com/broad-phase-collision-detection/
@@ -100,23 +100,16 @@ challenge 2) build a mini game based on Sweep and Prune with AABB collision dete
     data visualization:
        http://makc.github.io/three.js/map2globe/demo.html
 
-Raycasting:
-
-  introduction...
-  http://permadi.com/1996/05/ray-casting-tutorial-1/
-
-  http://threejs.org/docs/#Reference/Core/Raycaster
-  http://spirare.js.org/app/examples/basic-collision-detection/index.html
-    code: http://spirare.js.org/app/examples/basic-collision-detection/js/main.js
-	http://webmaestro.fr/collisions-detection-three-js-raycasting/
-	http://oos.moxiecode.com/js_webgl/ray_collision/index.html
-
 Physics engine:
 
-  introduction:
-
-	https://github.com/kripken/ammo.js/
-    demo: http://kripken.github.io/ammo.js/examples/webgl_demo/ammo.html
-
-	https://github.com/lo-th/Ammo.lab
+  WebGL based physics engines:
+  Bullet -> Ammo.js -> Ammo.lab
+	  https://github.com/kripken/ammo.js/
+    https://github.com/lo-th/Ammo.lab
     demo: http://lo-th.github.io/Ammo.lab/#basic
+    https://gildas-lormeau.github.io/zip.js/
+  Cannon.js
+  GooJS
+  Oimo
+  PhysicsJS
+  ...
