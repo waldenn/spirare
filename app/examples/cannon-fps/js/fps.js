@@ -14,6 +14,14 @@ var controls, time = Date.now();
 
 var dt = 1 / 60;
 
+// used by ball bullets
+var ballShape = new CANNON.Sphere( 0.2 );
+var ballGeometry = new THREE.SphereGeometry( ballShape.radius, 32, 32 );
+var shootDirection = new THREE.Vector3();
+var shootVelo = 35;
+var projector = new THREE.Projector();
+
+// html UI elements
 var blocker = document.getElementById( 'blocker' );
 var instructions = document.getElementById( 'instructions' );
 
@@ -178,6 +186,7 @@ function init() {
 	light.position.set( 10, 30, 20 );
 	light.target.position.set( 0, 0, 0 );
 
+  // easy to switch the fancy lighting off by setting to "false"
 	if ( true ) {
 
 		light.castShadow = true;
@@ -196,6 +205,7 @@ function init() {
 	}
 	scene.add( light );
 
+  // pointerlock controls
 	controls = new PointerLockControls( camera, sphereBody );
 	scene.add( controls.getObject() );
 
@@ -224,27 +234,38 @@ function init() {
 	var halfExtents = new CANNON.Vec3( 1, 1, 1 );
 	var boxShape = new CANNON.Box( halfExtents );
 	var boxGeometry = new THREE.BoxGeometry( halfExtents.x * 2, halfExtents.y * 2, halfExtents.z * 2 );
+
 	for ( var i = 0; i < 3; i ++ ) {
 
 		var x = ( Math.random() - 0.5 ) * 20;
 		var y = 1 + ( Math.random() - 0.5 ) * 1;
 		var z = ( Math.random() - 0.5 ) * 20;
+
 		var boxBody = new CANNON.Body( { mass: 5 } );
 		boxBody.addShape( boxShape );
+
 		var boxMesh = new THREE.Mesh( boxGeometry, material );
+
+    // add to CannnonJS world
 		world.addBody( boxBody );
+
+    // add to ThreeJS scene
 		scene.add( boxMesh );
+
 		boxBody.position.set( x, y, z );
+
 		boxMesh.position.set( x, y, z );
 		boxMesh.castShadow = true;
 		boxMesh.receiveShadow = true;
-		boxes.push( boxBody );
-		boxMeshes.push( boxMesh );
+
+		boxes.push( boxBody ); // CannonJS list
+
+		boxMeshes.push( boxMesh ); // ThreeJS list
 
 	}
 
 
-	// Add linked boxes
+	// add linked boxes (ladder)
 	var size = 0.5;
 	var he = new CANNON.Vec3( size, size, size * 0.1 );
 	var boxShape = new CANNON.Box( he );
@@ -265,8 +286,9 @@ function init() {
 		boxMesh.receiveShadow = true;
 		world.addBody( boxbody );
 		scene.add( boxMesh );
-		boxes.push( boxbody );
-		boxMeshes.push( boxMesh );
+
+		boxes.push( boxbody ); // CannonJS
+		boxMeshes.push( boxMesh ); // ThreeJS
 
 		if ( i != 0 ) {
 
@@ -300,11 +322,12 @@ function onWindowResize() {
 function animate() {
 
 	requestAnimationFrame( animate );
+
 	if ( controls.enabled ) {
 
 		world.step( dt );
 
-		// Update ball positions
+		// update ball/bullets positions
 		for ( var i = 0; i < balls.length; i ++ ) {
 
 			ballMeshes[ i ].position.copy( balls[ i ].position );
@@ -312,11 +335,12 @@ function animate() {
 
 		}
 
-		// Update box positions
+		// update box positions
 		for ( var i = 0; i < boxes.length; i ++ ) {
 
-			boxMeshes[ i ].position.copy( boxes[ i ].position );
-			boxMeshes[ i ].quaternion.copy( boxes[ i ].quaternion );
+      // update ThreeJS objects
+			boxMeshes[ i ].position.copy( boxes[ i ].position ); // position update
+			boxMeshes[ i ].quaternion.copy( boxes[ i ].quaternion ); // rotation update
 
 		}
 
@@ -328,12 +352,6 @@ function animate() {
 
 }
 
-var ballShape = new CANNON.Sphere( 0.2 );
-var ballGeometry = new THREE.SphereGeometry( ballShape.radius, 32, 32 );
-var shootDirection = new THREE.Vector3();
-var shootVelo = 35;
-var projector = new THREE.Projector();
-
 function getShootDir( targetVec ) {
 
 	var vector = targetVec;
@@ -344,6 +362,7 @@ function getShootDir( targetVec ) {
 
 }
 
+// shoot by clicking
 window.addEventListener( "click", function( e ) {
 
 	if ( controls.enabled == true ) {
@@ -351,26 +370,35 @@ window.addEventListener( "click", function( e ) {
 		var x = sphereBody.position.x;
 		var y = sphereBody.position.y;
 		var z = sphereBody.position.z;
+
 		var ballBody = new CANNON.Body( { mass: 1 } );
 		ballBody.addShape( ballShape );
+
 		var ballMesh = new THREE.Mesh( ballGeometry, material );
-		world.addBody( ballBody );
-		scene.add( ballMesh );
+		world.addBody( ballBody ); // CannonJS
+		scene.add( ballMesh ); // ThreeJS
+
 		ballMesh.castShadow = true;
 		ballMesh.receiveShadow = true;
-		balls.push( ballBody );
-		ballMeshes.push( ballMesh );
+		balls.push( ballBody ); // CannonJS
+		ballMeshes.push( ballMesh ); // ThreeJS
+
+    console.log(shootDirection);
 		getShootDir( shootDirection );
-		ballBody.velocity.set( shootDirection.x * shootVelo,
-		shootDirection.y * shootVelo,
-		shootDirection.z * shootVelo );
+
+		ballBody.velocity.set(
+      shootDirection.x * shootVelo,
+		  shootDirection.y * shootVelo,
+		  shootDirection.z * shootVelo
+    );
 
 		// Move the ball outside the player sphere
 		x += shootDirection.x * ( sphereShape.radius * 1.02 + ballShape.radius );
 		y += shootDirection.y * ( sphereShape.radius * 1.02 + ballShape.radius );
 		z += shootDirection.z * ( sphereShape.radius * 1.02 + ballShape.radius );
-		ballBody.position.set( x, y, z );
-		ballMesh.position.set( x, y, z );
+
+		ballBody.position.set( x, y, z ); // CannonJS
+		ballMesh.position.set( x, y, z ); // ThreeJS
 
 	}
 
