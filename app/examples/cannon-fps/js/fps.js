@@ -191,14 +191,14 @@ function init() {
 
 		light.castShadow = true;
 
-		light.shadowCameraNear = 20;
-		light.shadowCameraFar = 50;//camera.far;
-		light.shadowCameraFov = 40;
+		light.shadow.camera.near = 20;
+		light.shadow.camera.far = 50;//camera.far;
+		light.shadow.camera.fov = 40;
 
 		light.shadowMapBias = 0.1;
 		light.shadowMapDarkness = 0.7;
-		light.shadowMapWidth = 2 * 512;
-		light.shadowMapHeight = 2 * 512;
+		light.shadow.mapSize.width = 2 * 512;
+		light.shadow.mapSize.height = 2 * 512;
 
 		//light.shadowCameraVisible = true;
 
@@ -213,7 +213,8 @@ function init() {
 	geometry = new THREE.PlaneGeometry( 300, 300, 50, 50 );
 	geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
 
-	material = new THREE.MeshNormalMaterial( { color: 0xdddddd } );
+	material = new THREE.MeshNormalMaterial( { } );
+	//material = new THREE.MeshLambertMaterial( { color: 0xdddddd } );
 
 	mesh = new THREE.Mesh( geometry, material );
 	mesh.castShadow = true;
@@ -221,7 +222,7 @@ function init() {
 	scene.add( mesh );
 
 	renderer = new THREE.WebGLRenderer();
-	renderer.shadowMapEnabled = true;
+	renderer.shadowMap.enabled = true;
 	renderer.shadowMapSoft = true;
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.setClearColor( scene.fog.color, 1 );
@@ -235,11 +236,11 @@ function init() {
 	var boxShape = new CANNON.Box( halfExtents );
 	var boxGeometry = new THREE.BoxGeometry( halfExtents.x * 2, halfExtents.y * 2, halfExtents.z * 2 );
 
-	for ( var i = 0; i < 3; i ++ ) {
+	for ( var i = 0; i < 5; i ++ ) {
 
-		var x = ( Math.random() - 0.5 ) * 20;
+		var x = ( Math.random() - 0.5 ) * 40;
 		var y = 1 + ( Math.random() - 0.5 ) * 1;
-		var z = ( Math.random() - 0.5 ) * 20;
+		var z = ( Math.random() - 0.5 ) * 40;
 
 		var boxBody = new CANNON.Body( { mass: 5 } );
 		boxBody.addShape( boxShape );
@@ -356,7 +357,8 @@ function getShootDir( targetVec ) {
 
 	var vector = targetVec;
 	targetVec.set( 0, 0, 1 );
-	projector.unprojectVector( vector, camera );
+	vector.unproject( camera );
+	//projector.unprojectVector( vector, camera );
 	var ray = new THREE.Ray( sphereBody.position, vector.sub( sphereBody.position ).normalize() );
 	targetVec.copy( ray.direction );
 
@@ -383,7 +385,7 @@ window.addEventListener( "click", function( e ) {
 		balls.push( ballBody ); // CannonJS
 		ballMeshes.push( ballMesh ); // ThreeJS
 
-    console.log(shootDirection);
+    //console.log(shootDirection);
 		getShootDir( shootDirection );
 
 		ballBody.velocity.set(
