@@ -23,15 +23,17 @@
 
             scene.add( cube );
 
-            camera.position.z = 3;
+            camera.position.z = 15;
 
             var render = function () {
 	
 				requestAnimationFrame( render );
 
-				cube.rotation.x += 0.06;
-				cube.rotation.y += 0.02;
-				cube.rotation.z += 0.10;
+				cube.rotation.x += 0.02;
+				cube.rotation.y += 0.06;
+				cube.rotation.z += 0.00;
+
+        camera.position.z -= 0.04;
 
 				renderer.render( scene, camera );
             
