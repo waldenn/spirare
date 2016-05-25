@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <script type="text/javascript" src="js/libs/three.min.js"></script>
+  <script type="text/javascript" src="js/libs/stats.js"></script>
+  <script type="text/javascript" src="js/libs/physi.js"></script>
+  <script type="text/javascript" src="js/init.js"></script>
+
+</head>
+
+<body>
+    <div id="viewport"></div>
+
+    <script type="text/javascript">
+
+      Physijs.scripts.worker = 'js/libs/physijs_worker.js';
+      Physijs.scripts.ammo = 'ammo.js';
+
+      window.onload = initScene();
+
+    </script>
+</body>
+</html>
