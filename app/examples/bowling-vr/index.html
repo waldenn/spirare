@@ -14,7 +14,9 @@
 </head>
 
 <body>
-    <div id="viewport"></div>
+  <div id="viewport"></div>
+
+  <div id="hud">Score: 0</div>
 
 	<script>
 	/*
@@ -79,16 +81,18 @@
 	<script type="text/javascript" src="js/libs/physi.js"></script>
 
 	<!-- game code -->
+  <script type="text/javascript" src="js/inputmanager.js"></script>
+
 	<script type="text/javascript" src="js/game.js"></script>
 	<!--script type="text/javascript" src="js/level.js"></script-->
-	
+
     <script type="text/javascript">
 
         Physijs.scripts.worker = 'js/libs/physijs_worker.js';
         Physijs.scripts.ammo = 'ammo.js';
 
-        var game = new Game();      
-        window.onload = game.init();   
+        var game = new Game();
+        window.onload = game.init();
 
     </script>
 
