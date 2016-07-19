@@ -1,8 +1,7 @@
 var Game = function() {
-
 	var renderer, scene, camera, ground;
 	var ball, ballVelocity;
-	var groundFriction = 0.9, groundRestitution = 0.1;
+	var groundFriction = 100, groundRestitution = 0.1;
 	var display;
 	var effect;
 	var controls;
@@ -11,6 +10,7 @@ var Game = function() {
 	var boxSize = 5;
 	var cube;
 	var manager;
+	var cameraObject;
 
 	// Create a VR manager helper to enter and exit VR mode.
 	var params = {
@@ -61,9 +61,7 @@ Game.prototype.setStageDimensions = function( stage ) {
 }
 
 
-Game.prototype.createBowlingPins = function(
-  firstPinPositionX, firstPinPositionY, firstPinPositionZ, spacing, rows ) {
-
+Game.prototype.createBowlingPins = function( firstPinPositionX, firstPinPositionY, firstPinPositionZ, spacing, rows ) {
 	for ( var i = 1; i <= rows; i ++ ) {
 
 		var even = ( i % 2 == 0 );
@@ -73,16 +71,33 @@ Game.prototype.createBowlingPins = function(
 			if ( even ) var offset = ( i / 2 * spacing ) - spacing / 2;
 			if ( ! even ) var offset = ( i / 2 - 0.5 ) * spacing;
 
-			var parent = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.5, 0.3, 2, 12 ), new THREE.MeshNormalMaterial(), 0.1 );
-			//var pin = new Physijs.BoxMesh( new THREE.CubeGeometry( 2, 5, 2 ), new THREE.MeshNormalMaterial(), 0.1 );
-			parent.position.set( offset - nPins * spacing, 1.10, i * - spacing );
-			//this.scene.add( pin );
+			var base = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.35, 0.1, 1.3, 32 ), new THREE.MeshNormalMaterial(), 2 );
+			base.position.set( offset - nPins * spacing, 1, i * - spacing );
 
-			//var child = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.7, 1, 2, 12 ), new THREE.MeshNormalMaterial(), 0.1 );
-			//child.position.set( offset - nPins * spacing, 3, i * - spacing );
+			var middle = new Physijs.CylinderMesh(new THREE.CylinderGeometry(0.35, 0.35, 0.2, 32), new THREE.MeshNormalMaterial());
+			middle.position.y = 0.75;
 
-			//parent.add( child );
-			this.scene.add( parent );
+			var top = new Physijs.CylinderMesh(new THREE.CylinderGeometry(0.1, 0.35, 0.5, 32), new THREE.MeshNormalMaterial());
+			top.position.y = 1.10;
+
+			var ballStand = new Physijs.CylinderMesh(new THREE.CylinderGeometry(0.1, 0.1, 0.1, 32), new THREE.MeshNormalMaterial());
+			ballStand.position.y = 1.40;
+
+			var ball = new Physijs.SphereMesh(new THREE.SphereGeometry(0.15, 32, 32), new THREE.MeshNormalMaterial());
+			ball.position.y = 1.5;
+
+			var pinStand = new Physijs.BoxMesh(new THREE.BoxGeometry(0.05, 0.05, 0.05), new THREE.MeshNormalMaterial());
+			pinStand.position.y = 0;
+
+			base.add(pinStand);
+			base.add(middle);
+			base.add(top);
+			base.add(ballStand);
+			base.add(ball);
+
+			this.pinPositions[i] = base.position;
+
+			this.scene.add( base );
 
 		}
 
@@ -92,6 +107,12 @@ Game.prototype.createBowlingPins = function(
 
 
 Game.prototype.init = function() {
+	this.pinPositions = [50];
+	this.score = 0;
+
+	this.inputManager = new InputManager();
+	this.inputManager.init();
+  console.log(this.inputManager);
 
 	// setup three.js WebGL renderer. Note: Antialiasing is a big performance hit.
 	// only enable it if you actually need to.
@@ -109,6 +130,12 @@ Game.prototype.init = function() {
 	// create a three.js camera.
 	this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
 
+	this.cameraObject = new THREE.Object3D();
+	this.cameraObject.position.y = 1;
+	this.cameraObject.position.z = 0;
+	this.cameraObject.add(this.camera);
+	this.scene.add(this.cameraObject);
+
 	// apply VR headset positional data to camera.
 	this.controls = new THREE.VRControls( this.camera );
 	this.controls.standing = true;
@@ -119,7 +146,7 @@ Game.prototype.init = function() {
 
     // ground physics
 	ground = new Physijs.BoxMesh(
-	  new THREE.CubeGeometry( 50, 0.1, 600 ),
+	  new THREE.CubeGeometry( 50, 1, 600 ),
 	  Physijs.createMaterial( new THREE.MeshBasicMaterial( { color: 0x888888 } ),
 	  this.groundFriction, this.groundRestitution ),
 	  0
@@ -130,7 +157,7 @@ Game.prototype.init = function() {
 	this.scene.add( ground );
 
     // setup the bowling pins
-	this.createBowlingPins( 0, 0, 0, 10, 4 );
+	this.createBowlingPins( 0, 0, 0, 1.4, 7 );
 
 	// add a repeating grid as a skybox. FIXME
 	var loader = new THREE.TextureLoader();
@@ -172,14 +199,14 @@ Game.prototype.onTextureLoaded = function( texture ) {
 	this.cube.position.set( 0, this.controls.userHeight, - 1 );
 
 	ball = new Physijs.SphereMesh(
-	  new THREE.SphereGeometry( 2, 10, 10 ),
+	  new THREE.SphereGeometry( 1, 32, 32 ),
 	  new THREE.MeshNormalMaterial(),
-	  1
+	  10
 	);
 
-	ball.position.set( 0, 3, 20 );
+	ball.position.set( 0, 2, 10 );
 	this.scene.add( ball );
-	ball.applyCentralImpulse( new THREE.Vector3( 0, 0, - 100 ) );
+	ball.applyCentralImpulse( new THREE.Vector3( 0, 0, -590 ) );
 
 	// add cube mesh to our scene
 	this.scene.add( this.cube );
@@ -194,6 +221,14 @@ Game.prototype.onTextureLoaded = function( texture ) {
 
 
 Game.prototype.animate = function( timestamp ) {
+	document.getElementById("hud").innerHTML = 'Score: ' + this.score;
+
+	for(var i = 0; i < this.pinPositions.length; i++) {
+		if(this.pinPositions[i].y < 0.85) {
+			this.score++;
+			this.pinPositions[i] = new THREE.Vector3(0, 1, 0);
+		}
+	}
 
 	var delta = Math.min( timestamp - this.lastRender, 500 );
 	this.lastRender = timestamp;
@@ -210,6 +245,8 @@ Game.prototype.animate = function( timestamp ) {
 	// render the scene through the manager.
 	this.manager.render( this.scene, this.camera, timestamp );
 
+	//console.log(this.inputManager.up);
+
 	requestAnimationFrame( this.animate.bind( this ) );
 
 }
@@ -221,8 +258,3 @@ Game.prototype.onResize = function( e ) {
 	this.camera.updateProjectionMatrix();
 
 }
-
-
-
-
-
