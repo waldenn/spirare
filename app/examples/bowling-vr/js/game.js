@@ -1,7 +1,6 @@
 var Game = function() {
 	var renderer, scene, camera, ground;
 	var ball, ballVelocity;
-	var groundFriction = 100, groundRestitution = 0.1;
 	var display;
 	var effect;
 	var controls;
@@ -11,6 +10,7 @@ var Game = function() {
 	var cube;
 	var manager;
 	var cameraObject;
+	var arrow;
 
 	// Create a VR manager helper to enter and exit VR mode.
 	var params = {
@@ -62,6 +62,8 @@ Game.prototype.setStageDimensions = function( stage ) {
 
 
 Game.prototype.createBowlingPins = function( firstPinPositionX, firstPinPositionY, firstPinPositionZ, spacing, rows ) {
+	var index = 0;
+	var pins = [];
 	for ( var i = 1; i <= rows; i ++ ) {
 
 		var even = ( i % 2 == 0 );
@@ -71,44 +73,110 @@ Game.prototype.createBowlingPins = function( firstPinPositionX, firstPinPosition
 			if ( even ) var offset = ( i / 2 * spacing ) - spacing / 2;
 			if ( ! even ) var offset = ( i / 2 - 0.5 ) * spacing;
 
-			var base = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.35, 0.1, 1.3, 32 ), new THREE.MeshNormalMaterial(), 2 );
-			base.position.set( offset - nPins * spacing, 1, i * - spacing );
+			var base = new Physijs.BoxMesh(new THREE.BoxGeometry(0.09, 0.32, 0.09), new THREE.MeshNormalMaterial());
+			base.position.set( firstPinPositionX + (offset - nPins * spacing), firstPinPositionY + 0.15, firstPinPositionZ + (i * - spacing ));
+			base.name = 'pin';
 
-			var middle = new Physijs.CylinderMesh(new THREE.CylinderGeometry(0.35, 0.35, 0.2, 32), new THREE.MeshNormalMaterial());
-			middle.position.y = 0.75;
+			/*var base = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.057277, 0.03556, 0.085725, 8 ), Physijs.createMaterial(new THREE.MeshNormalMaterial(), 0, 1), 1.5 );
+			base.position.set( firstPinPositionX + (offset - nPins * spacing), firstPinPositionY, firstPinPositionZ + (i * - spacing ));
 
-			var top = new Physijs.CylinderMesh(new THREE.CylinderGeometry(0.1, 0.35, 0.5, 32), new THREE.MeshNormalMaterial());
-			top.position.y = 1.10;
+			var middle = new Physijs.CylinderMesh(new THREE.CylinderGeometry(0.057277, 0.057277, 0.0635, 8), new THREE.MeshNormalMaterial());
+			middle.position.y = 0.074;
 
-			var ballStand = new Physijs.CylinderMesh(new THREE.CylinderGeometry(0.1, 0.1, 0.1, 32), new THREE.MeshNormalMaterial());
-			ballStand.position.y = 1.40;
+			var top = new Physijs.CylinderMesh(new THREE.CylinderGeometry(0.0249555, 0.057277, 0.0889, 8), new THREE.MeshNormalMaterial());
+			top.position.y = 0.15;
 
-			var ball = new Physijs.SphereMesh(new THREE.SphereGeometry(0.15, 32, 32), new THREE.MeshNormalMaterial());
-			ball.position.y = 1.5;
+			var neck = new Physijs.CylinderMesh(new THREE.CylinderGeometry(0.0249555, 0.0249555, 0.0381, 8), new THREE.MeshNormalMaterial());
+			neck.position.y = 0.213;
+																																																//Correct length is 0.066675 but looked weird
+			var ballStand = new Physijs.CylinderMesh(new THREE.CylinderGeometry(0.0323469, 0.0249555, 0.046675, 8), new THREE.MeshNormalMaterial());
+			ballStand.position.y = 0.245;
 
-			var pinStand = new Physijs.BoxMesh(new THREE.BoxGeometry(0.05, 0.05, 0.05), new THREE.MeshNormalMaterial());
-			pinStand.position.y = 0;
+			var ball = new Physijs.SphereMesh(new THREE.SphereGeometry(0.0323469, 8, 8), new THREE.MeshNormalMaterial());
+			ball.position.y = 0.2695;
 
-			base.add(pinStand);
+			var stableBlock = new Physijs.BoxMesh(new THREE.BoxGeometry(0.13, 0.32, 0.13), new THREE.MeshNormalMaterial());
+			stableBlock.position.y = 0.12;
+			stableBlock.visible = false;
+
 			base.add(middle);
 			base.add(top);
+			base.add(neck);
 			base.add(ballStand);
-			base.add(ball);
+			base.add(ball);*/
+			//base.add(stableBlock);
+			index++;
 
-			this.pinPositions[i] = base.position;
-
-			this.scene.add( base );
-
+			pins.push(base);
 		}
 
 	}
-
+	return pins;
 }
+
+	Game.prototype.createLane = function() {
+		var gutter2offset = 1.28;
+
+		var laneFriction = 100, laneRestitution = 0.1;
+		var lane = new Physijs.BoxMesh(new THREE.BoxGeometry(1.0541, 0.1, 18.28800), Physijs.createMaterial(new THREE.MeshNormalMaterial(), laneFriction, laneRestitution), 0);
+		lane.position.y = -0.5;
+		this.scene.add(lane);
+
+		var gutter1Left = new Physijs.BoxMesh(new THREE.BoxGeometry(0.1, 0.01, 18.28800), Physijs.createMaterial(new THREE.MeshNormalMaterial(), 1, 0), 0);
+		gutter1Left.position.x = (1.0541 / 2) + 0.03;
+		gutter1Left.position.y = -0.488;
+		gutter1Left.rotation.z = -(Math.PI / 4);
+		this.scene.add(gutter1Left);
+
+		var gutter1Middle = new Physijs.BoxMesh(new THREE.BoxGeometry(0.1, 0.01, 18.28800), Physijs.createMaterial(new THREE.MeshNormalMaterial(), 1, 0), 0);
+		gutter1Middle.position.x = 0.64;
+		gutter1Middle.position.y = -0.52;
+		this.scene.add(gutter1Middle);
+
+		var gutter1Right = new Physijs.BoxMesh(new THREE.BoxGeometry(0.1, 0.01, 18.28800), Physijs.createMaterial(new THREE.MeshNormalMaterial(), 1, 0), 0);
+		gutter1Right.position.x = 0.725;
+		gutter1Right.position.y = -0.488;
+		gutter1Right.rotation.z = Math.PI / 4;
+		this.scene.add(gutter1Right);
+
+		var invisibleWall1 = new Physijs.BoxMesh(new THREE.BoxGeometry(0.0001, 10, 18.28800), Physijs.createMaterial(new THREE.MeshNormalMaterial(), 1, 0), 0);
+		invisibleWall1.position.x = 0.76;
+		invisibleWall1.position.y = 0;
+		invisibleWall1.visible = false;
+		this.scene.add(invisibleWall1);
+
+		var gutter2Left = new Physijs.BoxMesh(new THREE.BoxGeometry(0.1, 0.01, 18.28800), Physijs.createMaterial(new THREE.MeshNormalMaterial(), 1, 0), 0);
+		gutter2Left.position.x = ((1.0541 / 2) + 0.03) - gutter2offset;
+		gutter2Left.position.y = -0.488;
+		gutter2Left.rotation.z = -(Math.PI / 4);
+		this.scene.add(gutter2Left);
+
+		var gutter2Middle = new Physijs.BoxMesh(new THREE.BoxGeometry(0.1, 0.01, 18.28800), Physijs.createMaterial(new THREE.MeshNormalMaterial(), 1, 0), 0);
+		gutter2Middle.position.x = 0.64 - gutter2offset;
+		gutter2Middle.position.y = -0.52;
+		this.scene.add(gutter2Middle);
+
+		var gutter2Right = new Physijs.BoxMesh(new THREE.BoxGeometry(0.1, 0.01, 18.28800), Physijs.createMaterial(new THREE.MeshNormalMaterial(), 1, 0), 0);
+		gutter2Right.position.x = 0.725 - gutter2offset;
+		gutter2Right.position.y = -0.488;
+		gutter2Right.rotation.z = Math.PI / 4;
+		this.scene.add(gutter2Right);
+
+		var invisibleWall2 = new Physijs.BoxMesh(new THREE.BoxGeometry(0.0001, 10, 18.28800), Physijs.createMaterial(new THREE.MeshNormalMaterial(), 1, 0), 0);
+		invisibleWall2.position.x = 0.76 - gutter2offset - 0.24;
+		invisibleWall2.position.y = 0;
+		invisibleWall2.visible = false;
+		this.scene.add(invisibleWall2);
+	}
 
 
 Game.prototype.init = function() {
-	this.pinPositions = [50];
+	this.soundWood = new Howl({src: ['/examples/bowling-vr/res/sounds/wood.mp3']});
+
+	this.pinPositions = [];
 	this.score = 0;
+	this.upPins = [];
+	this.camSpeed = 0.05;
 
 	this.inputManager = new InputManager();
 	this.inputManager.init();
@@ -125,14 +193,12 @@ Game.prototype.init = function() {
 	// create a three.js scene.
 	//var scene = new THREE.Scene();
 	this.scene = new Physijs.Scene;
-	this.scene.setGravity( new THREE.Vector3( 0, - 50, 0 ) );
+	this.scene.setGravity( new THREE.Vector3( 0, -10, 0 ) );
 
 	// create a three.js camera.
 	this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
 
 	this.cameraObject = new THREE.Object3D();
-	this.cameraObject.position.y = 1;
-	this.cameraObject.position.z = 0;
 	this.cameraObject.add(this.camera);
 	this.scene.add(this.cameraObject);
 
@@ -140,12 +206,15 @@ Game.prototype.init = function() {
 	this.controls = new THREE.VRControls( this.camera );
 	this.controls.standing = true;
 
+	this.cameraObject.position.y = -1;
+	this.cameraObject.position.z = 10;
+
 	// apply VR stereo rendering to renderer.
 	this.effect = new THREE.VREffect( this.renderer );
 	this.effect.setSize( window.innerWidth, window.innerHeight );
 
     // ground physics
-	ground = new Physijs.BoxMesh(
+	/*ground = new Physijs.BoxMesh(
 	  new THREE.CubeGeometry( 50, 1, 600 ),
 	  Physijs.createMaterial( new THREE.MeshBasicMaterial( { color: 0x888888 } ),
 	  this.groundFriction, this.groundRestitution ),
@@ -154,10 +223,15 @@ Game.prototype.init = function() {
 
 	ground.name = "ground";
 	ground.position.set( 0, 0, 0 );
-	this.scene.add( ground );
+	this.scene.add( ground );*/
 
-    // setup the bowling pins
-	this.createBowlingPins( 0, 0, 0, 1.4, 7 );
+  // setup the bowling pins
+	this.createLane();
+	this.upPins = this.createBowlingPins( 0, -0.207, 0, 0.3048, 4 );
+
+  for (var i = 0; i < this.upPins.length; i++){
+  	this.scene.add(this.upPins[i]);
+	}
 
 	// add a repeating grid as a skybox. FIXME
 	var loader = new THREE.TextureLoader();
@@ -190,51 +264,58 @@ Game.prototype.onTextureLoaded = function( texture ) {
 
 	this.manager = new WebVRManager( this.renderer, this.effect, this.params );
 
-	// create 3D objects.
-	var geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
-	var material = new THREE.MeshNormalMaterial();
-	this.cube = new THREE.Mesh( geometry, material );
-
-	// Position cube mesh to be right in front of you.
-	this.cube.position.set( 0, this.controls.userHeight, - 1 );
-
 	ball = new Physijs.SphereMesh(
-	  new THREE.SphereGeometry( 1, 32, 32 ),
+	  new THREE.SphereGeometry( 0.108, 8, 8 ),
 	  new THREE.MeshNormalMaterial(),
-	  10
+		8
 	);
 
-	ball.position.set( 0, 2, 10 );
-	this.scene.add( ball );
-	ball.applyCentralImpulse( new THREE.Vector3( 0, 0, -590 ) );
+	ball.addEventListener( 'collision', function( other_object, linear_velocity, angular_velocity ) {
+    if(other_object.name == 'pin')this.soundWood.play();
+	}.bind(this));
 
-	// add cube mesh to our scene
-	this.scene.add( this.cube );
+	ball.position.set( 0, 0, 10 );
+	this.scene.add( ball );
+	ball.applyCentralImpulse( new THREE.Vector3( 0, 0, -50 ) );
+
+	arrow = new Physijs.PlaneMesh(
+		new THREE.BoxGeometry(0.05, 0.01, 0.15),
+		new THREE.MeshBasicMaterial,
+		0
+	);
+
+	var arrowPointer = new Physijs.BoxMesh(
+		new THREE.BoxGeometry()
+	)
+	arrow.position.set(0, -0.3, 9);
+	this.scene.add(arrow);
 
 	// start the animation loop
 	requestAnimationFrame( this.animate.bind( this ) );
 
 	window.addEventListener( 'resize', this.onResize, true );
 	window.addEventListener( 'vrdisplaypresentchange', this.onResize, true );
+	window.addEventListener( 'keydown', this.onKeyDown.bind(this), true);
 
 }
 
 
 Game.prototype.animate = function( timestamp ) {
+
 	document.getElementById("hud").innerHTML = 'Score: ' + this.score;
 
-	for(var i = 0; i < this.pinPositions.length; i++) {
-		if(this.pinPositions[i].y < 0.85) {
+	//console.log(this.upPins[3].position);
+
+	for(var i = 0; i < this.upPins.length; i++) {
+		var pos = this.upPins[i].position;
+		if(pos.y < -0.32) {
 			this.score++;
-			this.pinPositions[i] = new THREE.Vector3(0, 1, 0);
+			this.upPins.splice(i, 1);
 		}
 	}
 
 	var delta = Math.min( timestamp - this.lastRender, 500 );
 	this.lastRender = timestamp;
-
-	// apply rotation to cube mesh
-	this.cube.rotation.y += delta * 0.0006;
 
 	// update VR headset position and apply to camera.
 	this.controls.update();
@@ -252,9 +333,39 @@ Game.prototype.animate = function( timestamp ) {
 }
 
 Game.prototype.onResize = function( e ) {
-
+	//FIXME
 	this.effect.setSize( window.innerWidth, window.innerHeight );
 	this.camera.aspect = window.innerWidth / window.innerHeight;
 	this.camera.updateProjectionMatrix();
+
+}
+
+Game.prototype.onKeyDown = function(e) {
+	console.log('key: ' + e.keyCode)
+	console.log(this.cameraObject.position);
+
+	if(e.keyCode == 87) { //W
+		this.cameraObject.position.z -= this.camSpeed;
+	}
+
+	if(e.keyCode == 83) { //S
+		this.cameraObject.position.z += this.camSpeed;
+	}
+
+	if(e.keyCode == 65) { //A
+		this.cameraObject.position.x -= this.camSpeed;
+	}
+
+	if(e.keyCode == 68) { //D
+		this.cameraObject.position.x += this.camSpeed;
+	}
+
+	if(e.keyCode == 32) { //Space
+		this.cameraObject.position.y += this.camSpeed;
+	}
+
+	if(e.keyCode == 17) { //Ctrl
+		this.cameraObject.position.y -= this.camSpeed;
+	}
 
 }
