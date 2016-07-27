@@ -7,3 +7,10 @@ body {
   padding: 0;
   overflow: hidden;
 }
+
+#hud {
+  color: pink;
+  font-size: 25px;
+  margin: 5px;
+  font-family: 'arial';
+}
