@@ -19,13 +19,8 @@
   <div id="hud">Score: 0</div>
 
 	<script>
-	/*
-	 * Debug parameters.
-	 */
 	WebVRConfig = {
-	  /**
-	   * webvr-polyfill configuration
-	   */
+	  /* webvr-polyfill configuration */
 
 	  // Forces availability of VR mode.
 	  //FORCE_ENABLE_VR: true, // Default: false.
@@ -74,8 +69,8 @@
 	<!-- Helps enter and exit VR mode, provides best practices while in VR.  -->
 	<script src="js/libs/webvr-manager.js"></script>
 
-  <!-- Produces 3-dimensional sound -->
-  <script src="js/libs/howler.min.js"></script>
+	<!-- Produces 3-dimensional sound -->
+	<script src="js/libs/howler.min.js"></script>
 
 	<!-- threejs render stats widget -->
 	<script type="text/javascript" src="js/libs/stats.js"></script>
@@ -84,20 +79,20 @@
 	<script type="text/javascript" src="js/libs/physi.js"></script>
 
 	<!-- game code -->
-  <script type="text/javascript" src="js/inputmanager.js"></script>
+	<script type="text/javascript" src="js/inputmanager.js"></script>
 
 	<script type="text/javascript" src="js/game.js"></script>
 	<!--script type="text/javascript" src="js/level.js"></script-->
 
-    <script type="text/javascript">
+	<script type="text/javascript">
 
-        Physijs.scripts.worker = 'js/libs/physijs_worker.js';
-        Physijs.scripts.ammo = 'ammo.js';
+          Physijs.scripts.worker = 'js/libs/physijs_worker.js';
+          Physijs.scripts.ammo = 'ammo.js';
 
-        var game = new Game();
-        window.onload = game.init();
+          var game = new Game();
+          window.onload = game.init();
 
-    </script>
+	</script>
 
 </body>
 </html>
