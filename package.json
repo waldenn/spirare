@@ -10,6 +10,6 @@
     "livereloadx": "^0.3.7"
   },
   "scripts": {
-    "start": "./live.sh"
+    "start": "live.bat"
   }
 }

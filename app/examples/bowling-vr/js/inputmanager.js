@@ -1,3 +1,5 @@
+"use strict";
+
 const InputManager = {
     w: false,
     s: false,
