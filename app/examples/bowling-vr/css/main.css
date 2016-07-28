@@ -9,8 +9,13 @@ body {
 }
 
 #hud {
-  color: pink;
+  color: black;
   font-size: 25px;
   margin: 5px;
-  font-family: 'arial';
+  font-family: 'Courier';
+  font-weight: 600;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 1;
 }
