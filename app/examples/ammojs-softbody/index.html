@@ -32,11 +32,11 @@
 	<div id="info">Ammo.js physics soft body volume demo<br>Click to throw a ball</div>
         <div id="container"><br /><br /><br /><br /><br />Loading...</div>
 
-	<script src="../build/three.js"></script>
-	<script src="js/libs/ammo.js"></script>
-	<script src="js/controls/OrbitControls.js"></script>
+	<script src="js/three.js"></script>
+	<script src="js/ammo.js"></script>
+	<script src="js/OrbitControls.js"></script>
         <script src="js/Detector.js"></script>
-	<script src="js/libs/stats.min.js"></script>
+	<script src="js/stats.min.js"></script>
 
         <script>
 
@@ -174,15 +174,15 @@
 			// Ground
 			pos.set( 0, - 0.5, 0 );
 			quat.set( 0, 0, 0, 1 );
-			var ground = createParalellepiped( 40, 1, 40, 0, pos, quat, new THREE.MeshPhongMaterial( { color: 0xFFFFFF } ) );
-			ground.castShadow = true;
-			ground.receiveShadow = true;
+			var ground = createParalellepiped( 40, 1, 40, 0, pos, quat, new THREE.MeshNormalMaterial( { color: 0xFFFFFF } ) );
+			ground.castShadow = false;
+			ground.receiveShadow = false;
 			textureLoader.load( "textures/grid.png", function( texture ) {
 				texture.wrapS = THREE.RepeatWrapping;
 				texture.wrapT = THREE.RepeatWrapping;
 				texture.repeat.set( 40, 40 );
 				ground.material.map = texture;
-				ground.material.needsUpdate = true;
+				ground.material.needsUpdate = false;
 			} );
 
 
@@ -200,7 +200,7 @@
 			// Ramp
 			pos.set( 3, 1, 0 );
 			quat.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), 30 * Math.PI / 180 );
-			var obstacle = createParalellepiped( 10, 1, 4, 0, pos, quat, new THREE.MeshPhongMaterial( { color: 0x606060 } ) );
+			var obstacle = createParalellepiped( 10, 1, 4, 0, pos, quat, new THREE.MeshNormalMaterial( { color: 0x606060 } ) );
 			obstacle.castShadow = true;
 			obstacle.receiveShadow = true;
 
@@ -310,7 +310,7 @@
 
 			processGeometry( bufferGeom );
 
-			var volume = new THREE.Mesh( bufferGeom, new THREE.MeshPhongMaterial( { color: 0xFFFFFF } ) );
+			var volume = new THREE.Mesh( bufferGeom, new THREE.MeshNormalMaterial( { color: 0xFFFFFF } ) );
 			volume.castShadow = true;
 			volume.receiveShadow = true;
 			volume.frustumCulled = false;

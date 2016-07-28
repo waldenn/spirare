@@ -36,7 +36,7 @@ Game.prototype.init = function() {
 
 	// setup three.js WebGL renderer. Note: Antialiasing is a big performance hit.
 	// only enable it if you actually need to.
-	this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+	this.renderer = new THREE.WebGLRenderer( { antialias: false } );
 	this.renderer.setPixelRatio( window.devicePixelRatio );
 
 	// append the canvas element created by the renderer to document body element.
