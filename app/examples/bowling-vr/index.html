@@ -11,12 +11,34 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 <link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="css/bulma.css">
+
 </head>
 
 <body>
   <div id="viewport"></div>
 
-  <div id="hud">Score: 0</div>
+	<div id="score">0</div>
+
+  <div id="gui">
+
+  <div id="hud">
+
+		<div class="columns">
+			<div class="column">
+				New Game
+			</div>
+			<div class="column">
+				Settings
+			</div>
+			<a class="button">
+				About
+			</a>
+		</div>
+
+  </div>
+
+	</div>
 
 	<script>
 	/*
@@ -77,27 +99,53 @@
   <!-- Produces 3-dimensional sound -->
   <script src="js/libs/howler.min.js"></script>
 
+  <!-- Library for receiving input -->
+  <script src="js/libs/threex.keyboardstate.js"></script>
+
 	<!-- threejs render stats widget -->
-	<script type="text/javascript" src="js/libs/stats.js"></script>
+	<script src="js/libs/stats.js"></script>
+
+	<script src="js/libs/jquery-3.1.0.min.js"></script>
 
 	<!-- PhysiJS physics engine -->
 	<script type="text/javascript" src="js/libs/physi.js"></script>
 
-	<!-- game code -->
-  <script type="text/javascript" src="js/inputmanager.js"></script>
+        <script type="application/x-glsl" id="sky-vertex">
+                varying vec2 vUV;
 
+                void main() {
+                  vUV = uv;
+                  vec4 pos = vec4(position, 1.0);
+                  gl_Position = projectionMatrix * modelViewMatrix * pos;
+                }
+        </script>
+
+        <script type="application/x-glsl" id="sky-fragment">
+                uniform sampler2D texture;
+                varying vec2 vUV;
+
+                void main() {
+                  vec4 sample = texture2D(texture, vUV);
+                  gl_FragColor = vec4(sample.xyz, sample.w);
+                }
+        </script>
+
+
+	<!-- game code -->
+  <script type="text/javascript" src="js/level.js"></script>
 	<script type="text/javascript" src="js/game.js"></script>
 	<!--script type="text/javascript" src="js/level.js"></script-->
 
-    <script type="text/javascript">
+  <script type="text/javascript">
+      "use strict";
 
-        Physijs.scripts.worker = 'js/libs/physijs_worker.js';
-        Physijs.scripts.ammo = 'ammo.js';
+      Physijs.scripts.worker = 'js/libs/physijs_worker.js';
+      Physijs.scripts.ammo = 'ammo.js';
 
-        var game = new Game();
-        window.onload = game.init();
+      var game = new Game();
+      window.onload = game.run();
 
-    </script>
+  </script>
 
 </body>
 </html>
