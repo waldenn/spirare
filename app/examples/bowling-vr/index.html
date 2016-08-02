@@ -19,8 +19,13 @@
   <div id="hud">Score: 0</div>
 
 	<script>
+	/*
+	 * Debug parameters.
+	 */
 	WebVRConfig = {
-	  /* webvr-polyfill configuration */
+	  /**
+	   * webvr-polyfill configuration
+	   */
 
 	  // Forces availability of VR mode.
 	  //FORCE_ENABLE_VR: true, // Default: false.
@@ -69,8 +74,8 @@
 	<!-- Helps enter and exit VR mode, provides best practices while in VR.  -->
 	<script src="js/libs/webvr-manager.js"></script>
 
-	<!-- Produces 3-dimensional sound -->
-	<script src="js/libs/howler.min.js"></script>
+  <!-- Produces 3-dimensional sound -->
+  <script src="js/libs/howler.min.js"></script>
 
 	<!-- threejs render stats widget -->
 	<script type="text/javascript" src="js/libs/stats.js"></script>
@@ -79,41 +84,21 @@
 	<script type="text/javascript" src="js/libs/physi.js"></script>
 
 	<!-- game code -->
-	<script type="text/javascript" src="js/inputmanager.js"></script>
-
+  <script type="text/javascript" src="js/inputmanager.js"></script>
+  <script type="text/javascript" src="js/level.js"></script>
 	<script type="text/javascript" src="js/game.js"></script>
 	<!--script type="text/javascript" src="js/level.js"></script-->
 
-	<script type="application/x-glsl" id="sky-vertex">
-		varying vec2 vUV;
+  <script type="text/javascript">
+      "use strict";
 
-		void main() {
-		  vUV = uv;
-		  vec4 pos = vec4(position, 1.0);
-		  gl_Position = projectionMatrix * modelViewMatrix * pos;
-		}
-	</script>
+      Physijs.scripts.worker = 'js/libs/physijs_worker.js';
+      Physijs.scripts.ammo = 'ammo.js';
 
-	<script type="application/x-glsl" id="sky-fragment">
-		uniform sampler2D texture;
-		varying vec2 vUV;
+      var game = new Game();
+      window.onload = game.run();
 
-		void main() {
-		  vec4 sample = texture2D(texture, vUV);
-		  gl_FragColor = vec4(sample.xyz, sample.w);
-		}
-	</script>
-
-
-	<script type="text/javascript">
-
-          Physijs.scripts.worker = 'js/libs/physijs_worker.js';
-          Physijs.scripts.ammo = 'ammo.js';
-
-          var game = new Game();
-          window.onload = game.init();
-
-	</script>
+  </script>
 
 </body>
 </html>
