@@ -11,7 +11,8 @@ function Game() {
 
 Game.prototype.init = function() {
 	//Load resources
-	this.soundWood = new Howl({src: ['/examples/bowling-vr/res/sounds/wood.mp3']});
+        this.soundWood = new Howl( { src: [ 'res/sounds/wood.mp3' ] } );
+        this.soundBall = new Howl( { src: [ 'res/sounds/ball.mp3' ], loop: false } );
 
 	//Create the inputManager wich detects input
 	this.inputManager = Object.create(InputManager);
@@ -38,7 +39,26 @@ Game.prototype.init = function() {
 	);
 
 	this.ball.addEventListener('collision', function( other_object, linear_velocity, angular_velocity) {
-    if(other_object.name == 'pin')this.soundWood.play();
+
+		if(other_object.name == 'pin'){
+			var id = this.soundWood.play();
+
+			// Change the position and rate.
+			this.soundWood.pos(other_object.position.x, other_object.position.y, other_object.position.z, id);
+			this.soundWood.rate(0.7, id);
+			this.soundWood.volume(1, id);
+                }
+
+                if ( other_object.name == 'ground' ){
+
+                        var id = this.soundBall.play();
+
+                        // Change the position and rate.
+                        //this.soundBall.pos(other_object.position.x, other_object.position.y, other_object.position.z, id);
+                        //this.soundWood.rate( 0.1, id);
+                        this.soundBall.volume(1, id);
+		}
+
 	}.bind(this));
 
 	this.ball.position.set(0, 0, 10);
