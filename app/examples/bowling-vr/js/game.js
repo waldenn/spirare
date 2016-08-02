@@ -61,6 +61,9 @@ Game.prototype.init = function() {
 
 	}.bind(this));
 
+
+        this.scene.add( this.createSkysphere() );
+
 	this.ball.position.set(0, 0, 10);
 	this.scene.add( this.ball );
 	this.ball.applyCentralImpulse(new THREE.Vector3(0, 0, -50));
@@ -133,3 +136,29 @@ Game.prototype.onResize = function(event) {
 	this.camera.aspect = window.innerWidth / window.innerHeight;
 	this.camera.updateProjectionMatrix();
 }
+
+Game.prototype.createSkysphere = function() {
+
+        // http://www.ianww.com/2014/02/17/making-a-skydome-in-three-dot-js/
+        var g = new THREE.SphereGeometry(3000, 60, 40);
+        var uniforms = {
+                  texture: { type: 't', value: THREE.ImageUtils.loadTexture('res/textures/clouds.jpg') }
+                  //texture: { type: 't', value: THREE.ImageUtils.loadTexture('res/textures/stars.jpg') }
+                  //texture: { type: 't', value: THREE.TextureLoader('res/textures/clouds.jpg') }
+                  // FIXME: http://stackoverflow.com/questions/35540880/three-textureloader-is-not-loading-images-files
+        };
+
+        var m = new THREE.ShaderMaterial( {
+                  uniforms:       uniforms,
+                  vertexShader:   document.getElementById('sky-vertex').textContent,
+                  fragmentShader: document.getElementById('sky-fragment').textContent
+        });
+
+        var skySphere = new THREE.Mesh(g, m);
+        skySphere.scale.set(-1, 1, 1);
+        //skySpere.eulerOrder = 'XZY';
+        skySphere.renderOrder = -100.0;
+
+        return skySphere;
+}
+
