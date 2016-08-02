@@ -11,7 +11,7 @@ function Game() {
 
 Game.prototype.init = function() {
 	//Load resources
-	this.soundWood = new Howl({src: ['/examples/bowling-vr/res/sounds/wood.mp3']});
+	this.soundWood = new Howl({src: ['res/sounds/wood.mp3']});
 
 	//Create the inputManager wich detects input
 	this.inputManager = Object.create(InputManager);
