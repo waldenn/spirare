@@ -8,7 +8,7 @@ body {
   overflow: hidden;
 }
 
-#hud {
+#menu {
   color: black;
   font-size: 25px;
   margin: 5px;
@@ -19,4 +19,48 @@ body {
   top: 0px;
   z-index: 1;
 }
+
+canvas {
+ position: absolute;
+ left: 0px;
+ top: 0px;
+ z-index: -1;
+}
+
+div#score {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+div#score {
+    position: absolute;
+    top: 0;
+    color: black;
+    left: 0;
+}
+
+div#gui {
+    height: 100px;
+    width: 100px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+/*
+div#gui{
+￼    position: absolute;
+￼    top: 0px;
+￼    width: 100px;
+￼    height: 100px;
+￼    bottom: 0px;
+￼    right: 0px;
+￼    left: 0px;
+￼    margin: auto;
+}
+*/
 
