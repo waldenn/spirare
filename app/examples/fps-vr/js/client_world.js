@@ -4,6 +4,9 @@ var keyState = {};
 var ground;
 var sphere;
 
+var playerMoveX = 0;
+var playerMoveZ = 0;
+
 var clickRequest = false;
 var mouseCoords = new THREE.Vector2();
 
@@ -112,10 +115,24 @@ var loadWorld = function() {
 
 		}, false );
 
+		document.addEventListener( 'mousemove', function( event ) {
 
+			console.log('mousemove');
+			//console.log( event.clientX, event.clientY);
+
+			playerMoveX = event.clientX / window.innerWidth  * 2 - 1;
+			playerMoveZ = - (event.clientY / window.innerHeight)  * 2 + 1;
+
+			console.log(  event.clientX / window.innerWidth  * 2 - 1,
+				    - event.clientY / window.innerHeight  * 2 + 1);
+
+
+		}, false );
+
+
+		//document.addEventListener( 'mousemove', onMouseMove, true );
 		//document.addEventListener( 'mousedown', onMouseDown, false );
 		//document.addEventListener( 'mouseup', onMouseUp, false );
-		document.addEventListener( 'mousemove', onMouseMove, true );
 		document.addEventListener( 'mouseout', onMouseOut, false );
 		document.addEventListener( 'keydown', onKeyDown, false );
 		document.addEventListener( 'keyup', onKeyUp, false );
@@ -269,6 +286,7 @@ var loadWorld = function() {
 			//updateCameraPosition();
 
 			checkKeyStates();
+			checkMouseStates();
 
 			//camera.lookAt(player.position);
 
@@ -439,6 +457,17 @@ var updatePlayerData = function() {
 	playerData.r_z = player.rotation.z;
 
 };
+
+var checkMouseStates = function() {
+
+	// FIXME move in the diretion of the camera-vector
+	//player.position.x = moveSpeed * playerMoveX;
+	//player.position.z -= moveSpeed * playerMoveZ;
+	//updatePlayerData();
+	//socket.emit( 'updatePosition', playerData );
+
+};
+
 var checkKeyStates = function() {
 
 	if ( keyState[ 38 ] || keyState[ 87 ] ) {
