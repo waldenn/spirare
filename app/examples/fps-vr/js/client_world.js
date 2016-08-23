@@ -62,8 +62,6 @@ var loadWorld = function() {
 		//renderer.setSize(window.innerWidth, window.innerHeight);
 		//effect.setSize(window.innerWidth, window.innerHeight);
 
-		raycaster = new THREE.Raycaster();
-
 		controls = new THREE.OrbitControls( camera, element );
 		controls.rotateUp( Math.PI / 4 );
 
@@ -175,7 +173,20 @@ var loadWorld = function() {
 		if ( clickRequest ) {
 
 			console.log('shoot');
-			raycaster.setFromCamera( mouseCoords, camera );
+
+      var origin = new THREE.Vector3();
+      origin.copy( player.position );
+
+      //origin.setFromMatrixPosition( camera.matrixWorld );
+      //origin.setFromMatrixPosition( player.matrixWorld );
+      //console.log(player.position.);
+      //console.log(camera.matrixWorld);
+
+      var ahead = new THREE.Vector3( 0, 0, -1 );
+      ahead.transformDirection( camera.matrixWorld );
+
+      raycaster = new THREE.Raycaster( origin, ahead );
+			//raycaster.setFromCamera( mouseCoords, camera );
 
 			// creates a bullet
 			var bulletMass = 0.2;
@@ -207,7 +218,7 @@ var loadWorld = function() {
 			pos.copy( raycaster.ray.direction );
 			//pos.add( raycaster.ray.origin );
 			//quat.set( 0, 0, 0, 1 );
-			//pos.multiplyScalar( 4 );
+			pos.multiplyScalar( 40 );
 
 			/*
 			var ballBody = createRigidBody( ball, ballShape, ballMass, pos, quat );

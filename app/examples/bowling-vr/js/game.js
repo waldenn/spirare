@@ -3,6 +3,7 @@
 function Game() {
 
 	//Config vars
+	this.started = false;
 	this.gravity = - 5;
 	this.cameraStartPosition = new THREE.Vector3( 0, - 1.5, 2 );
 	this.camSpeed = 0.1;
@@ -12,6 +13,33 @@ function Game() {
 };
 
 Game.prototype.init = function() {
+
+	$( document ).ready( function() {
+		$( "#about-page" ).hide();
+
+		$( ".button" ).click( function( e ) {
+
+			if ( $( this ).text() == "Start" ) {
+
+				console.log( "Start" );
+				$( "#menu" ).hide();
+				game.started = true;
+
+			} else if ( $( this ).text() == "Settings" ) {
+
+				console.log( "Settings" );
+
+			} else if ( $( this ).text() == "About" ) {
+
+				console.log( "About" );
+				$( "#menu" ).hide();
+				$( "#about-page" ).show();
+
+			}
+
+		} )
+
+	} );
 
 	//Load resources
 	this.soundWood = new Howl( { src: [ 'res/sounds/wood.mp3' ] } );
@@ -35,6 +63,14 @@ Game.prototype.init = function() {
 	this.level = new Level();
 	this.scene = this.level.scene;
 	this.scene.setGravity( new THREE.Vector3( 0, this.gravity, 0 ) );
+
+	this.arrowHelper = new THREE.ArrowHelper( new THREE.Vector3( 0, 0, -1 ), new THREE.Vector3( 0, -0.3, 1 ), 0.5, 0x00000000 );
+	this.arrowPivot = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshNormalMaterial());
+	this.arrowPivot.position.set(new THREE.Vector3(0, 0, 0));
+
+	console.log(this.arrowHelper instanceof THREE.Object3D);
+
+	this.arrowPivot.add(this.arrowHelper);
 
 	this.ball = new Physijs.SphereMesh(
 		new THREE.SphereGeometry( 0.108, 8, 8 ),
@@ -98,6 +134,9 @@ Game.prototype.init = function() {
 }
 
 Game.prototype.run = function( timestamp ) {
+	requestAnimationFrame( this.run.bind( this ) );
+	if(!this.started) return;
+
 	const delta = Math.min( timestamp - this.lastRender, 500 );
 	this.lastRender = timestamp;
 
@@ -111,8 +150,6 @@ Game.prototype.run = function( timestamp ) {
 	this.manager.render( this.scene, this.camera, timestamp );
 
 	this.handleInput();
-
-	requestAnimationFrame( this.run.bind( this ) );
 
 }
 
@@ -152,23 +189,35 @@ Game.prototype.createSkysphere = function() {
 
 Game.prototype.handleInput = function() {
 
-	if(this.keyboard.pressed( 'w' )) {
+	if ( this.keyboard.pressed( 'w' ) ) {
+
 		this.cameraObject.position.z -= this.camSpeed;
+
 	}
-	if(this.keyboard.pressed( 's' )) {
+	if ( this.keyboard.pressed( 's' ) ) {
+
 		this.cameraObject.position.z += this.camSpeed;
+
 	}
-	if(this.keyboard.pressed( 'a' )) {
+	if ( this.keyboard.pressed( 'a' ) ) {
+
 		this.cameraObject.position.x -= this.camSpeed;
+
 	}
-	if(this.keyboard.pressed( 'd' )) {
+	if ( this.keyboard.pressed( 'd' ) ) {
+
 		this.cameraObject.position.x += this.camSpeed;
+
 	}
-	if(this.keyboard.pressed( 'e' )) {
+	if ( this.keyboard.pressed( 'e' ) ) {
+
 		this.cameraObject.position.y += this.camSpeed;
+
 	}
-	if(this.keyboard.pressed( 'q' )) {
+	if ( this.keyboard.pressed( 'q' ) ) {
+
 		this.cameraObject.position.y -= this.camSpeed;
+
 	}
 
 }
