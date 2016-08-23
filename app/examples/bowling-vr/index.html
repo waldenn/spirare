@@ -11,12 +11,74 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 <link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="css/bulma.css">
+
 </head>
 
 <body>
   <div id="viewport"></div>
 
-  <div id="hud">Score: 0</div>
+	<div id="score">0</div>
+
+  <div id="gui">
+
+  <div id="hud">
+
+  <div id="menu">
+    <div class="box">
+  	   <div class="menu">
+  		     <ul class="menu-list">
+  		         <li><div class="button">Start</div></li>
+               <li><div class="button">Settings</div></li>
+  			       <li><div class="button">About</div></li>
+  	       </ul>
+  	  </div>
+    </div>
+  </div>
+
+  <div id="about-page" class="columns">
+    <div class="column">
+          <div>
+      	  Spirare Strike Team WITHN JEEEELLLLLLLLLLLEEEEE!<3 !!
+          Im Blond!
+          <div class="box">
+            <article class="media">
+              <div class="media-left">
+                <figure class="image is-64x64">
+                  <img src="http://placehold.it/128x128" alt="Image">
+                </figure>
+              </div>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
+                    <br>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla egestas. Nullam condimentum luctus turpis.
+                  </p>
+                </div>
+                <nav class="level">
+                  <div class="level-left">
+                    <a class="level-item">
+                      <span class="icon is-small"><i class="fa fa-reply"></i></span>
+                    </a>
+                    <a class="level-item">
+                      <span class="icon is-small"><i class="fa fa-retweet"></i></span>
+                    </a>
+                    <a class="level-item">
+                      <span class="icon is-small"><i class="fa fa-heart"></i></span>
+                    </a>
+                  </div>
+                </nav>
+              </div>
+            </article>
+          </div>
+          <div>
+    </div>
+  </div>
+
+  </div>
+
+	</div>
 
 	<script>
 	/*
@@ -77,14 +139,39 @@
   <!-- Produces 3-dimensional sound -->
   <script src="js/libs/howler.min.js"></script>
 
+  <!-- Library for receiving input -->
+  <script src="js/libs/threex.keyboardstate.js"></script>
+
 	<!-- threejs render stats widget -->
-	<script type="text/javascript" src="js/libs/stats.js"></script>
+	<script src="js/libs/stats.js"></script>
+
+	<script src="js/libs/jquery-3.1.0.min.js"></script>
 
 	<!-- PhysiJS physics engine -->
 	<script type="text/javascript" src="js/libs/physi.js"></script>
 
+        <script type="application/x-glsl" id="sky-vertex">
+                varying vec2 vUV;
+
+                void main() {
+                  vUV = uv;
+                  vec4 pos = vec4(position, 1.0);
+                  gl_Position = projectionMatrix * modelViewMatrix * pos;
+                }
+        </script>
+
+        <script type="application/x-glsl" id="sky-fragment">
+                uniform sampler2D texture;
+                varying vec2 vUV;
+
+                void main() {
+                  vec4 sample = texture2D(texture, vUV);
+                  gl_FragColor = vec4(sample.xyz, sample.w);
+                }
+        </script>
+
+
 	<!-- game code -->
-  <script type="text/javascript" src="js/inputmanager.js"></script>
   <script type="text/javascript" src="js/level.js"></script>
 	<script type="text/javascript" src="js/game.js"></script>
 	<!--script type="text/javascript" src="js/level.js"></script-->

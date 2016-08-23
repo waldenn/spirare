@@ -9,7 +9,7 @@ This is a educational programming project for the [Spirare school](http://spirar
 * git clone https://github.com/waldenn/spirare.git 
 * cd spirare
 * npm install
-* npm start
+* npm start (or npm start-windows)
 * browse to [http://localhost:8000](http://localhost:8000) (note: live reloading upon edits is enabled)
 
 # publish gh-pages
