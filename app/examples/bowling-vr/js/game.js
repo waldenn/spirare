@@ -7,7 +7,7 @@ function Game() {
 	//Config vars
 	this.started = false;
 	this.gravity = - 5;
-	this.cameraStartPosition = new THREE.Vector3( 0, - 1.5, 3 );
+	this.cameraStartPosition = new THREE.Vector3( 0, - 1.5, 9 );
 	this.camSpeed = 0.1;
 	this.normMouseX = 0;
 	this.normMouseY = 0;
@@ -89,7 +89,7 @@ Game.prototype.init = function() {
 	this.arrow.line.material.linewidth = 1000;*/
 
 	this.arrowPivot = new THREE.Object3D();
-	this.arrowPivot.position.set( 0, - 0.4, 2 );
+	this.arrowPivot.position.set( 0, - 0.4, 8.3 );
 	this.arrowPivot.add( this.arrowStem );
 
 	this.scene.add( this.arrowPivot );
@@ -263,10 +263,7 @@ Game.prototype.handleInput = function() {
 		this.scene.add( this.ball );
 		this.inputState ++;
 
-		this.ball.applyCentralImpulse( new THREE.Vector3( Math.sin( this.arrowPivot.rotation.y ) * - 20, 0, Math.cos( this.arrowPivot.rotation.y ) * - 20 ) );
-
-		//console.log(new THREE.Vector3(Math.sin(this.arrowPivot.rotation.y), 0, Math.cos(this.arrowPivot.rotation.y)));
-
+		this.ball.applyCentralImpulse( new THREE.Vector3( Math.sin( this.arrowPivot.rotation.y ) * - this.arrowStem.scale.y * 35, 0, Math.cos( this.arrowPivot.rotation.y ) * - this.arrowStem.scale.y * 35) );
 	}
 
 }
