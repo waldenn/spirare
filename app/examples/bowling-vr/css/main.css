@@ -35,33 +35,55 @@ div#score {
     left: 0;
 }
 
-div#score {
-    position: absolute;
-    top: 0;
-    color: black;
-    left: 0;
+#menu {
+  position: absolute;
+  width: 125px;
+  height: 100px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
-div#gui {
-    height: 100px;
-    width: 100px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
+#about-page {
+  position: absolute;
+  width: 400px;
+  height: 300px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
-/*
-div#gui{
-￼    position: absolute;
-￼    top: 0px;
-￼    width: 100px;
-￼    height: 100px;
-￼    bottom: 0px;
-￼    right: 0px;
-￼    left: 0px;
-￼    margin: auto;
+#about-page .button {
+  position: relative;
+  top: 30px;
+  left: 150px;
 }
-*/
+
+#settings-page {
+  position: absolute;
+  width: 150px;
+  height: 100px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+#settings-page .button {
+  position: relative;
+  top: 20px;
+  left: 30px;
+}
+
+div.button-text {
+  pointer-events: none;
+}
+
+div.button {
+  margin:auto;
+}

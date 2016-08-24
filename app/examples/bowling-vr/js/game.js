@@ -12,6 +12,7 @@ function Game() {
 	this.normMouseX = 0;
 	this.normMouseY = 0;
 	this.inputState = 0;
+	this.antialias = false;
 
 	this.init();
 
@@ -33,11 +34,20 @@ Game.prototype.init = function() {
 
 			} else if ( $( this ).text() == "Settings" ) {
 
+				$( "#menu" ).hide();
+				//TODO: Options don't work yet
+				$( "#settings-page" ).show();
 
 			} else if ( $( this ).text() == "About" ) {
 
 				$( "#menu" ).hide();
 				$( "#about-page" ).show();
+
+			} else if ( $ ( this ).text() == "Back" ) {
+
+				$( "#menu" ).show();
+				$( "#about-page" ).hide();
+				$( "#settings-page" ).hide();
 
 			}
 
@@ -263,7 +273,8 @@ Game.prototype.handleInput = function() {
 		this.scene.add( this.ball );
 		this.inputState ++;
 
-		this.ball.applyCentralImpulse( new THREE.Vector3( Math.sin( this.arrowPivot.rotation.y ) * - this.arrowStem.scale.y * 35, 0, Math.cos( this.arrowPivot.rotation.y ) * - this.arrowStem.scale.y * 35) );
+		this.ball.applyCentralImpulse( new THREE.Vector3( Math.sin( this.arrowPivot.rotation.y ) * - this.arrowStem.scale.y * 35, 0, Math.cos( this.arrowPivot.rotation.y ) * - this.arrowStem.scale.y * 35 ) );
+
 	}
 
 }
