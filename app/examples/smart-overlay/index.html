@@ -7,89 +7,61 @@
 <meta name="Keywords"  content="JavaScript,HTML5,CSS" />
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
-<style type="text/css">* {
+<style type="text/css">
 
+* {
   margin: 0;
-
   padding: 0;
-
   border: 0;
-
 }
 
 
 
 #container {
-
     overflow: hidden;
-
     position: absolute;
-
     width: 400px;
-
     height: 400px;
-
     outline: 1px dashed grey;
-
     margin-left: -200px;
-
     margin-top: -200px;
-
     left: 50%;
-
     top: 50%;
-
 }
 
 
 
 .balloon {
-
     position: absolute;
-
     color: white;
-
     background: black;
-
     border-radius: 100px;
-
     font-family: sans-serif;
-
     font-size: 20px;
-
     width: 100px;
-
     height: 30px;
-
     text-align: center;
-
     padding-top: 10px;
-
 }
 
 
 
 .balloon .arrow {
-
     left: 40px;
-
     margin-top: 9px;
-
     border-width: 10px 10px 0px;
-
     border-color: black transparent transparent;
-
     position: absolute;
-
     width: 0px;
-
     height: 0px;
-
     border-style: solid;
+}
+</style>
+</head>
 
-}</style></head>
 <body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+
+<script src="js/three.min.js"></script>
 
 <div id="container"></div>
 <script type="text/javascript">
@@ -97,7 +69,6 @@
 // see: https://makc3d.wordpress.com/2015/04/04/three-js-and-2d-overlays/
 // we start with basic example from https://github.com/mrdoob/three.js/blob/master/README.md
 // we define this balloon class to handle 2D overlay stuff for us
-
 
 function Balloon( html ) {
 
