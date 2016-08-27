@@ -2,11 +2,17 @@
 
 function Game() {
 
+	//TODO: Port physics engine to ammo.js
+
 	//Config vars
 	this.started = false;
 	this.gravity = - 5;
-	this.cameraStartPosition = new THREE.Vector3( 0, - 1.5, 2 );
+	this.cameraStartPosition = new THREE.Vector3( 0, - 1.5, 9 );
 	this.camSpeed = 0.1;
+	this.normMouseX = 0;
+	this.normMouseY = 0;
+	this.inputState = 0;
+	this.antialias = false;
 
 	this.init();
 
@@ -14,26 +20,34 @@ function Game() {
 
 Game.prototype.init = function() {
 
+	document.onmousemove = this.handleMouseMove.bind( this );
+
 	$( document ).ready( function() {
-		$( "#about-page" ).hide();
 
 		$( ".button" ).click( function( e ) {
 
 			if ( $( this ).text() == "Start" ) {
 
-				console.log( "Start" );
-				$( "#menu" ).hide();
+				$( "#gui" ).hide();
 				game.started = true;
+				$( "#viewport" ).show();
 
 			} else if ( $( this ).text() == "Settings" ) {
 
-				console.log( "Settings" );
+				$( "#menu" ).hide();
+				//TODO: Options don't work yet
+				$( "#settings-page" ).show();
 
 			} else if ( $( this ).text() == "About" ) {
 
-				console.log( "About" );
 				$( "#menu" ).hide();
 				$( "#about-page" ).show();
+
+			} else if ( $ ( this ).text() == "Back" ) {
+
+				$( "#menu" ).show();
+				$( "#about-page" ).hide();
+				$( "#settings-page" ).hide();
 
 			}
 
@@ -52,7 +66,13 @@ Game.prototype.init = function() {
 	this.renderer.setPixelRatio( window.devicePixelRatio );
 
 	//Append the canvas element created by the renderer to document body element.
-	document.body.appendChild( this.renderer.domElement );
+	$( "#viewport" ).append( this.renderer.domElement );
+	$( "canvas" ).click( function( e ) {
+
+		this.inputState ++;
+
+	}.bind( this ) );
+	$( "canvas" ).css( "cursor", "none" );
 
 	//Create the inputManager wich detects input
 	this.keyboard	= new THREEx.KeyboardState( this.renderer.domElement );
@@ -64,51 +84,27 @@ Game.prototype.init = function() {
 	this.scene = this.level.scene;
 	this.scene.setGravity( new THREE.Vector3( 0, this.gravity, 0 ) );
 
-	this.arrowHelper = new THREE.ArrowHelper( new THREE.Vector3( 0, 0, -1 ), new THREE.Vector3( 0, -0.3, 1 ), 0.5, 0x00000000 );
-	this.arrowPivot = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshNormalMaterial());
-	this.arrowPivot.position.set(new THREE.Vector3(0, 0, 0));
+	/*this.arrow = new THREE.ArrowHelper( new THREE.Vector3( 0, 0, -1 ), new THREE.Vector3( 0, -0.3, 1 ), 0.5, 0x00000000 );
+	this.scene.add(this.arrow);*/
+	this.arrowPoint = new THREE.Mesh( new THREE.CylinderGeometry( 0.001, 0.01, 0.05 ), new THREE.MeshNormalMaterial() );
+	this.arrowStem = new THREE.Mesh( new THREE.CylinderGeometry( 0.002, 0.002, 1 ), new THREE.MeshNormalMaterial() );
+	this.arrowPoint.position.set( 0, 0.5, 0 );
+	this.arrowStem.add( this.arrowPoint );
+	this.arrowStem.position.set( 0, 0, - 0.5 )
 
-	console.log(this.arrowHelper instanceof THREE.Object3D);
+	this.arrowStem.rotateX( - 90 * ( Math.PI / 180 ) );
+	this.setArrowLength( 0.25 );
 
-	this.arrowPivot.add(this.arrowHelper);
+	/*this.arrow = new THREE.ArrowHelper(new THREE.Vector3(0, 0, -1), new THREE.Vector3(0, -0.4 , 1), 0.2, 0x0000ff, 0.05, 0.05);
+	this.arrow.line.material.linewidth = 1000;*/
 
-	this.ball = new Physijs.SphereMesh(
-		new THREE.SphereGeometry( 0.108, 8, 8 ),
-		new THREE.MeshNormalMaterial(),
-		8
-	);
+	this.arrowPivot = new THREE.Object3D();
+	this.arrowPivot.position.set( 0, - 0.4, 8.3 );
+	this.arrowPivot.add( this.arrowStem );
 
-	this.ball.addEventListener( 'collision', function( other_object, linear_velocity, angular_velocity ) {
-
-		if ( other_object.name == 'pin' ) {
-
-			var id = this.soundWood.play();
-
-			// Change the position and rate.
-			this.soundWood.pos( other_object.position.x, other_object.position.y, other_object.position.z, id );
-			this.soundWood.rate( 0.7, id );
-			this.soundWood.volume( 1, id );
-
-		}
-
-		if ( other_object.name == 'ground' ) {
-
-			var id = this.soundBall.play();
-
-			// Change the position and rate.
-			//this.soundBall.pos(other_object.position.x, other_object.position.y, other_object.position.z, id);
-			//this.soundWood.rate( 0.1, id);
-			this.soundBall.volume( 1, id );
-
-		}
-
-	}.bind( this ) );
+	this.scene.add( this.arrowPivot );
 
 	this.scene.add( this.createSkysphere() );
-
-	this.ball.position.set( 0, 0, 10 );
-	this.scene.add( this.ball );
-	this.ball.applyCentralImpulse( new THREE.Vector3( 0, 0, - 50 ) );
 
 	//Create a three.js camera.
 	this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
@@ -133,9 +129,17 @@ Game.prototype.init = function() {
 
 }
 
+Game.prototype.handleMouseMove = function( e ) {
+
+	this.normMouseX = e.clientX / window.innerWidth * 2 - 1;
+	this.normMouseY = e.clientY / window.innerHeight * 2 - 1;
+
+}
+
 Game.prototype.run = function( timestamp ) {
+
 	requestAnimationFrame( this.run.bind( this ) );
-	if(!this.started) return;
+	if ( ! this.started ) return;
 
 	const delta = Math.min( timestamp - this.lastRender, 500 );
 	this.lastRender = timestamp;
@@ -219,5 +223,66 @@ Game.prototype.handleInput = function() {
 		this.cameraObject.position.y -= this.camSpeed;
 
 	}
+
+	if ( this.inputState == 0 ) {
+
+		this.arrowPivot.position.x = this.normMouseX * 0.45;
+
+	} else if ( this.inputState == 1 ) {
+
+		this.arrowPivot.rotation.set( 0, this.normMouseX * - 90 * ( Math.PI / 180 ), 0 );
+		this.setArrowLength( ( ( - this.normMouseY + 1 ) / 2 ) + 0.05 );
+
+	} else if ( this.inputState == 2 ) {
+
+		this.ball = new Physijs.SphereMesh(
+			new THREE.SphereGeometry( 0.108, 8, 8 ),
+			new THREE.MeshNormalMaterial(),
+			8
+		);
+
+		this.ball.position.set( this.arrowPivot.position.x, this.arrowPivot.position.y + 0.08, this.arrowPivot.position.z );
+		this.ball.position.y += 0.01;
+
+		this.ball.addEventListener( 'collision', function( other_object, linear_velocity, angular_velocity ) {
+
+			if ( other_object.name == 'pin' ) {
+
+				var id = this.soundWood.play();
+
+				// Change the position and rate.
+				this.soundWood.pos( other_object.position.x, other_object.position.y, other_object.position.z, id );
+				this.soundWood.rate( 0.7, id );
+				this.soundWood.volume( 1, id );
+
+			}
+
+			if ( other_object.name == 'ground' ) {
+
+				var id = this.soundBall.play();
+
+				// Change the position and rate.
+				//this.soundBall.pos(other_object.position.x, other_object.position.y, other_object.position.z, id);
+				//this.soundWood.rate( 0.1, id);
+				this.soundBall.volume( 1, id );
+
+			}
+
+		}.bind( this ) );
+
+		this.scene.add( this.ball );
+		this.inputState ++;
+
+		this.ball.applyCentralImpulse( new THREE.Vector3( Math.sin( this.arrowPivot.rotation.y ) * - this.arrowStem.scale.y * 35, 0, Math.cos( this.arrowPivot.rotation.y ) * - this.arrowStem.scale.y * 35 ) );
+
+	}
+
+}
+
+Game.prototype.setArrowLength = function( length ) {
+
+	this.arrowStem.translateY( ( length - this.arrowStem.scale.y ) / 2 );
+	this.arrowStem.scale.y = length;
+	this.arrowPoint.scale.y = 1 / length;
 
 }
