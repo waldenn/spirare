@@ -39,7 +39,7 @@ a:hover {
   left: 0;
   right: 0;
   margin-bottom: -50px;
-  background: #000;
+  background: yellow;
   background: rgba(0, 0, 0, 0.5);
   color: #FFF;
   padding: 10px;
@@ -57,7 +57,8 @@ a:hover {
   font-weight: bold;
   line-height: normal;
   text-align: center;
-  background-color: #ffff42;
+  color: cyan;
+  background-color: black;
   margin-top: 10px;
   margin-right: 10px;
   transform: rotate(-3deg);
@@ -72,6 +73,7 @@ a:hover {
 }
 body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleBox {
   margin: 25px;
+  color: yellow;
 }
 @media only screen and (max-width: 480px) {
   /* Smartphone view: 1 tile */
