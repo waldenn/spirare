@@ -39,7 +39,7 @@ a:hover {
   left: 0;
   right: 0;
   margin-bottom: -50px;
-  background: yellow;
+  background: #000;
   background: rgba(0, 0, 0, 0.5);
   color: #FFF;
   padding: 10px;
@@ -57,8 +57,7 @@ a:hover {
   font-weight: bold;
   line-height: normal;
   text-align: center;
-  color: cyan;
-  background-color: black;
+  background-color: #ffff42;
   margin-top: 10px;
   margin-right: 10px;
   transform: rotate(-3deg);
