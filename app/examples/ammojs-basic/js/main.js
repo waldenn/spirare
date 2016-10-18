@@ -105,7 +105,6 @@ onRenderFcts.push(function(){
   mesh.position.y = -mesh.geometry.parameters.height/2 - 3
         scene.add(mesh)
   
-
   var ammoControls = new THREEx.AmmoControls(mesh, {
     mass: 0
   })
