@@ -6,6 +6,7 @@ function Game() {
 
 	//Config vars
 	this.started = false;
+	this.retries = 0;
 	this.gravity = - 5;
 	this.cameraStartPosition = new THREE.Vector3( 0, - 1.5, 9 );
 	this.camSpeed = 0.1;
@@ -106,9 +107,36 @@ Game.prototype.init = function() {
 
 	this.scene.add( this.createSkysphere() );
 
+	//Create the text
+	let loader = new THREE.FontLoader();
+
+	loader.load( 'res/fonts/helvetiker_regular.typeface.js', function ( font ) {
+
+		let textGeo = new THREE.TextGeometry( "Game Over", {
+			font: font,
+
+			size: 0.15,
+			height: 0.03,
+			curveSegments: 12,
+		});
+
+		textGeo.computeBoundingBox();
+
+		//var mesh = new THREE.Mesh( textGeo, new THREE.MeshNormalMaterial() );
+
+		//mesh.castShadow = true;
+		//mesh.receiveShadow = true;
+
+		this.gameOverMesh = new Physijs.ConcaveMesh(textGeo, new THREE.MeshNormalMaterial(), 3);
+		this.gameOverMesh.position.y = 3;
+		this.gameOverMesh.position.x = -0.5;
+		this.gameOverMesh.position.z = 8;
+
+	}.bind(this) );
+
 	//Create a three.js camera.
 	this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
-
+ 
 	this.cameraObject = new THREE.Object3D();
 	this.cameraObject.position.set( this.cameraStartPosition.x, this.cameraStartPosition.y, this.cameraStartPosition.z );
 	this.cameraObject.add( this.camera );
@@ -140,6 +168,18 @@ Game.prototype.run = function( timestamp ) {
 
 	requestAnimationFrame( this.run.bind( this ) );
 	if ( ! this.started ) return;
+
+	if(this.ball && this.ball.position.y <= -0.5) {
+		this.retries++;
+		if(this.retries >= 3) {
+			this.scene.add(this.gameOverMesh);
+			this.inputState = -1;
+		}
+		this.ball = undefined;
+		this.inputState = 0;
+		this.setArrowLength(0.25);
+		this.arrowPivot.rotation.set(0, 0, 0);
+	}
 
 	const delta = Math.min( timestamp - this.lastRender, 500 );
 	this.lastRender = timestamp;
