@@ -1,5 +1,18 @@
 "use strict";
 
+/*
+
+ temporary:  all level stuff 
+ persistent: everything else?
+
+ todo:
+    - move all temporary stuff into its own scene hierarchy
+    - loadLevel( levelNumber ) 
+    - ...
+
+
+*/
+
 function Level() {
 
 	this.scene = new Physijs.Scene;
@@ -42,23 +55,55 @@ Level.prototype.genPins = function( startPosition, spacing, rows ) {
 
 Level.prototype.createPin = function() {
 
-	const base = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.057277, 0.03556, 0.085725, 8 ), Physijs.createMaterial( new THREE.MeshNormalMaterial(), 0, 1 ), 1 );
+	const base = new Physijs.BoxMesh(
+		new THREE.BoxGeometry( 0.09, 0.09, 0.09 ),
+		Physijs.createMaterial( new THREE.MeshNormalMaterial(), 0.6, 0 ),
+		0.1
+	);
 
-	const middle = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.057277, 0.057277, 0.0635, 8 ), new THREE.MeshNormalMaterial() );
+	const base2 = new Physijs.CylinderMesh(
+		new THREE.CylinderGeometry( 0.057277, 0.03556, 0.085725, 8 ),
+		Physijs.createMaterial( new THREE.MeshNormalMaterial(), 1, 0 ),
+		1
+	);
+
+	const middle = new Physijs.CylinderMesh(
+		new THREE.CylinderGeometry(  0.057277, 0.057277, 0.0635, 8 ),
+		Physijs.createMaterial( new THREE.MeshNormalMaterial(), 0.6, 0 ),
+		0.1
+	);
+
 	middle.position.y = 0.074;
 
-	const top = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.0249555, 0.057277, 0.0889, 8 ), new THREE.MeshNormalMaterial() );
+	const top = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.0249555, 0.057277, 0.0889, 8 ),
+		Physijs.createMaterial( new THREE.MeshNormalMaterial(), 0.6, 0 ),
+		0.1
+	);
 	top.position.y = 0.15;
 
-	const neck = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.0249555, 0.0249555, 0.0381, 8 ), new THREE.MeshNormalMaterial() );
+	const neck = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.0249555, 0.0249555, 0.0381, 8 ),
+		Physijs.createMaterial( new THREE.MeshNormalMaterial(), 0.6, 0 ),
+		0.1
+	);
 	neck.position.y = 0.213;
 	//Correct length is 0.066675 but looked weird
-	const ballStand = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.0323469, 0.0249555, 0.046675, 8 ), new THREE.MeshNormalMaterial() );
+
+	const ballStand = new Physijs.CylinderMesh( new THREE.CylinderGeometry( 0.0323469, 0.0249555, 0.046675, 8 ),
+		Physijs.createMaterial( new THREE.MeshNormalMaterial(), 0.6, 0 ),
+		0.1
+	);
+
 	ballStand.position.y = 0.245;
 
-	const ball = new Physijs.SphereMesh( new THREE.SphereGeometry( 0.0323469, 8, 8 ), new THREE.MeshNormalMaterial() );
+	const ball = new Physijs.SphereMesh(
+		new THREE.SphereGeometry( 0.0323469, 8, 8 ),
+		Physijs.createMaterial( new THREE.MeshNormalMaterial(), 1, 0 ),
+		39
+	);
+
 	ball.position.y = 0.2695;
 
+	base.add( base2 );
 	base.add( middle );
 	base.add( top );
 	base.add( neck );
@@ -72,7 +117,7 @@ Level.prototype.createPin = function() {
 Level.prototype.genLane = function() {
 
 	const laneFriction = 100, laneRestitution = 0.1;
-	const lane = new Physijs.BoxMesh( new THREE.BoxGeometry( 1.0541, 0.1, 18.28800 ), Physijs.createMaterial( new THREE.MeshNormalMaterial(), laneFriction, laneRestitution ), 0 );
+	const lane = new Physijs.BoxMesh( new THREE.BoxGeometry( 1.0541, 0.1, 18.28800 ), Physijs.createMaterial( new THREE.MeshNormalMaterial(), 1, 0 ), 0 );
 	lane.position.y = - 0.5;
 
 	const invisibleWallRight = new Physijs.BoxMesh( new THREE.BoxGeometry( 0.1, 1, 18.28800 ), Physijs.createMaterial( new THREE.MeshNormalMaterial(), 1, 0 ), 0 );
