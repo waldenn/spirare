@@ -5,9 +5,7 @@ THREEx.AmmoControls = function( object3d, options ) {
 	options = options || {}
 	this.object3d = object3d
 
-	////////////////////////////////////////////////////////////////////////////////
-	//          Compute shape from geometry
-	////////////////////////////////////////////////////////////////////////////////
+	// Compute shape from geometry
 
 	if ( options.shape !== undefined ) {
 
@@ -41,22 +39,22 @@ THREEx.AmmoControls = function( object3d, options ) {
 
 	var btTransform = new Ammo.btTransform();
 	btTransform.setIdentity();
+
 	var position = this.object3d.position;
 	btTransform.setOrigin( new Ammo.btVector3( position.x, position.y, position.z ) );
+
 	var quaternion = this.object3d.quaternion;
 	btTransform.setRotation( new Ammo.btQuaternion( quaternion.x, quaternion.y, quaternion.z, quaternion.w ) );
+
 	var motionState = new Ammo.btDefaultMotionState( btTransform );
 
 	var rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, shape, localInertia );
+
 	var body = new Ammo.btRigidBody( rbInfo );
 
-	this.physicsBody = body
+	this.physicsBody = body;
 
 }
-
-////////////////////////////////////////////////////////////////////////////////
-//          Code Separator
-////////////////////////////////////////////////////////////////////////////////
 
 THREEx.AmmoControls.guessMassFromObject3d = function( object3d ) {
 
@@ -125,9 +123,6 @@ THREEx.AmmoControls.guessShapeFromObject3d = function( object3d ) {
 	return shape
 
 }
-////////////////////////////////////////////////////////////////////////////////
-//          Code Separator
-////////////////////////////////////////////////////////////////////////////////
 
 THREEx.AmmoControls.prototype.setRestitution = function( value ) {
 

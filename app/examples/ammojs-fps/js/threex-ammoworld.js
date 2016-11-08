@@ -1,6 +1,6 @@
 var THREEx = THREEx || {}
 
-/** some links:
+/** Bullet API docs:
 
   http://www.bulletphysics.org/mediawiki-1.5.8/index.php/Hello_World
   http://bulletphysics.org/Bullet/BulletFull/classbtCollisionWorld.html
@@ -27,34 +27,37 @@ var THREEx = THREEx || {}
 
 THREEx.AmmoWorld = function() {
 
+	// physics objects
 	this._ammoControls = []
 
+	// time keeping
 	this._clock = new THREE.Clock();
 
-	var collisionConfiguration = new Ammo.btDefaultCollisionConfiguration();
-	var dispatcher = new Ammo.btCollisionDispatcher( collisionConfiguration );
-	var broadphase = new Ammo.btDbvtBroadphase();
-	var solver = new Ammo.btSequentialImpulseConstraintSolver();
-	this.physicsWorld = new Ammo.btDiscreteDynamicsWorld( dispatcher, broadphase, solver, collisionConfiguration );
+	// physis setup
+	var collisionConfiguration	= new Ammo.btDefaultCollisionConfiguration();
+	var dispatcher			= new Ammo.btCollisionDispatcher( collisionConfiguration );
+	var broadphase			= new Ammo.btDbvtBroadphase();
+	var solver			= new Ammo.btSequentialImpulseConstraintSolver();
 
-	// gravity
+	// world setup
+	this.physicsWorld		= new Ammo.btDiscreteDynamicsWorld( dispatcher, broadphase, solver, collisionConfiguration );
+
+	// world gravity
 	this.physicsWorld.setGravity( new Ammo.btVector3( 0, - 9.81, 0 ) );
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//          Code Separator
-////////////////////////////////////////////////////////////////////////////////
-
 THREEx.AmmoWorld.prototype.update = function() {
 
 	var deltaTime = this._clock.getDelta();
-	// compute physics
+
+	// run simulation steps
 	this.physicsWorld.stepSimulation( deltaTime, 10 );
 
-	// update all ammoControls
+	// default transform
 	var btTransform = new Ammo.btTransform();
 	
+	// update all ammoControls (physics objects)
 	for ( var i = 0; i < this._ammoControls.length; i ++ ) {
 
 		var ammoControls = this._ammoControls[ i ];
@@ -73,10 +76,6 @@ THREEx.AmmoWorld.prototype.update = function() {
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//          Code Separator
-////////////////////////////////////////////////////////////////////////////////
-
 THREEx.AmmoWorld.prototype.add = function( ammoControls ) {
 
 	console.assert( ammoControls instanceof THREEx.AmmoControls )
@@ -93,4 +92,3 @@ THREEx.AmmoWorld.prototype.remove = function( ammoControls ) {
 	ammoWorld.physicsWorld.removeRigidBody( ammoControls.physicsWorld )
 
 }
-
