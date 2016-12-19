@@ -267,12 +267,8 @@ onRenderFcts.push( function() {
 
 } )()
 
-<<<<<<< HEAD
-// pile of crate
-=======
 /*
 //          Pile of crate
->>>>>>> 9a2bae2c45287198d9e36459521df2a7b4312f22
 ;( function() {
 
 	return
