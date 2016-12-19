@@ -118,6 +118,7 @@ requestAnimationFrame( function animate( nowMsec ) {
 
 
 var ammoWorld = new THREEx.AmmoWorld()
+
 onRenderFcts.push( function() {
 
 	ammoWorld.update()
@@ -266,7 +267,12 @@ onRenderFcts.push( function() {
 
 } )()
 
+<<<<<<< HEAD
 // pile of crate
+=======
+/*
+//          Pile of crate
+>>>>>>> 9a2bae2c45287198d9e36459521df2a7b4312f22
 ;( function() {
 
 	return
@@ -281,7 +287,7 @@ onRenderFcts.push( function() {
 	, geometry.parameters.height * 1.1
 	, geometry.parameters.depth * 1 )
 
-	for ( var x = 0; x < nCubes.x; x ++ ) {
+	or ( var x = 0; x < nCubes.x; x ++ ) {
 
 		for ( var y = 0; y < nCubes.y; y ++ ) {
 
@@ -340,6 +346,7 @@ onRenderFcts.push( function() {
 	}
 
 } )()
+*/
 
 //  throw a ball in front of the camera
 ;( function() {
@@ -375,8 +382,8 @@ onRenderFcts.push( function() {
 		// create mesh
 		var geometry = new THREE.SphereGeometry( 1, 8, 10 )
 		var material = new THREE.MeshNormalMaterial( {
-		wireframe: false
-	} );
+		  wireframe: false
+    } );
 
 		var mesh = new THREE.Mesh( geometry, material )
 		mesh.position.copy( position )
@@ -493,156 +500,6 @@ function gamepadUpdate() {
 }
 
 
-/*
-function draw(tick) {
-  // clear the background
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  if (!imagesLoaded) return;
-
-  var timeDiff = tick - gameStart;
-  if (!hasStarted || timeDiff < 1000) {
-    ctx.save();
-
-    // Once the A button has been pressed, start a fade out using globalAlpha
-    if (hasStarted) {
-      ctx.globalAlpha = 1 - (timeDiff / 1000);
-    }
-
-    // Display the text and the image for 'A' button
-    ctx.fillStyle = 'white';
-    ctx.font = '32px Arial';
-    ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center';
-    var x = (canvas.width - images['A'].width) / 2;
-    var y = (canvas.height / 2);
-    var text = 'Press';
-    var textLength = ctx.measureText(text).width;
-    ctx.fillText(text, x, y);
-    ctx.drawImage(images['A'], x + textLength - (images['A'].width / 2), y - (images['A'].height / 2));
-
-    // Display the number of players connected
-    ctx.font = '12px Arial';
-    ctx.textBaseline = 'bottom';
-    ctx.textAlign = 'left';
-    ctx.fillStyle = 'white';
-    var numControllers = gamepads.length;
-    var numPlayersText = numControllers === 0 ? 'No controllers connected' : 
-      numControllers + ' controller' + (numControllers === 1 ? '' : 's') + ' connected';
-    ctx.fillText(numPlayersText, 20, canvas.height - 20);
-
-    ctx.restore();
-  } else {
-    ctx.save()
-    
-    var fadeInTime = timeDiff - 1000;
-    var isFadingIn = (fadeInTime <= 1000);
-    if (isFadingIn) {
-      var alpha = (fadeInTime < 1000) ? (fadeInTime / 1000) : 1;
-      ctx.globalAlpha = alpha;      
-    }
-    
-    ctx.fillStyle = 'rgb(9, 117, 153)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    var imgLeftStick = images['Left Stick'];
-    var imgRightStick = images['Right Stick'];
-    var imageWidth = imgLeftStick.width;
-    var imageHeight = imgLeftStick.height;
-
-    var imgLeftStickX = (canvas.width - imageWidth) / 2;
-    var imgLeftStickY = (canvas.height - imageHeight) / 2;
-    var imgRightStickX = (canvas.width - imageWidth) / 2;
-    var imgRightStickY = (canvas.height - imageHeight) / 2;
-
-    var padding = 20;
-    var halfScreenMoveBoundsWidth = (canvas.width - imageWidth - (padding * 2)) / 2;
-    var halfScreenMoveBoundsHeight = (canvas.height - imageHeight - (padding * 2)) / 2;
-
-    if (gamepads[0]) {
-      imgLeftStickX += halfScreenMoveBoundsWidth * gamepads[0].axes[0];
-      imgLeftStickY += halfScreenMoveBoundsHeight * gamepads[0].axes[1];
-      imgRightStickX += halfScreenMoveBoundsWidth * gamepads[0].axes[2];
-      imgRightStickY += halfScreenMoveBoundsHeight * gamepads[0].axes[3];
-    }
-
-    // draw gray oval shadow
-    ctx.beginPath();
-    ctx.ellipse(
-      canvas.width / 2, canvas.height / 2, // x and y of center
-      (canvas.width - (padding * 2)) / 2, (canvas.height - (padding * 2)) / 2, // x and y radius
-      0, // rotation
-      0, 2 * Math.PI, // start and end angle (in radians)
-      false // anti-clockwise
-    );
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-    ctx.fill();
-
-    // draw the image in the middle of the gray area
-    ctx.imageSmoothingEnabled = true;    
-    ctx.drawImage(imgRightStick,
-      imgRightStickX,
-      imgRightStickY,
-      imageWidth,
-      imageHeight
-    );
-    ctx.drawImage(imgLeftStick,
-      imgLeftStickX,
-      imgLeftStickY,
-      imageWidth,
-      imageHeight
-    );
-
-    var halfButtonSize = 32;
-    ctx.globalAlpha = pressedButtons.includes(BUTTONS.A) ? 1 : 0.5;
-    ctx.drawImage(images['A'], canvas.width - 70, canvas.height - 50, halfButtonSize, halfButtonSize);
-    ctx.globalAlpha = pressedButtons.includes(BUTTONS.B) ? 1 : 0.5;
-    ctx.drawImage(images['B'], canvas.width - 50, canvas.height - 70, halfButtonSize, halfButtonSize);
-    ctx.globalAlpha = pressedButtons.includes(BUTTONS.X) ? 1 : 0.5;
-    ctx.drawImage(images['X'], canvas.width - 90, canvas.height - 70, halfButtonSize, halfButtonSize);
-    ctx.globalAlpha = pressedButtons.includes(BUTTONS.Y) ? 1 : 0.5;
-    ctx.drawImage(images['Y'], canvas.width - 70, canvas.height - 90, halfButtonSize, halfButtonSize);
-
-    ctx.globalAlpha = pressedButtons.includes(BUTTONS.LEFT_BUMPER) ? 1 : 0.5;
-    ctx.drawImage(images['Left Bumper'], 20, 0);
-
-    ctx.globalAlpha = pressedButtons.includes(BUTTONS.LEFT_TRIGGER) ? 1 : 0.5;
-    ctx.drawImage(images['Left Trigger'], 20, 40);
-
-    if ( pressedButtons.includes(BUTTONS.LEFT_BUMBER) ){
-	console.log('LB');
-    }
-
-    ctx.globalAlpha = pressedButtons.includes(BUTTONS.RIGHT_BUMPER) ? 1 : 0.5;
-    ctx.drawImage(images['Right Bumper'], canvas.width - images['Right Bumper'].width - 20, 0);
-    ctx.globalAlpha = pressedButtons.includes(BUTTONS.RIGHT_TRIGGER) ? 1 : 0.5;
-    ctx.drawImage(images['Right Trigger'], canvas.width - images['Right Trigger'].width - 20, 40);
-
-    ctx.globalAlpha = 1;
-
-    var DPadImageLeft = padding;
-    var DPadImageTop = canvas.height - padding - images['DPad None'].height;
-    if (pressedButtons.includes(BUTTONS.DPAD_UP)) {
-      ctx.drawImage(images['DPad Up'], DPadImageLeft, DPadImageTop);
-    } else if (pressedButtons.includes(BUTTONS.DPAD_DOWN)) {
-      ctx.drawImage(images['DPad Down'], DPadImageLeft, DPadImageTop);
-    } else if (pressedButtons.includes(BUTTONS.DPAD_LEFT)) {
-      ctx.drawImage(images['DPad Left'], DPadImageLeft, DPadImageTop);
-    } else if (pressedButtons.includes(BUTTONS.DPAD_RIGHT)) {
-      ctx.drawImage(images['DPad Right'], DPadImageLeft, DPadImageTop);
-    } else {
-      ctx.drawImage(images['DPad None'], DPadImageLeft, DPadImageTop);
-    }
-
-    ctx.restore();
-  }
-}
-*/
-
-// --- end of xbox gamepad handling
-
-
-
 // key and gamepad handling
 var keyboard	= new THREEx.KeyboardState(renderer.domElement);
 renderer.domElement.setAttribute("tabIndex", "0");
@@ -650,13 +507,12 @@ renderer.domElement.focus();
 
 onRenderFcts.push( function(delta, now){
 
-	//console.log( pressedButtons );
-
-	if ( pressedButtons.includes(BUTTONS.DPAD_RIGHT) ) {
-		console.log('DPAD_RIGHT');
+	if ( pressedButtons.includes(BUTTONS.B) ) {
+		console.log('button B');
 	}
 
 	if( keyboard.pressed('left') ){
+	  console.log( pressedButtons );
 		console.log('left');
 	}else if( keyboard.pressed('right') ){
 		console.log('right');
