@@ -150,10 +150,14 @@ onRenderFcts.push( function() {
 	ammoControls.setRestitution( 0.9 )
 	ammoWorld.add( ammoControls )
 
+	var shape = new Ammo.btStaticPlaneShape( new Ammo.btVector3( 0, 0, 1 ), 0 );
+	var ammoControls = new THREEx.AmmoControls( mesh, { mass: 0, shape: shape, } );
+	ammoControls.setRestitution( 0.4 );
+	ammoWorld.add( ammoControls );
+
 } )()
 
 // an inside box
-
 ;( function() {
 
 	return
@@ -212,6 +216,7 @@ onRenderFcts.push( function() {
 		var ammoControls = new THREEx.AmmoControls( mesh, {
 		mass: 0,
 		shape: shape,
+
 	} )
 		ammoControls.setRestitution( 0.4 )
 		ammoWorld.add( ammoControls )
@@ -245,6 +250,7 @@ onRenderFcts.push( function() {
 	  bumpScale: 0.01,
 	  */
 	} )
+
 	for ( var i = 0; i < 5; i ++ ) {
 
 		var mesh = new THREE.Mesh( geometry, material )
@@ -260,7 +266,7 @@ onRenderFcts.push( function() {
 
 } )()
 
-//          Pile of crate
+// pile of crate
 ;( function() {
 
 	return
@@ -300,7 +306,7 @@ onRenderFcts.push( function() {
 
 } )()
 
-//          Pile of bowling pins
+// pile of bowling pins
 ;( function() {
 
 	return
