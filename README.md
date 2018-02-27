@@ -1,4 +1,4 @@
-# spirare 
+# Spirare 
 
 * [online demos](http://spirare.js.org/app/)
 
